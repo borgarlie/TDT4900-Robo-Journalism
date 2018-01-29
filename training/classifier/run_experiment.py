@@ -70,20 +70,28 @@ if __name__ == '__main__':
          relative_path_fake_data, num_articles, True)
 
     all_titles = titles + fake_titles
-    ground_truth = [[1] for i in titles] + [[0] for i in fake_titles]
+    ground_truth = [1 for i in titles] + [0 for i in fake_titles]
 
     # shuffle titles and ground truth equally
     c = list(zip(all_titles, ground_truth))
     random.shuffle(c)
     all_titles_shuffled, ground_truth_shuffled = zip(*c)
 
-    print(all_titles)
-    print(ground_truth)
+    train_length = len(all_titles_shuffled) - num_evaluate
+    # Append remainder to evaluate set so that the training set has exactly a multiple of batch size
+    num_evaluate += train_length % batch_size
+    train_length = len(all_titles_shuffled) - num_evaluate
 
-    ground_truth_train = ground_truth_shuffled[0:num_articles-num_evaluate]
-    ground_truth_eval = ground_truth_shuffled[num_articles-num_evaluate:num_articles]
-    train_titles = all_titles_shuffled[0:num_articles-num_evaluate]
-    train_eval = all_titles_shuffled[num_articles-num_evaluate:num_articles]
+    print("Train length: ", train_length)
+    print("Num eval: ", num_evaluate)
+    print("Range train: %d - %d" % (0, train_length), flush=True)
+    print("Range test: %d - %d" % (train_length, train_length + num_evaluate), flush=True)
+
+    ground_truth_train = ground_truth_shuffled[0:train_length]
+    train_titles = all_titles_shuffled[0:train_length]
+
+    ground_truth_eval = ground_truth_shuffled[train_length:train_length+num_evaluate]
+    train_eval = all_titles_shuffled[train_length:train_length+num_evaluate]
 
     model = CNNDiscriminator(vocabulary.n_words, hidden_size, num_kernels, kernel_sizes, dropout_p)
     if use_cuda:

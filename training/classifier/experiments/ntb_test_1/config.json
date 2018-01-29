@@ -2,16 +2,16 @@
   "train" : {
     "dataset" : "../../data/ntb_preprocessed/test_real_data.unk",
     "fake_dataset" : "../../data/ntb_fake_data/test_fake_data.unk",
-    "num_articles" : 10,
+    "num_articles" : -1,
     "num_evaluate" : 2,
     "with_categories": true,
-    "num_epochs" : 5,
-    "batch_size" : 16,
+    "num_epochs" : 50,
+    "batch_size" : 4,
     "learning_rate" : 0.001
   },
   "model" : {
     "n_layers" : 1,
-    "hidden_size" : 64,
+    "hidden_size" : 16,
     "dropout_p" : 0.1,
     "num_kernels" : 100,
     "kernel_sizes" : [2, 3, 4]
@@ -20,7 +20,7 @@
     "save_file" : "test1.pth.tar"
   },
   "log" : {
-    "print_every" : 100
+    "print_every" : 10
   },
   "tensorboard" : {
     "log_path" : "../../log/classifier/ntb_test_1"

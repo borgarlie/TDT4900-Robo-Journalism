@@ -59,8 +59,9 @@ def train_iters(config, ground_truth, titles, vocabulary, model, optimizer, grou
         title_batches = list(chunks(titles_shuffled, batch_size))
 
         for batch in range(num_batches):
-            ground_truth, sequences = batch_sequences(vocabulary, title_batches[batch], ground_truth_batches[batch])
-            loss = train(ground_truth, sequences, model, optimizer, criterion)
+            ground_truth_batched, sequences = batch_sequences(vocabulary, title_batches[batch],
+                                                              ground_truth_batches[batch])
+            loss = train(ground_truth_batched, sequences, model, optimizer, criterion)
 
             print_loss_total += loss
             batch_loss_avg += loss
@@ -98,7 +99,7 @@ def batch_sequences(vocabulary, titles, ground_truth):
     seq_padded = [pad_seq(s, max(seq_lengths)) for s in sequences]
 
     sequences = Variable(torch.LongTensor(seq_padded))
-    ground_truth_batched = Variable(torch.FloatTensor([ground_truth]))
+    ground_truth_batched = Variable(torch.FloatTensor(ground_truth)).unsqueeze(1)
 
     if use_cuda:
         sequences = sequences.cuda()
