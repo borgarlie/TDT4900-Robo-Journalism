@@ -9,15 +9,12 @@ def chunks(l, n):
 
 def random_batch(batch_size, vocabulary, articles, titles, max_length, with_categories=False):
     input_seqs = []
-    categories = []
     target_seqs = []
 
     # Choose random pairs
     for i in range(batch_size):
         if with_categories:
-            category, article = split_category_and_article(articles[i])
-            category_variable = category_from_string(category.strip())
-            categories.append(category_variable)
+            _, article = split_category_and_article(articles[i])
             input_variable = indexes_from_sentence(vocabulary, article.strip())
         else:
             input_variable = indexes_from_sentence(vocabulary, articles[i])
@@ -39,12 +36,8 @@ def random_batch(batch_size, vocabulary, articles, titles, max_length, with_cate
     input_var = Variable(torch.LongTensor(input_padded)).transpose(0, 1)
     target_var = Variable(torch.LongTensor(target_padded)).transpose(0, 1)
 
-    # no need to transpose categories ?
-    categories_var = Variable(torch.FloatTensor(categories))
-
     if use_cuda:
         input_var = input_var.cuda()
         target_var = target_var.cuda()
-        categories_var = categories_var.cuda()
 
-    return categories_var, input_var, input_lengths, target_var, target_lengths
+    return input_var, input_lengths, target_var, target_lengths

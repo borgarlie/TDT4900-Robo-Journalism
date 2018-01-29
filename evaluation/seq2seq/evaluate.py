@@ -43,3 +43,50 @@ def evaluate_beams(config, vocabulary, encoder, decoder, sentence, max_length):
     for beam in pruned_beams:
         beam.cut_attention_weights_at_sequence_length()
     return pruned_beams
+
+
+# Calculate loss on the evaluation set. Does not modify anything.
+def calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, writer, epoch, max_length,
+                               eval_articles, eval_titles):
+    loss = 0
+    for i in range(0, len(eval_articles)):
+        _, article = split_category_and_article(eval_articles[i])
+        title = eval_titles[i]
+        input_variable = indexes_from_sentence(vocabulary, article)
+        input_variable = pad_seq(input_variable, max_length)
+        input_length = max_length
+        input_variable = Variable(torch.LongTensor(input_variable)).unsqueeze(1)
+        input_variable = input_variable.cuda() if use_cuda else input_variable
+
+        target_variable = indexes_from_sentence(vocabulary, title)
+        target_variable = Variable(torch.LongTensor(target_variable)).unsqueeze(1)
+        target_variable = target_variable.cuda() if use_cuda else target_variable
+
+        loss += calculate_loss_on_single_eval_article(config, encoder, decoder, criterion, input_variable,
+                                                      target_variable, input_length)
+    loss_avg = loss / len(eval_articles)
+    writer.add_scalar('Evaluation loss', loss_avg, epoch)
+    print("Evaluation set loss for epoch %d: %.4f" % (epoch, loss_avg), flush=True)
+
+
+def calculate_loss_on_single_eval_article(config, encoder, decoder, criterion, input_variable, target_variable,
+                                          input_length):
+    loss = 0
+    encoder_outputs, encoder_hidden = encoder(input_variable, [input_length], None)
+
+    encoder_hidden = concat_encoder_hidden_directions(encoder_hidden)
+    num_layers = config['model']['n_layers']
+    encoder_hidden = encoder_hidden.repeat(num_layers, 1, 1)
+
+    decoder_input = Variable(torch.LongTensor([SOS_token]))
+    decoder_input = decoder_input.cuda() if use_cuda else decoder_input
+    decoder_hidden = encoder_hidden
+
+    for di in range(target_variable.size()[0]):
+        decoder_output, decoder_hidden, decoder_attention = decoder(decoder_input, decoder_hidden, encoder_outputs, 1)
+        topv, topi = decoder_output.data.topk(1)
+        ni = topi  # next input, batch of top softmax scores
+        decoder_input = Variable(torch.cuda.LongTensor(ni)) if use_cuda else Variable(torch.LongTensor(ni))
+        loss += criterion(decoder_output, target_variable[di])
+
+    return loss.data[0]
