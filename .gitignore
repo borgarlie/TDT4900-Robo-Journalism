@@ -1,0 +1,6 @@
+data/*
+.idea
+saved_models/*
+*.pyc
+*.tar
+*.txt
