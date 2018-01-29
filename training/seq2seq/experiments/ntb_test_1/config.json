@@ -1,0 +1,35 @@
+{
+  "train" : {
+    "dataset" : "../../../data/ntb_preprocessed/ntb_80_5cat.unk",
+    "num_articles" : 2000,
+    "num_evaluate" : 100,
+    "throw" : 10,
+    "with_categories": true,
+    "num_epochs" : 5,
+    "batch_size" : 16,
+    "learning_rate" : 0.001,
+    "teacher_forcing_ratio" : 0.9,
+    "load" : false,
+    "load_file" : "test1.pth.tar"
+  },
+  "evaluate" : {
+    "expansions" : 3,
+    "keep_beams" : 20,
+    "return_beams": 5
+  },
+  "model" : {
+    "n_layers" : 1,
+    "hidden_size" : 64,
+    "dropout_p" : 0.1
+  },
+  "save" : {
+    "save_file" : "test1.pth.tar",
+    "attention_path" : "attention/"
+  },
+  "log" : {
+    "print_every" : 100
+  },
+  "tensorboard" : {
+    "log_path" : "../../../log/seq2seq/ntb_test_1"
+  }
+}
