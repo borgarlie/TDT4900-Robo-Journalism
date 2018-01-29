@@ -47,3 +47,11 @@ def variables_from_pair(article, title, vocabulary):
 # This can be optimized to instead search for ">>>" to just split on word position
 def split_category_and_article(article):
     return article.split(">>>")
+
+
+def concat_encoder_hidden_directions(h):
+    """ do the following transformation:
+        (#directions * #layers, #batch, hidden_size) -> (#layers, #batch, #directions * hidden_size)
+        to compensate for two directions in a bidirectional encoder
+    """
+    return torch.cat([h[0:h.size(0):2], h[1:h.size(0):2]], 2)

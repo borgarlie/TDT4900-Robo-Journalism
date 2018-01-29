@@ -3,25 +3,6 @@ import torch.nn.functional as F
 import torch
 
 
-class DecoderRNN(nn.Module):
-    def __init__(self, hidden_size, output_size, n_layers=1, batch_size=1):
-        super(DecoderRNN, self).__init__()
-        self.batch_size = batch_size
-        self.n_layers = n_layers
-        self.hidden_size = hidden_size * 2  # * 2 because of bidirectional encoder
-
-        self.embedding = nn.Embedding(output_size, hidden_size)
-        self.gru = nn.GRU(hidden_size, hidden_size, n_layers)
-        self.out = nn.Linear(hidden_size, output_size)
-        self.softmax = nn.LogSoftmax()
-
-    def forward(self, input, hidden, batch_size=1):
-        output = self.embedding(input).view(1, batch_size, self.hidden_size)
-        output, hidden = self.gru(output, hidden)
-        output = self.softmax(self.out(output[0]))
-        return output, hidden
-
-
 class AttnDecoderRNN(nn.Module):
     def __init__(self, hidden_size, output_size, max_length, n_layers=1, dropout_p=0.1, batch_size=1):
         super(AttnDecoderRNN, self).__init__()

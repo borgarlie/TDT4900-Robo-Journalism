@@ -7,7 +7,7 @@ def chunks(l, n):
         yield l[i:i + n]
 
 
-def random_batch(batch_size, vocabulary, articles, titles, max_length, attention=False, with_categories=False):
+def random_batch(batch_size, vocabulary, articles, titles, max_length, with_categories=False):
     input_seqs = []
     categories = []
     target_seqs = []
@@ -18,7 +18,7 @@ def random_batch(batch_size, vocabulary, articles, titles, max_length, attention
             category, article = split_category_and_article(articles[i])
             category_variable = category_from_string(category.strip())
             categories.append(category_variable)
-            input_variable = indexes_from_sentence(vocabulary, article.strip())  # is ".strip" necessary?
+            input_variable = indexes_from_sentence(vocabulary, article.strip())
         else:
             input_variable = indexes_from_sentence(vocabulary, articles[i])
         target_variable = indexes_from_sentence(vocabulary, titles[i])
@@ -30,16 +30,10 @@ def random_batch(batch_size, vocabulary, articles, titles, max_length, attention
     input_seqs, target_seqs = zip(*seq_pairs)
 
     # For input and target sequences, get array of lengths and pad with 0s to max length
-    if attention:
-        input_lengths = [max_length for s in input_seqs]
-        input_padded = [pad_seq(s, max_length) for s in input_seqs]
-        target_lengths = [len(s) for s in target_seqs]
-        target_padded = [pad_seq(s, max_length) for s in target_seqs]
-    else:
-        input_lengths = [len(s) for s in input_seqs]
-        input_padded = [pad_seq(s, max(input_lengths)) for s in input_seqs]
-        target_lengths = [len(s) for s in target_seqs]
-        target_padded = [pad_seq(s, max(target_lengths)) for s in target_seqs]
+    input_lengths = [max_length for s in input_seqs]
+    input_padded = [pad_seq(s, max_length) for s in input_seqs]
+    target_lengths = [len(s) for s in target_seqs]
+    target_padded = [pad_seq(s, max_length) for s in target_seqs]
 
     # Turn padded arrays into (batch_size x max_len) tensors, transpose into (max_len x batch_size)
     input_var = Variable(torch.LongTensor(input_padded)).transpose(0, 1)
