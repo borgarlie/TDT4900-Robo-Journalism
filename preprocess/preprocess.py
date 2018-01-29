@@ -64,6 +64,45 @@ def generate_vocabulary(relative_path, max_size=-1, with_categories=False):
     return article[:max_size], title[:max_size], vocabulary
 
 
+def generate_vocabulary_for_classifier(relative_path, relative_path_fake_data, max_size=-1, with_categories=False):
+    print("Reading lines...")
+    article = open(relative_path + '.article.txt', encoding='utf-8').read().strip().split('\n')
+    title = open(relative_path + '.title.txt', encoding='utf-8').read().strip().split('\n')
+    fake_titles = open(relative_path_fake_data + '.title.txt', encoding='utf-8').read().strip().split('\n')
+    print("Read %s articles" % len(article))
+    print("Read %s title" % len(title))
+    print("Read %s fake_titles" % len(fake_titles))
+
+    if max_size == -1:
+        max_size = len(article)
+
+    vocabulary = Vocabulary()
+
+    longest_sentence = 0
+    print("Counting words...")
+    for i in range(0, max_size):
+        if with_categories:
+            _, art = split_category_and_article(article[i])
+        else:
+            art = article[i]
+        vocabulary.add_sentence(art)
+        sentence_length = len(art.strip().split(' '))
+        if sentence_length > longest_sentence:
+            longest_sentence = sentence_length
+    for i in range(0, max_size):
+        vocabulary.add_sentence(title[i])
+        if len(title[i].split(' ')) > longest_sentence:
+            longest_sentence = len(title[i].split(' '))
+    for i in range(0, max_size):
+        vocabulary.add_sentence(fake_titles[i])
+        if len(fake_titles[i].split(' ')) > longest_sentence:
+            longest_sentence = len(fake_titles[i].split(' '))
+
+    print("longest sentence: ", longest_sentence)
+    print("Counted words: %s" % vocabulary.n_words)
+    return article[:max_size], title[:max_size], fake_titles[:max_size], vocabulary
+
+
 class VocabularySizeItem:
     def __init__(self, key, value, num):
         self.key = key

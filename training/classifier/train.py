@@ -22,12 +22,14 @@ def train(ground_truth, sequences, model, optimizer, criterion):
 
 
 # ground_truth = [1, 1, 1, 1, ..., 0, 0, 0, 0, ...]
-def train_iters(ground_truth, titles, vocabulary, model, optimizer, ground_truth_eval, eval_titles, writer, batch_size,
-                n_epochs):
+def train_iters(config, ground_truth, titles, vocabulary, model, optimizer, ground_truth_eval, eval_titles, writer):
+
+    n_epochs = config['train']['num_epochs']
+    batch_size = config['train']['batch_size']
+    print_every = config['log']['print_every']
 
     start = time.time()
     print_loss_total = 0  # Reset every print_every
-    print_every = 500
 
     criterion = nn.BCEWithLogitsLoss()
 
