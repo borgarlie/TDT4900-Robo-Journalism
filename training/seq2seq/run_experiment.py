@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
     print("Range test: %d - %d" % (train_length, train_length+test_length), flush=True)
 
-    encoder = EncoderRNN(vocabulary.n_words, hidden_size, n_layers=n_layers, batch_size=batch_size)
+    encoder = EncoderRNN(vocabulary.n_words, hidden_size, n_layers=n_layers)
 
     if config['train']['with_categories']:
         max_length = max(len(article.split(">>>")[1].strip().split(' ')) for article in articles) + 1
@@ -96,7 +96,7 @@ if __name__ == '__main__':
         max_length = max(len(article.split(' ')) for article in articles) + 1
 
     decoder = AttnDecoderRNN(hidden_size, vocabulary.n_words, max_length=max_length, n_layers=n_layers,
-                             dropout_p=dropout_p, batch_size=batch_size)
+                             dropout_p=dropout_p)
 
     if use_cuda:
         encoder = encoder.cuda()
