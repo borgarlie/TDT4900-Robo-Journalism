@@ -36,14 +36,21 @@ def generate_single_argmax_summary(vocabulary, encoder, decoder, input_variable,
     decoded_word_sequence = []
     for di in range(input_length):
         decoder_output, decoder_hidden, decoder_attention = decoder(decoder_input, decoder_hidden, encoder_outputs, 1)
-        topv, topi = decoder_output.data.topk(1)
-        ni = topi  # next input, batch of top softmax scores
-        decoder_input = Variable(torch.cuda.LongTensor(ni)) if use_cuda else Variable(torch.LongTensor(ni))
+        topv, topi = decoder_output.data.topk(3)
         next_word = topi[0][0]
+        # need special logic to ensure minimum 4 words
         if next_word == EOS_token or next_word == PAD_token:
-            break
+            if di >= 4:
+                break
+            counter = 1
+            while next_word == EOS_token or next_word == PAD_token:
+                next_word = topi[0][counter]
+                counter += 1
         decoded_word = vocabulary.index2word[next_word]
         decoded_word_sequence.append(decoded_word)
+        # next input to decoder
+        ni = [next_word]  # next input, batch of top softmax scores
+        decoder_input = Variable(torch.cuda.LongTensor(ni)) if use_cuda else Variable(torch.LongTensor(ni))
     return decoded_word_sequence
 
 
@@ -95,7 +102,7 @@ if __name__ == '__main__':
     encoder.eval()
     decoder.eval()
 
-    articles = articles[0:5000]
+    articles = articles[0:10000]
 
     # generate data
     fake_data = generate_argmax_summaries(vocabulary, encoder, decoder, articles, max_length)

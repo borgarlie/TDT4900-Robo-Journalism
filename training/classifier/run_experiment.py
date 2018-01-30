@@ -59,7 +59,6 @@ if __name__ == '__main__':
     learning_rate = config['train']['learning_rate']
 
     hidden_size = config['model']['hidden_size']
-    n_layers = config['model']['n_layers']
     dropout_p = config['model']['dropout_p']
     num_kernels = config['model']['num_kernels']
     kernel_sizes = config['model']['kernel_sizes']
