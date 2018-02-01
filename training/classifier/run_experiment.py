@@ -81,8 +81,8 @@ if __name__ == '__main__':
     num_evaluate += train_length % batch_size
     train_length = len(all_titles_shuffled) - num_evaluate
 
-    print("Train length: ", train_length)
-    print("Num eval: ", num_evaluate)
+    print("Train length: ", train_length, flush=True)
+    print("Num eval: ", num_evaluate, flush=True)
     print("Range train: %d - %d" % (0, train_length), flush=True)
     print("Range test: %d - %d" % (train_length, train_length + num_evaluate), flush=True)
 
@@ -91,6 +91,12 @@ if __name__ == '__main__':
 
     ground_truth_eval = ground_truth_shuffled[train_length:train_length+num_evaluate]
     train_eval = all_titles_shuffled[train_length:train_length+num_evaluate]
+
+    fake_count = 0
+    for gt in ground_truth_eval:
+        if gt == 0:
+            fake_count += 1
+    print("fake_count_eval: %d / %d" % (fake_count, len(ground_truth_eval)), flush=True)
 
     model = CNNDiscriminator(vocabulary.n_words, hidden_size, num_kernels, kernel_sizes, dropout_p)
     if use_cuda:

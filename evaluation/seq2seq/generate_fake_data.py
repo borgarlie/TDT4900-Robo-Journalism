@@ -11,7 +11,7 @@ from utils.data_prep import *
 
 def generate_argmax_summaries(vocabulary, encoder, decoder, articles, max_length):
     fake_data = []
-    print_every = 100
+    print_every = 500
     for i in range(0, len(articles)):
         _, article = split_category_and_article(articles[i])
         input_variable = indexes_from_sentence(vocabulary, article)
@@ -102,7 +102,7 @@ if __name__ == '__main__':
     encoder.eval()
     decoder.eval()
 
-    articles = articles[0:10000]
+    # articles = articles[0:10000]
 
     # generate data
     fake_data = generate_argmax_summaries(vocabulary, encoder, decoder, articles, max_length)
