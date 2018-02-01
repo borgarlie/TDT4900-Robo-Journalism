@@ -4,9 +4,8 @@ from utils.data_prep import *
 
 
 class Generator:
-    def __init__(self, vocabulary, encoder, decoder, max_length, encoder_optimizer, decoder_optimizer, mle_criterion,
+    def __init__(self, encoder, decoder, max_length, encoder_optimizer, decoder_optimizer, mle_criterion,
                  batch_size, use_cuda, beta):
-        self.vocabulary = vocabulary
         self.encoder = encoder
         self.decoder = decoder
         self.max_length = max_length
