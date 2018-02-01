@@ -88,8 +88,8 @@ def train_iters(config, articles, titles, eval_articles, eval_titles, vocabulary
         title_batches = list(chunks(titles_shuffled, batch_size))
 
         for batch in range(num_batches):
-            input_variable, input_lengths, target_variable, target_lengths = random_batch(batch_size,
-                  vocabulary, article_batches[batch], title_batches[batch], max_length, with_categories)
+            input_variable, input_lengths, target_variable, target_lengths = prepare_batch(batch_size,
+                                                                                           vocabulary, article_batches[batch], title_batches[batch], max_length, with_categories)
 
             loss = train(config, input_variable, input_lengths, target_variable, target_lengths,
                          encoder, decoder, encoder_optimizer, decoder_optimizer, criterion)

@@ -7,7 +7,7 @@ def chunks(l, n):
         yield l[i:i + n]
 
 
-def random_batch(batch_size, vocabulary, articles, titles, max_length, with_categories=False):
+def prepare_batch(batch_size, vocabulary, articles, titles, max_length, with_categories=False):
     input_seqs = []
     target_seqs = []
 
