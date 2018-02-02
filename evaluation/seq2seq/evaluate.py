@@ -4,7 +4,11 @@ from utils.data_prep import *
 
 def evaluate(config, articles, titles, vocabulary, encoder, decoder, max_length):
     for i in range(len(articles)):
-        _, input_sentence = split_category_and_article(articles[i])
+        with_categories = config['train']['with_categories']
+        if with_categories:
+            _, input_sentence = split_category_and_article(articles[i])
+        else:
+            input_sentence = articles[i]
         target_sentence = titles[i]
         print('>', input_sentence, flush=True)
         print('=', target_sentence, flush=True)
@@ -50,7 +54,11 @@ def calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, 
                                eval_articles, eval_titles):
     loss = 0
     for i in range(0, len(eval_articles)):
-        _, article = split_category_and_article(eval_articles[i])
+        with_categories = config['train']['with_categories']
+        if with_categories:
+            _, article = split_category_and_article(eval_articles[i])
+        else:
+            article = eval_articles[i]
         title = eval_titles[i]
         input_variable = indexes_from_sentence(vocabulary, article)
         input_variable = pad_seq(input_variable, max_length)

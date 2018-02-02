@@ -1,0 +1,35 @@
+{
+  "train" : {
+    "dataset" : "../../data/cnn_preprocessed/cnn_preprocessed_200_80.unk",
+    "num_articles" : 5000,
+    "num_evaluate" : 500,
+    "throw" : 0,
+    "with_categories": false,
+    "num_epochs" : 2,
+    "batch_size" : 32,
+    "learning_rate" : 0.001,
+    "teacher_forcing_ratio" : 0.9,
+    "load" : false,
+    "load_file" : "test1.pth.tar"
+  },
+  "evaluate" : {
+    "expansions" : 3,
+    "keep_beams" : 20,
+    "return_beams": 5
+  },
+  "model" : {
+    "n_layers" : 1,
+    "hidden_size" : 100,
+    "dropout_p" : 0.1
+  },
+  "save" : {
+    "save_file" : "cnn_test1.pth.tar",
+    "attention_path" : "attention/"
+  },
+  "log" : {
+    "print_every" : 500
+  },
+  "tensorboard" : {
+    "log_path" : "../../log/seq2seq/cnn_test1"
+  }
+}

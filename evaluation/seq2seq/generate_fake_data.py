@@ -9,11 +9,14 @@ from preprocess import preprocess
 from utils.data_prep import *
 
 
-def generate_argmax_summaries(vocabulary, encoder, decoder, articles, max_length):
+def generate_argmax_summaries(vocabulary, encoder, decoder, articles, max_length, with_categories=False):
     fake_data = []
     print_every = 500
     for i in range(0, len(articles)):
-        _, article = split_category_and_article(articles[i])
+        if with_categories:
+            _, article = split_category_and_article(articles[i])
+        else:
+            article = articles[i]
         input_variable = indexes_from_sentence(vocabulary, article)
         input_variable = pad_seq(input_variable, max_length)
         input_length = max_length
@@ -77,6 +80,7 @@ if __name__ == '__main__':
     n_layers = 1
     dropout_p = 0.1
     load_file = "../../models/pretrained_models/pretrained_seq2seq.pth.tar"
+    with_categories = False
 
     articles, titles, vocabulary = preprocess.generate_vocabulary(relative_path, -1, True)
 
@@ -105,7 +109,7 @@ if __name__ == '__main__':
     # articles = articles[0:10000]
 
     # generate data
-    fake_data = generate_argmax_summaries(vocabulary, encoder, decoder, articles, max_length)
+    fake_data = generate_argmax_summaries(vocabulary, encoder, decoder, articles, max_length, with_categories)
 
     # for sample in fake_data:
     #     print(sample, flush=True)
