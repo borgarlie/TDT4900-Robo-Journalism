@@ -34,7 +34,7 @@ class Vocabulary:
 def generate_vocabulary(relative_path, max_size=-1, with_categories=False):
     print("Reading lines...")
     article = open(relative_path + '.article.txt', encoding='utf-8').read().strip().split('\n')
-    title = open(relative_path + '.title.txt', encoding='utf-8').read().strip().split('\n')
+    title = open(relative_path + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
     print("Read %s articles" % len(article))
     print("Read %s title" % len(title))
 
@@ -67,7 +67,7 @@ def generate_vocabulary(relative_path, max_size=-1, with_categories=False):
 def generate_vocabulary_for_classifier(relative_path, relative_path_fake_data, max_size=-1, with_categories=False):
     print("Reading lines...")
     article = open(relative_path + '.article.txt', encoding='utf-8').read().strip().split('\n')
-    title = open(relative_path + '.title.txt', encoding='utf-8').read().strip().split('\n')
+    title = open(relative_path + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
     fake_titles = open(relative_path_fake_data + '.title.txt', encoding='utf-8').read().strip().split('\n')
     print("Read %s articles" % len(article))
     print("Read %s title" % len(title))
@@ -148,12 +148,34 @@ def replace_word_with_unk(word):
     return "<UNK" + word[0] + ">"
 
 
-def save_articles_with_unk(articles, titles, relative_path, to_replace_vocabulary):
+def save_articles_with_unk(articles, abstracts, relative_path, to_replace_vocabulary):
     articles_to_skip = []
-    num_unks_10 = 0
+    max_abstract_UNKs = 8
+    with open(relative_path + '.unk.abstract.txt', 'w') as f:
+        for item in range(0, len(abstracts)):
+            num_unk = 0
+            words = abstracts[item].split(" ")
+            unked_words = []
+            for word in words:
+                if word in to_replace_vocabulary:
+                    unked_words.append(replace_word_with_unk(word))
+                    num_unk += 1
+                else:
+                    unked_words.append(word)
+            if num_unk >= max_abstract_UNKs:
+                articles_to_skip.append(item)
+            else:
+                abstract = " ".join(unked_words)
+                f.write(abstract)
+                f.write("\n")
+    print("Abstracts with %d or more UNK: %d" % (max_abstract_UNKs, len(articles_to_skip)))
+    max_article_UNKs = 20
+    articles_that_should_have_been_skipped = 0
     with open(relative_path + '.unk.article.txt', 'w') as f:
         for item in range(0, len(articles)):
             num_unk = 0
+            if item in articles_to_skip:
+                continue
             words = articles[item].split(" ")
             unked_words = []
             for word in words:
@@ -162,28 +184,12 @@ def save_articles_with_unk(articles, titles, relative_path, to_replace_vocabular
                     num_unk += 1
                 else:
                     unked_words.append(word)
-            if num_unk >= 8:
-                num_unks_10 += 1
-                articles_to_skip.append(item)
-            else:
-                article = " ".join(unked_words)
-                f.write(article)
-                f.write("\n")
-    print("Articles with 10 or more UNK: %d" % num_unks_10)
-    with open(relative_path + '.unk.title.txt', 'w') as f:
-        for item in range(0, len(titles)):
-            if item in articles_to_skip:
-                continue
-            words = titles[item].split(" ")
-            unked_words = []
-            for word in words:
-                if word in to_replace_vocabulary:
-                    unked_words.append(replace_word_with_unk(word))
-                else:
-                    unked_words.append(word)
-            title = " ".join(unked_words)
-            f.write(title)
+            if num_unk >= max_article_UNKs:
+                articles_that_should_have_been_skipped += 1
+            article = " ".join(unked_words)
+            f.write(article)
             f.write("\n")
+    print("Articles that should have been skipped: %d" % articles_that_should_have_been_skipped)
 
 
 def count_low_length(articles, titles):
@@ -194,16 +200,16 @@ def count_low_length(articles, titles):
     for item in range(0, len(articles)):
         if len(articles[item].split(" ")) <= len(titles[item].split(" ")):
             num_less_than_title += 1
-        elif len(articles[item].split(" ")) <= len(titles[item].split(" ")) + 10:
+        elif len(articles[item].split(" ")) <= len(titles[item].split(" ")) + 20:
             num_abit_more += 1
-        elif len(articles[item].split(" ")) < 25:
+        elif len(articles[item].split(" ")) < 40:
             num_too_short_article += 1
-        elif len(titles[item].split(" ")) < 4:
+        elif len(titles[item].split(" ")) < 10:
             num_too_short_title += 1
-    print("Articles less than 25 words: %d" % num_too_short_article)
-    print("Titles less than 4 words: %d" % num_too_short_title)
-    print("Articles with length==title length: %d" % num_less_than_title)
-    print("Articles with length less than len(title) + 10: %d" % num_abit_more)
+    print("Articles less than 40 words: %d" % num_too_short_article)
+    print("Abstracts less than 10 words: %d" % num_too_short_title)
+    print("Articles with length==abstract length: %d" % num_less_than_title)
+    print("Articles with length less than len(abstract) + 20: %d" % num_abit_more)
 
 
 if __name__ == '__main__':
@@ -211,14 +217,17 @@ if __name__ == '__main__':
     relative_path_ntb = '../data/ntb_preprocessed/ntb_80_5cat'
     relative_path_ntb_unked = '../data/ntb_preprocessed/ntb_80_5cat.unk'
 
-    with_categories = True
-    article, title, vocabulary = generate_vocabulary(relative_path_ntb_unked, -1, with_categories)
+    relative_path_cnn = '../data/cnn_preprocessed/cnn_preprocessed_200_80'
+    relative_path_cnn_unked = '../data/cnn_preprocessed/cnn_preprocessed_200_80.unk'
+
+    with_categories = False
+    article, title, vocabulary = generate_vocabulary(relative_path_cnn_unked, -1, with_categories)
 
     vocab_items = []
     for k, v in vocabulary.index2word.items():
         vocab_items.append(VocabularySizeItem(k, v, vocabulary.word2count[v]))
 
-    minimum_frequency = 15
+    minimum_frequency = 40
     unked_chars = get_list_to_unk(vocab_items, minimum_frequency)
 
     print("Unked chars: %d" % len(unked_chars))
@@ -231,4 +240,4 @@ if __name__ == '__main__':
 
     count_low_length(article, title)
 
-    # save_articles_with_unk(article, title, relative_path_ntb, unked_chars)
+    # save_articles_with_unk(article, title, relative_path_cnn, unked_chars)
