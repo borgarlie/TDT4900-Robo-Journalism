@@ -30,8 +30,8 @@ def evaluate_beams(config, vocabulary, encoder, decoder, sentence, max_length):
     encoder_outputs, encoder_hidden = encoder(input_variable, [input_length], None)
 
     encoder_hidden = concat_encoder_hidden_directions(encoder_hidden)
-    num_layers = config['model']['n_layers']
-    encoder_hidden = encoder_hidden.repeat(num_layers, 1, 1)
+    # num_layers = config['model']['n_layers']
+    # encoder_hidden = encoder_hidden.repeat(num_layers, 1, 1)
 
     expansions = config['evaluate']['expansions']
     keep_beams = config['evaluate']['keep_beams']
@@ -83,8 +83,8 @@ def calculate_loss_on_single_eval_article(config, encoder, decoder, criterion, i
     encoder_outputs, encoder_hidden = encoder(input_variable, [input_length], None)
 
     encoder_hidden = concat_encoder_hidden_directions(encoder_hidden)
-    num_layers = config['model']['n_layers']
-    encoder_hidden = encoder_hidden.repeat(num_layers, 1, 1)
+    # num_layers = config['model']['n_layers']
+    # encoder_hidden = encoder_hidden.repeat(num_layers, 1, 1)
 
     decoder_input = Variable(torch.LongTensor([SOS_token]))
     decoder_input = decoder_input.cuda() if use_cuda else decoder_input

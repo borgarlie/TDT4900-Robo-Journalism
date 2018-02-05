@@ -1,0 +1,48 @@
+{
+  "train" : {
+    "dataset" : "../../data/cnn_preprocessed/cnn_preprocessed_200_80.unk",
+    "num_articles" : 5000,
+    "num_evaluate" : 500,
+    "throw" : 0,
+    "with_categories": false,
+    "n_epochs" : 4,
+    "batch_size" : 16,
+    "generator_learning_rate" : 0.001,
+    "discriminator_learning_rate" : 0.001,
+    "beta" : 0.5,
+    "n_generator" : 2,
+    "n_discriminator" : 4,
+    "max_sample_length" : 80
+  },
+  "evaluate" : {
+    "expansions" : 3,
+    "keep_beams" : 20,
+    "return_beams": 5
+  },
+  "generator_model" : {
+    "embedding_size" : 100,
+    "n_layers" : 1,
+    "hidden_size" : 128,
+    "dropout_p" : 0.1,
+    "load" : false,
+    "load_file" : "generator_test.pth.tar"
+  },
+  "discriminator_model" : {
+    "hidden_size" : 128,
+    "dropout_p" : 0.5,
+    "num_kernels" : 100,
+    "kernel_sizes" : [3, 4, 5],
+    "load" : false,
+    "load_file" : "discriminator_test.pth.tar"
+  },
+  "save" : {
+    "save_file_generator" : "generator_test_save.pth.tar",
+    "save_file_discriminator" : "discriminator_test_save.pth.tar"
+  },
+  "log" : {
+    "print_every" : 500
+  },
+  "tensorboard" : {
+    "log_path" : "../../log/GAN/test_1"
+  }
+}

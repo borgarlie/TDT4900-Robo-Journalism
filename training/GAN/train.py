@@ -24,7 +24,6 @@ def train_GAN(config, vocabulary, generator, discriminator, articles, titles, ev
     lowest_loss_generator = 999
     lowest_loss_discriminator = 999
 
-    # TODO: in run experiment -> make sure that: (len(train_articles) / batch_size) % n_normal == 0
     num_batches = int(len(articles) / batch_size)
     n_iters = num_batches * n_epochs
 
