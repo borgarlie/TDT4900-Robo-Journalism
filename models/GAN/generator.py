@@ -4,11 +4,10 @@ from utils.data_prep import *
 
 
 class Generator:
-    def __init__(self, encoder, decoder, max_length, encoder_optimizer, decoder_optimizer, mle_criterion,
+    def __init__(self, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion,
                  batch_size, use_cuda, beta):
         self.encoder = encoder
         self.decoder = decoder
-        self.max_length = max_length
         self.encoder_optimizer = encoder_optimizer
         self.decoder_optimizer = decoder_optimizer
         self.mle_criterion = mle_criterion
@@ -35,7 +34,7 @@ class Generator:
 
         mle_loss = 0
         decoder_outputs = [[] for _ in range(0, self.batch_size)]
-        softmax_scores = []  # this is networks belief in the current policy
+        policy_loss = 0
 
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_target_length):
@@ -50,23 +49,27 @@ class Generator:
             for batch_index in range(0, len(decoder_output_data)):
                 decoder_outputs[batch_index].append(decoder_output_data[batch_index].item())
 
-            softmax_scores.append(topv)
+            # calculate policy
+            policy_target = decoder_input.squeeze(1)
+            current_policy_value = self.mle_criterion(decoder_output, policy_target)
+            # TODO: Is it possible to use a max() function or something and keep the gradient here? might be cheaper
 
-        decoder_output_variables = Variable(torch.LongTensor(decoder_outputs))
-        if self.use_cuda:
-            decoder_output_variables = decoder_output_variables.cuda()
+            # monte_carlo_sample = ...
+            # reward = discriminator.evaluate(monte_carlo)
+            # policy_loss += reward * current_policy_value
 
-        reward = discriminator.evaluate(decoder_output_variables)
-        # policy_gradient_loss = reward * np.sum(softmax_scores)  # TODO: Verify that this is correct
+        # decoder_output_variables = Variable(torch.LongTensor(decoder_outputs))
+        # if self.use_cuda:
+        #     decoder_output_variables = decoder_output_variables.cuda()
 
-        policy_gradient_loss = 0  # TODO: fix
+        # policy_loss = policy_loss / max_target_length  # TODO: Is this ok ?
         # We need to make sure that we do not loose any gradients when we calculate this
 
         # softmax_scores is a list of topv. topv is a
         # list of [word_position][batch][top_scores (which prob is 1 value in this case)]
         # Might have to unpack it so it becomes -> batch_scores = [values]
 
-        total_loss = self.beta * policy_gradient_loss + (1 - self.beta) * mle_loss
+        total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
         total_loss.backward()
 
         self.encoder_optimizer.step()

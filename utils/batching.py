@@ -7,7 +7,8 @@ def chunks(l, n):
         yield l[i:i + n]
 
 
-def prepare_batch(batch_size, vocabulary, articles, titles, max_length, with_categories=False):
+def prepare_batch(batch_size, vocabulary, articles, titles, max_article_length, max_abstract_length,
+                  with_categories=False):
     input_seqs = []
     target_seqs = []
 
@@ -27,10 +28,10 @@ def prepare_batch(batch_size, vocabulary, articles, titles, max_length, with_cat
     input_seqs, target_seqs = zip(*seq_pairs)
 
     # For input and target sequences, get array of lengths and pad with 0s to max length
-    input_lengths = [max_length for s in input_seqs]
-    input_padded = [pad_seq(s, max_length) for s in input_seqs]
+    input_lengths = [max_article_length for s in input_seqs]
+    input_padded = [pad_seq(s, max_article_length) for s in input_seqs]
     target_lengths = [len(s) for s in target_seqs]
-    target_padded = [pad_seq(s, max_length) for s in target_seqs]
+    target_padded = [pad_seq(s, max_abstract_length) for s in target_seqs]
 
     # Turn padded arrays into (batch_size x max_len) tensors, transpose into (max_len x batch_size)
     input_var = Variable(torch.LongTensor(input_padded)).transpose(0, 1)

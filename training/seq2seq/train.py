@@ -57,8 +57,9 @@ def train(config, input_variable, input_lengths, target_variable, target_lengths
     return loss.data[0]
 
 
-def train_iters(config, articles, titles, eval_articles, eval_titles, vocabulary, encoder, decoder, max_length,
-                encoder_optimizer, decoder_optimizer, writer, start_epoch=1, total_runtime=0, with_categories=False):
+def train_iters(config, articles, titles, eval_articles, eval_titles, vocabulary, encoder, decoder, max_article_length,
+                max_abstract_length, encoder_optimizer, decoder_optimizer, writer, start_epoch=1, total_runtime=0,
+                with_categories=False):
 
     start = time.time()
     print_loss_total = 0  # Reset every print_every
@@ -89,7 +90,7 @@ def train_iters(config, articles, titles, eval_articles, eval_titles, vocabulary
 
         for batch in range(num_batches):
             input_variable, input_lengths, target_variable, target_lengths = prepare_batch(batch_size, vocabulary,
-                article_batches[batch], title_batches[batch], max_length, with_categories)
+                article_batches[batch], title_batches[batch], max_article_length, max_abstract_length, with_categories)
 
             loss = train(config, input_variable, input_lengths, target_variable, target_lengths,
                          encoder, decoder, encoder_optimizer, decoder_optimizer, criterion)
@@ -127,7 +128,7 @@ def train_iters(config, articles, titles, eval_articles, eval_titles, vocabulary
 
         encoder.eval()
         decoder.eval()
-        calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, writer, epoch, max_length,
+        calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, writer, epoch, max_article_length,
                                    eval_articles, eval_titles)
         encoder.train()
         decoder.train()

@@ -7,12 +7,15 @@ from utils.data_prep import *
 from utils.time_utils import *
 
 
-def train_GAN(config, vocabulary, generator, discriminator, articles, titles, eval_articles, eval_titles, max_length,
-              writer):
+def train_GAN(config, vocabulary, generator, discriminator, articles, titles, eval_articles, eval_titles,
+              max_article_length, max_abstract_length, writer):
 
+    print("Starting GAN training", flush=True)
     n_generator = config['train']['n_generator']
     n_discriminator = config['train']['n_discriminator']  # This is a scaling factor of n_generator
     max_sample_length = config['train']['max_sample_length']
+    if max_abstract_length > max_sample_length:
+        max_sample_length = max_abstract_length
     n_epochs = config['train']['n_epochs']
     batch_size = config['train']['batch_size']
     print_every = config['log']['print_every']
@@ -32,7 +35,9 @@ def train_GAN(config, vocabulary, generator, discriminator, articles, titles, ev
     d_articles = articles * n_discriminator
     d_titles = titles * n_discriminator
 
-    for epoch in n_epochs:
+    total_runtime = 0
+
+    for epoch in range(1, n_epochs+1):
         # shuffle articles and titles (equally)
         c = list(zip(g_articles, g_titles))
         random.shuffle(c)
@@ -53,15 +58,17 @@ def train_GAN(config, vocabulary, generator, discriminator, articles, titles, ev
             # train generator for n_generator batches
             for n in range(n_generator):
                 input_variable, input_lengths, target_variable, target_lengths = prepare_batch(batch_size, vocabulary,
-                    g_article_batches[batch], g_title_batches[batch], max_length, with_categories)
-                loss = generator.train(config, input_variable, input_lengths, target_variable, target_lengths)
+                    g_article_batches[batch], g_title_batches[batch], max_article_length, max_abstract_length,
+                                                                                               with_categories)
+                loss = generator.train_on_batch(input_variable, input_lengths, target_variable, target_lengths,
+                                                discriminator)
                 print_loss_generator += loss
                 # calculate number of batches processed
                 itr_generator = (epoch - 1) * num_batches + batch + 1
                 if itr_generator % print_every == 0:
                     print_loss_avg = print_loss_generator / print_every
                     print_loss_generator = 0
-                    progress, total_runtime = time_since(start, itr_generator / n_iters, print_loss_generator)
+                    progress, total_runtime = time_since(start, itr_generator / n_iters, total_runtime)
                     start = time.time()
                     print('%s (%d %d%%)' % (progress, itr_generator, itr_generator / n_iters * 100), flush=True)
                     print('Generator loss: %.4f' % print_loss_avg, flush=True)
@@ -72,15 +79,20 @@ def train_GAN(config, vocabulary, generator, discriminator, articles, titles, ev
                 # train discriminator for n_discriminator batches
                 for m in range(n_discriminator):
                     # generate ground truth
-                    ground_truth = [1 for _ in batch_size] + [0 for _ in batch_size]
+                    ground_truth = [1 for _ in range(batch_size)] + [0 for _ in range(batch_size)]
                     ground_truth_batched = Variable(torch.FloatTensor(ground_truth)).unsqueeze(1)
-                    # generate fate data
-                    real_data_variable, real_data_lengths = prepare_batch(batch_size, vocabulary,
-                        d_article_batches[count_disc], d_title_batches[count_disc], max_length, with_categories)
-                    fake_data_variable = generator.create_samples(real_data_variable, real_data_lengths,
+                    if use_cuda:
+                        ground_truth_batched = ground_truth_batched.cuda()
+                    # generate fake data
+                    pad_abstract_length = max_sample_length
+                    real_data_article_variable, real_data_article_lengths, real_data_variable, target_lengths = \
+                        prepare_batch(batch_size, vocabulary, d_article_batches[count_disc],
+                                      d_title_batches[count_disc], max_article_length, pad_abstract_length,
+                                      with_categories)
+                    real_data_variable = real_data_variable.transpose(1, 0)
+                    fake_data_variable = generator.create_samples(real_data_article_variable, real_data_article_lengths,
                                                                   max_sample_length)
-                    # concatenate real and fake data
-                    d_titles_real_and_fake = torch.cat(real_data_variable, fake_data_variable)  # TODO: verify ok?
+                    d_titles_real_and_fake = torch.cat((real_data_variable, fake_data_variable), 0)
                     # train and calculate loss
                     loss = discriminator.train(ground_truth_batched, d_titles_real_and_fake)
                     print_loss_discriminator += loss
@@ -107,6 +119,6 @@ def train_GAN(config, vocabulary, generator, discriminator, articles, titles, ev
         generator.encoder.eval()
         generator.decoder.eval()
         calculate_loss_on_eval_set(config, vocabulary, generator.encoder, generator.decoder, generator.mle_criterion,
-                                   writer, epoch, max_length, eval_articles, eval_titles)
+                                   writer, epoch, max_article_length, eval_articles, eval_titles)
         generator.encoder.train()
         generator.decoder.train()

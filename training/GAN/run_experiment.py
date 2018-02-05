@@ -96,7 +96,7 @@ if __name__ == '__main__':
     # Append remainder to evaluate set so that the training set has exactly a multiple of batch size
     num_evaluate += train_articles_length % batch_size
     temp_train_length = total_articles - num_evaluate
-    num_evaluate += (temp_train_length / batch_size) % n_generator
+    num_evaluate += int((temp_train_length / batch_size) % n_generator) * batch_size
     train_length = total_articles - num_evaluate
     test_length = num_evaluate
     print("Train length = %d" % train_length, flush=True)
@@ -112,14 +112,18 @@ if __name__ == '__main__':
     test_titles = titles[train_length:train_length + test_length]
     print("Range test: %d - %d" % (train_length, train_length+test_length), flush=True)
 
+    # TODO: Use generator_embedding_size
+
     generator_encoder = EncoderRNN(vocabulary.n_words, generator_hidden_size, n_layers=generator_n_layers)
 
     if config['train']['with_categories']:
-        max_length = max(len(article.split(">>>")[1].strip().split(' ')) for article in articles) + 1
+        max_article_length = max(len(article.split(">>>")[1].strip().split(' ')) for article in articles) + 1
     else:
-        max_length = max(len(article.split(' ')) for article in articles) + 1
+        max_article_length = max(len(article.split(' ')) for article in articles) + 1
 
-    generator_decoder = AttnDecoderRNN(generator_hidden_size, vocabulary.n_words, max_length=max_length,
+    max_abstract_length = max(len(title.split(' ')) for title in titles) + 1
+
+    generator_decoder = AttnDecoderRNN(generator_hidden_size, vocabulary.n_words, max_length=max_article_length,
                                        n_layers=generator_n_layers, dropout_p=generator_dropout_p)
 
     if generator_load_model:
@@ -157,20 +161,20 @@ if __name__ == '__main__':
     discriminator_optimizer = torch.optim.Adam(discriminator_model.parameters(), lr=discriminator_learning_rate)
     discriminator_criterion = torch.nn.BCEWithLogitsLoss()
 
-    generator = Generator(generator_encoder, generator_decoder, max_length, generator_encoder_optimizer,
+    generator = Generator(generator_encoder, generator_decoder, generator_encoder_optimizer,
                           generator_decoder_optimizer, generator_mle_criterion, batch_size, use_cuda, beta)
 
     discriminator = Discriminator(discriminator_model, discriminator_optimizer, discriminator_criterion)
 
     # Train the generator and discriminator alternately in a standard GAN setup
     train_GAN(config, vocabulary, generator, discriminator, train_articles, train_titles, test_articles, test_titles,
-              max_length, writer)
+              max_article_length, max_abstract_length, writer)
 
     # Evaluate the generator
     # TODO: Make sure the references here are correct
     generator_encoder.eval()
     generator_decoder.eval()
     evaluate(config, test_articles, test_titles, vocabulary, generator_encoder, generator_decoder,
-             max_length=max_length)
+             max_length=max_article_length)
 
     print("Done", flush=True)

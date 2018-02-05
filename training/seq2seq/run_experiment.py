@@ -91,11 +91,13 @@ if __name__ == '__main__':
     encoder = EncoderRNN(vocabulary.n_words, hidden_size, n_layers=n_layers)
 
     if config['train']['with_categories']:
-        max_length = max(len(article.split(">>>")[1].strip().split(' ')) for article in articles) + 1
+        max_article_length = max(len(article.split(">>>")[1].strip().split(' ')) for article in articles) + 1
     else:
-        max_length = max(len(article.split(' ')) for article in articles) + 1
+        max_article_length = max(len(article.split(' ')) for article in articles) + 1
 
-    decoder = AttnDecoderRNN(hidden_size, vocabulary.n_words, max_length=max_length, n_layers=n_layers,
+    max_abstract_length = max(len(title.split(' ')) for title in titles) + 1
+
+    decoder = AttnDecoderRNN(hidden_size, vocabulary.n_words, max_length=max_article_length, n_layers=n_layers,
                              dropout_p=dropout_p)
 
     if use_cuda:
@@ -121,11 +123,11 @@ if __name__ == '__main__':
             exit()
 
     train_iters(config, train_articles, train_titles, test_articles, test_titles, vocabulary,
-                encoder, decoder, max_length, encoder_optimizer, decoder_optimizer,
+                encoder, decoder, max_article_length, max_abstract_length, encoder_optimizer, decoder_optimizer,
                 writer, start_epoch=start_epoch, total_runtime=total_runtime, with_categories=with_categories)
 
     encoder.eval()
     decoder.eval()
-    evaluate(config, test_articles, test_titles, vocabulary, encoder, decoder, max_length=max_length)
+    evaluate(config, test_articles, test_titles, vocabulary, encoder, decoder, max_length=max_article_length)
 
     print("Done", flush=True)

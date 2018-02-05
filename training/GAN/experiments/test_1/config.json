@@ -1,11 +1,11 @@
 {
   "train" : {
     "dataset" : "../../data/cnn_preprocessed/cnn_preprocessed_200_80.unk",
-    "num_articles" : 5000,
-    "num_evaluate" : 500,
+    "num_articles" : 3000,
+    "num_evaluate" : 200,
     "throw" : 0,
     "with_categories": false,
-    "n_epochs" : 4,
+    "n_epochs" : 2,
     "batch_size" : 16,
     "generator_learning_rate" : 0.001,
     "discriminator_learning_rate" : 0.001,
@@ -40,7 +40,7 @@
     "save_file_discriminator" : "discriminator_test_save.pth.tar"
   },
   "log" : {
-    "print_every" : 500
+    "print_every" : 10
   },
   "tensorboard" : {
     "log_path" : "../../log/GAN/test_1"
