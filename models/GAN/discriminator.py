@@ -20,4 +20,5 @@ class Discriminator:
         self.model.eval()
         scores = self.model(sequences)
         self.model.train()
-        return nn.Sigmoid(scores)
+        scores = scores.squeeze()
+        return nn.functional.sigmoid(scores)

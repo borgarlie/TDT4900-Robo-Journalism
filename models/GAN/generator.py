@@ -5,7 +5,7 @@ from utils.data_prep import *
 
 class Generator:
     def __init__(self, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion,
-                 batch_size, use_cuda, beta):
+                 batch_size, use_cuda, beta, generator_beta):
         self.encoder = encoder
         self.decoder = decoder
         self.encoder_optimizer = encoder_optimizer
@@ -14,6 +14,7 @@ class Generator:
         self.batch_size = batch_size
         self.use_cuda = use_cuda
         self.beta = beta
+        self.generator_beta = generator_beta
 
     # discriminator is used to calculate reward
     # summary batch is used for MLE
@@ -33,41 +34,49 @@ class Generator:
         decoder_hidden = encoder_hidden
 
         mle_loss = 0
-        decoder_outputs = [[] for _ in range(0, self.batch_size)]
         policy_loss = 0
+        accumulated_sequence = None
 
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_target_length):
             decoder_output, decoder_hidden, decoder_attention = self.decoder(decoder_input, decoder_hidden,
                                                                              encoder_outputs, self.batch_size)
             topv, topi = decoder_output.data.topk(1)
-            ni = topi  # next input, batch of top softmax scores
-            decoder_input = Variable(torch.cuda.LongTensor(ni)) if self.use_cuda else Variable(torch.LongTensor(ni))
+            ni = topi  # next input, batch of top softmax
+            decoder_input = Variable(ni)
             mle_loss += self.mle_criterion(decoder_output, target_variable_batch[di])
 
-            decoder_output_data = ni.cpu().numpy()
-            for batch_index in range(0, len(decoder_output_data)):
-                decoder_outputs[batch_index].append(decoder_output_data[batch_index].item())
+            ni_transposed = ni.transpose(0, 1)
+            decoder_input_batch = Variable(ni_transposed)
+            if di == 0:
+                accumulated_sequence = decoder_input_batch
+            else:
+                accumulated_sequence = torch.cat((accumulated_sequence, decoder_input_batch), 0)
 
-            # calculate policy
+            # print(accumulated_sequence, flush=True)
+            # calculate policy value
             policy_target = decoder_input.squeeze(1)
             current_policy_value = self.mle_criterion(decoder_output, policy_target)
             # TODO: Is it possible to use a max() function or something and keep the gradient here? might be cheaper
 
-            # monte_carlo_sample = ...
-            # reward = discriminator.evaluate(monte_carlo)
-            # policy_loss += reward * current_policy_value
+            # calculate policy loss using monte carlo search
+            accumulated_reward = 0
+            num_samples = 2
+            for _ in range(num_samples):
+                sample = self.generator_beta.generate_sequence(input_variable_batch, input_lengths, max_target_length,
+                                                               accumulated_sequence)
+                sample = sample.transpose(1, 0)
+                accumulated_reward += discriminator.evaluate(sample)
 
-        # decoder_output_variables = Variable(torch.LongTensor(decoder_outputs))
-        # if self.use_cuda:
-        #     decoder_output_variables = decoder_output_variables.cuda()
+                print(sample, flush=True)
 
-        # policy_loss = policy_loss / max_target_length  # TODO: Is this ok ?
-        # We need to make sure that we do not loose any gradients when we calculate this
+            reward = accumulated_reward / num_samples
+            policy_loss += reward * current_policy_value
 
-        # softmax_scores is a list of topv. topv is a
-        # list of [word_position][batch][top_scores (which prob is 1 value in this case)]
-        # Might have to unpack it so it becomes -> batch_scores = [values]
+            print(reward, flush=True)
+            print(policy_loss, flush=True)
+
+        exit()
 
         total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
         total_loss.backward()
@@ -113,3 +122,6 @@ class Generator:
         self.decoder.train()
 
         return decoder_output_variables
+
+    def update_generator_beta_params(self):
+        self.generator_beta.update_params(self.encoder, self.decoder)
