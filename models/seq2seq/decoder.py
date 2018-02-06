@@ -25,7 +25,7 @@ class AttnDecoderRNN(nn.Module):
 
         cat = torch.cat((embedded[0], hidden[0]), 1)
         temp = self.attn(cat)
-        attn_weights = F.softmax(temp)
+        attn_weights = F.softmax(temp, dim=1)
         attn_applied = torch.bmm(attn_weights.unsqueeze(1), encoder_outputs.transpose(0, 1))
 
         output = torch.cat((embedded[0], attn_applied.squeeze(1)), 1)
@@ -33,5 +33,6 @@ class AttnDecoderRNN(nn.Module):
 
         output, hidden = self.gru(output, hidden)
 
-        output = F.log_softmax(self.out(output[0]))
+        # TODO: Should dim = 0 ?
+        output = F.log_softmax(self.out(output[0]), dim=1)
         return output, hidden, attn_weights

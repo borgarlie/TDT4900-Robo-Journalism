@@ -163,6 +163,7 @@ if __name__ == '__main__':
     generator_encoder_optimizer = optim.SGD(generator_encoder.parameters(), lr=generator_learning_rate)
     generator_decoder_optimizer = optim.SGD(generator_decoder.parameters(), lr=generator_learning_rate)
     generator_mle_criterion = torch.nn.NLLLoss()
+    policy_criterion = torch.nn.NLLLoss(reduce=False)
 
     # TODO: should this one be loaded?
     discriminator_optimizer = torch.optim.Adam(discriminator_model.parameters(), lr=discriminator_learning_rate)
@@ -172,8 +173,8 @@ if __name__ == '__main__':
     generator_beta.update_params(generator_encoder, generator_decoder)
 
     generator = Generator(generator_encoder, generator_decoder, generator_encoder_optimizer,
-                          generator_decoder_optimizer, generator_mle_criterion, batch_size, use_cuda, beta,
-                          generator_beta)
+                          generator_decoder_optimizer, generator_mle_criterion, policy_criterion, batch_size, use_cuda,
+                          beta, generator_beta)
 
     discriminator = Discriminator(discriminator_model, discriminator_optimizer, discriminator_criterion)
 

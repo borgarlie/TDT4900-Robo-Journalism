@@ -4,13 +4,14 @@ from utils.data_prep import *
 
 
 class Generator:
-    def __init__(self, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion,
+    def __init__(self, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion, policy_criterion,
                  batch_size, use_cuda, beta, generator_beta):
         self.encoder = encoder
         self.decoder = decoder
         self.encoder_optimizer = encoder_optimizer
         self.decoder_optimizer = decoder_optimizer
         self.mle_criterion = mle_criterion
+        self.policy_criterion = policy_criterion
         self.batch_size = batch_size
         self.use_cuda = use_cuda
         self.beta = beta
@@ -56,7 +57,8 @@ class Generator:
             # print(accumulated_sequence, flush=True)
             # calculate policy value
             policy_target = decoder_input.squeeze(1)
-            current_policy_value = self.mle_criterion(decoder_output, policy_target)
+            # TODO: Check if reduce false is ok
+            current_policy_value = self.policy_criterion(decoder_output, policy_target)
             # TODO: Is it possible to use a max() function or something and keep the gradient here? might be cheaper
 
             # calculate policy loss using monte carlo search
@@ -68,17 +70,14 @@ class Generator:
                 sample = sample.transpose(1, 0)
                 accumulated_reward += discriminator.evaluate(sample)
 
-                print(sample, flush=True)
-
             reward = accumulated_reward / num_samples
-            policy_loss += reward * current_policy_value
+            policy_loss_batch = reward * current_policy_value
+            reduced_policy_loss = policy_loss_batch.mean()
+            policy_loss += reduced_policy_loss
 
-            print(reward, flush=True)
-            print(policy_loss, flush=True)
+        # total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
+        total_loss = policy_loss
 
-        exit()
-
-        total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
         total_loss.backward()
 
         self.encoder_optimizer.step()
