@@ -18,13 +18,11 @@ class GeneratorBeta:
 
         decoder_output_variables = initial_sequence
 
-        # Using "model forcing"
         updated = False
         for di in range(len(initial_sequence), max_sample_length):
             decoder_output, decoder_hidden, _ = self.decoder(decoder_input, decoder_hidden, encoder_outputs,
                                                              self.batch_size)
 
-            # TODO: Check that this is correct (same as tf.multinomial)
             ni = decoder_output.data.multinomial(1)
             decoder_input = Variable(ni)
             ni_transposed = ni.transpose(0, 1)

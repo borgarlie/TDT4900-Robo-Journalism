@@ -5,7 +5,7 @@ from utils.data_prep import *
 
 class Generator:
     def __init__(self, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion, policy_criterion,
-                 batch_size, use_cuda, beta, generator_beta):
+                 batch_size, use_cuda, beta, generator_beta, num_monte_carlo_samples):
         self.encoder = encoder
         self.decoder = decoder
         self.encoder_optimizer = encoder_optimizer
@@ -16,9 +16,10 @@ class Generator:
         self.use_cuda = use_cuda
         self.beta = beta
         self.generator_beta = generator_beta
+        self.num_monte_carlo_samples = num_monte_carlo_samples
 
     # discriminator is used to calculate reward
-    # summary batch is used for MLE
+    # target batch is used for MLE
     def train_on_batch(self, input_variable_batch, input_lengths, target_variable_batch, target_lengths, discriminator):
 
         self.encoder_optimizer.zero_grad()
@@ -36,6 +37,7 @@ class Generator:
 
         mle_loss = 0
         policy_loss = 0
+        total_reward = 0
         accumulated_sequence = None
 
         # Without teacher forcing: use its own predictions as the next input
@@ -54,36 +56,32 @@ class Generator:
             else:
                 accumulated_sequence = torch.cat((accumulated_sequence, decoder_input_batch), 0)
 
-            # print(accumulated_sequence, flush=True)
             # calculate policy value
             policy_target = decoder_input.squeeze(1)
-            # TODO: Check if reduce false is ok
             current_policy_value = self.policy_criterion(decoder_output, policy_target)
-            # TODO: Is it possible to use a max() function or something and keep the gradient here? might be cheaper
-
             # calculate policy loss using monte carlo search
             accumulated_reward = 0
-            num_samples = 2
-            for _ in range(num_samples):
+            for _ in range(self.num_monte_carlo_samples):
                 sample = self.generator_beta.generate_sequence(input_variable_batch, input_lengths, max_target_length,
                                                                accumulated_sequence)
                 sample = sample.transpose(1, 0)
                 accumulated_reward += discriminator.evaluate(sample)
 
-            reward = accumulated_reward / num_samples
-            policy_loss_batch = reward * current_policy_value
+            reward = accumulated_reward / self.num_monte_carlo_samples
+            total_reward += reward
+            policy_loss_batch = (1-reward) * current_policy_value
             reduced_policy_loss = policy_loss_batch.mean()
             policy_loss += reduced_policy_loss
 
-        # total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
-        total_loss = policy_loss
-
+        total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
         total_loss.backward()
 
         self.encoder_optimizer.step()
         self.decoder_optimizer.step()
 
-        return total_loss.data[0]
+        total_reward = (total_reward / max_target_length).mean()
+
+        return total_loss.data[0], mle_loss.data[0], policy_loss.data[0], total_reward
 
     # Used to create fake data samples to train the discriminator
     # Returned values as batched sentences as variables

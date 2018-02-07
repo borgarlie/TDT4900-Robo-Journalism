@@ -63,7 +63,7 @@ def train_iters(config, articles, titles, eval_articles, eval_titles, vocabulary
 
     start = time.time()
     print_loss_total = 0  # Reset every print_every
-    lowest_loss = 999  # TODO: FIX THIS. save and load
+    lowest_loss = 999
 
     n_epochs = config['train']['num_epochs']
     batch_size = config['train']['batch_size']

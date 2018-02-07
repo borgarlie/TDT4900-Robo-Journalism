@@ -1,18 +1,19 @@
 {
   "train" : {
     "dataset" : "../../data/cnn_preprocessed/cnn_preprocessed_200_80.unk",
-    "num_articles" : 300,
-    "num_evaluate" : 20,
+    "num_articles" : 100,
+    "num_evaluate" : 5,
     "throw" : 0,
     "with_categories": false,
-    "n_epochs" : 20,
-    "batch_size" : 16,
+    "n_epochs" : 12,
+    "batch_size" : 8,
     "generator_learning_rate" : 0.001,
     "discriminator_learning_rate" : 0.001,
-    "beta" : 0.5,
+    "beta" : 0.9,
     "n_generator" : 2,
-    "n_discriminator" : 4,
-    "discriminator_n_epochs" : 2,
+    "n_discriminator" : 2,
+    "discriminator_n_epochs" : 1,
+    "num_monte_carlo_samples" : 1,
     "max_sample_length" : 80
   },
   "evaluate" : {
@@ -21,15 +22,15 @@
     "return_beams": 5
   },
   "generator_model" : {
-    "embedding_size" : 100,
+    "embedding_size" : 40,
     "n_layers" : 1,
-    "hidden_size" : 64,
+    "hidden_size" : 50,
     "dropout_p" : 0.1,
     "load" : false,
     "load_file" : "generator_test.pth.tar"
   },
   "discriminator_model" : {
-    "hidden_size" : 64,
+    "hidden_size" : 50,
     "dropout_p" : 0.5,
     "num_kernels" : 100,
     "kernel_sizes" : [3, 4, 5],

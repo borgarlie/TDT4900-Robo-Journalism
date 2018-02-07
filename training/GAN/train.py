@@ -24,7 +24,10 @@ def train_GAN(config, vocabulary, generator, discriminator, articles, titles, ev
 
     start = time.time()
     print_loss_generator = 0
+    print_loss_mle = 0
+    print_loss_policy = 0
     print_loss_discriminator = 0
+    print_total_reward = 0
     lowest_loss_generator = 999
     lowest_loss_discriminator = 999
 
@@ -68,18 +71,29 @@ def train_GAN(config, vocabulary, generator, discriminator, articles, titles, ev
                 input_variable, input_lengths, target_variable, target_lengths = prepare_batch(batch_size, vocabulary,
                     g_article_batches[batch], g_title_batches[batch], max_article_length, max_abstract_length,
                                                                                                with_categories)
-                loss = generator.train_on_batch(input_variable, input_lengths, target_variable, target_lengths,
-                                                discriminator)
+                loss, mle_loss, policy_loss, reward = generator.train_on_batch(
+                    input_variable, input_lengths, target_variable,  target_lengths, discriminator)
                 print_loss_generator += loss
+                print_loss_mle += mle_loss
+                print_loss_policy += policy_loss
+                print_total_reward += reward
                 # calculate number of batches processed
                 itr_generator = (epoch - 1) * num_batches + batch + 1
                 if itr_generator % print_every == 0:
                     print_loss_avg = print_loss_generator / print_every
+                    print_loss_avg_mle = print_loss_mle / print_every
+                    print_loss_avg_policy = print_loss_policy / print_every
+                    print_total_reward_avg = print_total_reward / print_every
                     print_loss_generator = 0
+                    print_loss_mle = 0
+                    print_loss_policy = 0
+                    print_total_reward = 0
                     progress, total_runtime = time_since(start, itr_generator / n_iters, total_runtime)
                     start = time.time()
                     print('%s (%d %d%%)' % (progress, itr_generator, itr_generator / n_iters * 100), flush=True)
-                    print('Generator loss: %.4f' % print_loss_avg, flush=True)
+                    print('Generator loss (total, mle, policy, reward): %.4f, %.4f, %.4f, %.4f'
+                          % (print_loss_avg, print_loss_avg_mle, print_loss_avg_policy, print_total_reward_avg),
+                          flush=True)
                     if print_loss_avg < lowest_loss_generator:
                         lowest_loss_generator = print_loss_avg
                         print(" ^ Lowest generator loss so far", flush=True)
@@ -107,7 +121,7 @@ def train_GAN(config, vocabulary, generator, discriminator, articles, titles, ev
                         loss = discriminator.train(ground_truth_batched, discriminator_training_data[m])
                         print_loss_discriminator += loss
                         # calculate number of batches processed
-                        itr_discriminator = (epoch - 1) * num_batches + k * n_discriminator + m
+                        itr_discriminator = (epoch - 1) * num_batches + batch + 1 + k * n_discriminator + m
                         if itr_discriminator % print_every == 0:
                             print_loss_avg = print_loss_discriminator / print_every
                             print_loss_discriminator = 0

@@ -67,6 +67,7 @@ if __name__ == '__main__':
     with_categories = config['train']['with_categories']
     batch_size = config['train']['batch_size']
     beta = config['train']['beta']
+    num_monte_carlo_samples = config['train']['num_monte_carlo_samples']
 
     # load generator parameters
     generator_embedding_size = config['generator_model']['embedding_size']
@@ -113,10 +114,13 @@ if __name__ == '__main__':
     test_titles = titles[train_length:train_length + test_length]
     print("Range test: %d - %d" % (train_length, train_length+test_length), flush=True)
 
-    # TODO: Use generator_embedding_size
+    # TODO: Use generator_embedding_size for decoder too ?
+    # TODO: What about using a shared embedding ?
 
-    generator_encoder = EncoderRNN(vocabulary.n_words, generator_hidden_size, n_layers=generator_n_layers)
-    generator_beta_encoder = EncoderRNN(vocabulary.n_words, generator_hidden_size, n_layers=generator_n_layers)
+    generator_encoder = EncoderRNN(vocabulary.n_words, generator_embedding_size, generator_hidden_size,
+                                   n_layers=generator_n_layers)
+    generator_beta_encoder = EncoderRNN(vocabulary.n_words, generator_embedding_size, generator_hidden_size,
+                                        n_layers=generator_n_layers)
 
     if config['train']['with_categories']:
         max_article_length = max(len(article.split(">>>")[1].strip().split(' ')) for article in articles) + 1
@@ -156,12 +160,13 @@ if __name__ == '__main__':
         generator_encoder = generator_encoder.cuda()
         generator_decoder = generator_decoder.cuda()
         discriminator_model = discriminator_model.cuda()
-        # TODO: Do we need to do this ?
         generator_beta_encoder = generator_beta_encoder.cuda()
         generator_beta_decoder = generator_beta_decoder.cuda()
 
-    generator_encoder_optimizer = optim.SGD(generator_encoder.parameters(), lr=generator_learning_rate)
-    generator_decoder_optimizer = optim.SGD(generator_decoder.parameters(), lr=generator_learning_rate)
+    # generator_encoder_optimizer = optim.SGD(generator_encoder.parameters(), lr=generator_learning_rate)
+    # generator_decoder_optimizer = optim.SGD(generator_decoder.parameters(), lr=generator_learning_rate)
+    generator_encoder_optimizer = optim.Adam(generator_encoder.parameters(), lr=generator_learning_rate)
+    generator_decoder_optimizer = optim.Adam(generator_decoder.parameters(), lr=generator_learning_rate)
     generator_mle_criterion = torch.nn.NLLLoss()
     policy_criterion = torch.nn.NLLLoss(reduce=False)
 
@@ -174,7 +179,7 @@ if __name__ == '__main__':
 
     generator = Generator(generator_encoder, generator_decoder, generator_encoder_optimizer,
                           generator_decoder_optimizer, generator_mle_criterion, policy_criterion, batch_size, use_cuda,
-                          beta, generator_beta)
+                          beta, generator_beta, num_monte_carlo_samples)
 
     discriminator = Discriminator(discriminator_model, discriminator_optimizer, discriminator_criterion)
 
@@ -183,7 +188,6 @@ if __name__ == '__main__':
               max_article_length, max_abstract_length, writer)
 
     # Evaluate the generator
-    # TODO: Make sure the references here are correct
     generator_encoder.eval()
     generator_decoder.eval()
     evaluate(config, test_articles, test_titles, vocabulary, generator_encoder, generator_decoder,
