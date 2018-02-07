@@ -30,10 +30,16 @@ class Beam:
     def __lt__(self, other):
         return self.get_avg_score().__lt__(other.get_avg_score())
 
+    # TODO: Add no-repeat for 3grams
+    # if word-2 + word-1 + word has occured earlier, dont add word
     def generate_expanded_beams(self, vocabulary, topv, topi, decoder_hidden, decoder_attention, expansions=5):
         for i in range(expansions):
             next_word = topi[0][i]
             if len(self.scores) < 4 and (next_word == EOS_token or next_word == PAD_token):
+                expansions += 1
+                continue
+            # TODO: Check that this is the correct way to do it. Should we just skip, or set score = 0?
+            if self.has_trigram(self.decoded_outputs, next_word):
                 expansions += 1
                 continue
             decoded_outputs = list(self.decoded_outputs) + [next_word]
@@ -45,6 +51,24 @@ class Beam:
             new_attention_weights = self.attention_weights.clone()
             new_attention_weights[len(self.decoded_word_sequence)] = decoder_attention.data
             yield Beam(decoded_words, decoded_outputs, new_attention_weights, new_scores, next_word, decoder_hidden)
+
+    # using indexes
+    def has_trigram(self, current_sequence, next_word):
+        if len(current_sequence) < 3:
+            return False
+        word1 = current_sequence[-2]
+        word2 = current_sequence[-1]
+        word3 = next_word
+        for i in range(2, len(current_sequence)):
+            if current_sequence[i-2] != word1:
+                continue
+            if current_sequence[i-1] != word2:
+                continue
+            if current_sequence[i] != word3:
+                continue
+            # all equal = overlap
+            return True
+        return False
 
     # return list of expanded beams. return self if current beam is at end of sentence
     def expand(self, vocabulary, encoder_outputs, decoder, expansions=5):

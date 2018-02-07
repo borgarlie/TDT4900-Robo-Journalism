@@ -14,12 +14,13 @@
   },
   "evaluate" : {
     "expansions" : 3,
-    "keep_beams" : 20,
+    "keep_beams" : 30,
     "return_beams": 5
   },
   "model" : {
     "n_layers" : 1,
-    "hidden_size" : 100,
+    "embedding_size" : 100,
+    "hidden_size" : 128,
     "dropout_p" : 0.1
   },
   "save" : {

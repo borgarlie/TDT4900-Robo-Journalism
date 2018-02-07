@@ -58,6 +58,7 @@ if __name__ == '__main__':
     batch_size = config['train']['batch_size']
     learning_rate = config['train']['learning_rate']
 
+    embedding_size = config['model']['embedding_size']
     hidden_size = config['model']['hidden_size']
     n_layers = config['model']['n_layers']
     dropout_p = config['model']['dropout_p']
@@ -88,7 +89,7 @@ if __name__ == '__main__':
 
     print("Range test: %d - %d" % (train_length, train_length+test_length), flush=True)
 
-    encoder = EncoderRNN(vocabulary.n_words, hidden_size, n_layers=n_layers)
+    encoder = EncoderRNN(vocabulary.n_words, embedding_size, hidden_size, n_layers=n_layers)
 
     if config['train']['with_categories']:
         max_article_length = max(len(article.split(">>>")[1].strip().split(' ')) for article in articles) + 1
