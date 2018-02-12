@@ -134,12 +134,12 @@ def read_file(relative_path):
 
 
 if __name__ == '__main__':
-    relative_path_cnn = '../data/cnn_preprocessed/cnn_preprocessed_200_80'
+    relative_path_cnn = '../data/ntb_preprocessed/ntb_80_5cat'
     articles, abstracts = read_file(relative_path_cnn)
 
-    with_categories = False
+    with_categories = True
     max_articles = -1
-    limit = 40000
+    limit = 30000
 
     vocabulary = generate_vocabulary(articles, abstracts, max_articles, with_categories)
     limited_vocabulary = limit_vocabulary(vocabulary, limit)
@@ -152,7 +152,7 @@ if __name__ == '__main__':
     # for tup in vocab_words:
     #     print("%s - %d" % (tup[0], tup[1]), flush=True)
 
-    save_path_dataset = '../data/cnn_pickled/cnn_pointer_40k'
+    save_path_dataset = '../data/ntb_pickled/ntb_pointer_30k'
     save_dataset(dataset, save_path_dataset)
 
     # load_path = '../data/cnn_pickled/cnn_pointer_40k'

@@ -9,8 +9,8 @@ from utils.time_utils import *
 
 
 # Train one batch
-def train(config, input_variable, input_lengths, target_variable, target_lengths,
-          encoder, decoder, encoder_optimizer, decoder_optimizer, criterion):
+def train(config, vocabulary, input_variable, full_input_variable, input_lengths, target_variable, full_target_variable,
+          target_lengths, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion):
 
     batch_size = config['train']['batch_size']
     teacher_forcing_ratio = config['train']['teacher_forcing_ratio']
@@ -32,22 +32,33 @@ def train(config, input_variable, input_lengths, target_variable, target_lengths
 
     use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False
 
+    # TODO: FIX all below here.
+
     if use_teacher_forcing:
         # Teacher forcing: Feed the target as the next input
         for di in range(max_target_length):
             decoder_output, decoder_hidden, decoder_attention = decoder(decoder_input, decoder_hidden, encoder_outputs,
-                                                                        batch_size)
-            loss += criterion(decoder_output, target_variable[di])
+                                                                        full_input_variable, batch_size)
+            # TODO: is log correct here?
+            loss += criterion(torch.log(decoder_output), full_target_variable[di])
             decoder_input = target_variable[di]  # Teacher forcing
     else:
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_target_length):
             decoder_output, decoder_hidden, decoder_attention = decoder(decoder_input, decoder_hidden, encoder_outputs,
-                                                                        batch_size)
+                                                                        full_input_variable, batch_size)
             topv, topi = decoder_output.data.topk(1)
             ni = topi  # next input, batch of top softmax scores
+
+            # if we produce an OOV word, then we need to replace input with UNK
+            for token_index in range(0, len(ni)):  # TODO: Is it >= or > ?
+                if ni[token_index] >= vocabulary.n_words:
+                    ni[token_index] = UNK_token
+
             decoder_input = Variable(torch.cuda.LongTensor(ni)) if use_cuda else Variable(torch.LongTensor(ni))
-            loss += criterion(decoder_output, target_variable[di])
+
+            # TODO: is log correct here?
+            loss += criterion(torch.log(decoder_output), full_target_variable[di])
 
     loss.backward()
 
@@ -57,9 +68,8 @@ def train(config, input_variable, input_lengths, target_variable, target_lengths
     return loss.data[0]
 
 
-def train_iters(config, articles, titles, eval_articles, eval_titles, vocabulary, encoder, decoder, max_article_length,
-                max_abstract_length, encoder_optimizer, decoder_optimizer, writer, start_epoch=1, total_runtime=0,
-                with_categories=False):
+def train_iters(config, training_pairs, eval_pairs, vocabulary, encoder, decoder, max_article_length,
+                max_abstract_length, encoder_optimizer, decoder_optimizer, writer, start_epoch=1, total_runtime=0):
 
     start = time.time()
     print_loss_total = 0  # Reset every print_every
@@ -71,7 +81,7 @@ def train_iters(config, articles, titles, eval_articles, eval_titles, vocabulary
 
     criterion = nn.NLLLoss()
 
-    num_batches = int(len(articles) / batch_size)
+    num_batches = int(len(training_pairs) / batch_size)
     n_iters = num_batches * n_epochs
 
     print("Starting training", flush=True)
@@ -80,19 +90,20 @@ def train_iters(config, articles, titles, eval_articles, eval_titles, vocabulary
         batch_loss_avg = 0
 
         # shuffle articles and titles (equally)
-        c = list(zip(articles, titles))
-        random.shuffle(c)
-        articles_shuffled, titles_shuffled = zip(*c)
+        # c = list(zip(articles, titles))
+        random.shuffle(training_pairs)  # TODO: Check that this is ok
+        # articles_shuffled, titles_shuffled = zip(*c)
 
         # split into batches
-        article_batches = list(chunks(articles_shuffled, batch_size))
-        title_batches = list(chunks(titles_shuffled, batch_size))
+        training_pair_batches = list(chunks(training_pairs, batch_size))
+        # title_batches = list(chunks(titles_shuffled, batch_size))
 
         for batch in range(num_batches):
-            input_variable, input_lengths, target_variable, target_lengths = prepare_batch(batch_size, vocabulary,
-                article_batches[batch], title_batches[batch], max_article_length, max_abstract_length, with_categories)
+            input_variable, full_input_variable, input_lengths, target_variable, full_target_variable, target_lengths \
+                = prepare_batch(batch_size, training_pair_batches[batch], max_article_length, max_abstract_length)
 
-            loss = train(config, input_variable, input_lengths, target_variable, target_lengths,
+            loss = train(config, vocabulary, input_variable, full_input_variable, input_lengths, target_variable,
+                         full_target_variable, target_lengths,
                          encoder, decoder, encoder_optimizer, decoder_optimizer, criterion)
 
             print_loss_total += loss
@@ -126,12 +137,13 @@ def train_iters(config, articles, titles, eval_articles, eval_titles, vocabulary
             'optimizer_state_decoder': decoder_optimizer.state_dict()
         }, config['experiment_path'] + "/" + config['save']['save_file'])
 
-        encoder.eval()
-        decoder.eval()
-        calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, writer, epoch, max_article_length,
-                                   eval_articles, eval_titles)
-        encoder.train()
-        decoder.train()
+        # TODO: Fix eval
+        # encoder.eval()
+        # decoder.eval()
+        # calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, writer, epoch, max_article_length,
+        #                            eval_articles, eval_titles)
+        # encoder.train()
+        # decoder.train()
 
 
 def save_state(state, filename):

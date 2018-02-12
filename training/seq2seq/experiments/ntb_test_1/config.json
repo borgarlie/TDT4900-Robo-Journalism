@@ -1,6 +1,6 @@
 {
   "train" : {
-    "dataset" : "../../data/ntb_preprocessed/ntb_80_5cat.unk",
+    "dataset" : "../../data/ntb_pickled/ntb_pointer_30k",
     "num_articles" : 2000,
     "num_evaluate" : 100,
     "throw" : 10,
@@ -19,6 +19,7 @@
   },
   "model" : {
     "n_layers" : 1,
+    "embedding_size" : 50,
     "hidden_size" : 64,
     "dropout_p" : 0.1
   },

@@ -57,7 +57,7 @@ class PointerGeneratorDecoder(nn.Module):
         self.embedding = nn.Embedding(self.vocabulary_size, self.embedding_size)
         # TODO: Make sure we have fixed embedding things. Should also probably fix it for the other model (?)
         self.dropout = nn.Dropout(self.dropout_p)
-        self.gru = nn.GRU(input_size=self.embedding_size, hidden_size=self.hidden_size, n_layers=self.n_layers)
+        self.gru = nn.GRU(input_size=self.embedding_size, hidden_size=self.hidden_size, num_layers=self.n_layers)
 
         # used to calculate W_s*s_t + b_attn
         self.decoder_state_linear = nn.Linear(self.hidden_size, self.hidden_size)
@@ -65,9 +65,9 @@ class PointerGeneratorDecoder(nn.Module):
         self.w_h = nn.Parameter(torch.randn(self.hidden_size))
         self.attention_weight_v = nn.Parameter(torch.randn(self.hidden_size))
 
-        self.out_hidden = nn.Linear(self.hidden_size, self.embedding_size)
+        self.out_hidden = nn.Linear(self.hidden_size * 2, self.embedding_size)
         self.out_vocabulary = nn.Linear(self.embedding_size, self.vocabulary_size)
-        self.pointer_linear = nn.Linear(self.hidden_size + self.embedding_size, 1)
+        self.pointer_linear = nn.Linear(self.hidden_size * 2 + self.embedding_size, 1)
 
     def forward(self, input, hidden, encoder_outputs, full_input, batch_size=1, use_cuda=True):
         embedded_input = self.embedding(input).view(1, batch_size, self.embedding_size)
@@ -79,28 +79,63 @@ class PointerGeneratorDecoder(nn.Module):
         # calculate new decoder state
         decoder_output, decoder_hidden = self.gru(embedded_input, hidden)
 
+        # print(decoder_output, flush=True)
+        # print(decoder_hidden, flush=True)
+
+        # TODO: They are 100% alike the first round. What happens at round 2 ? Which one should we use?
+
         # calculate attention weights
         decoder_state_linear = self.decoder_state_linear(decoder_hidden)
         attention_dist = F.tanh((self.w_h * encoder_outputs) + decoder_state_linear)
-        attention_dist = (self.attention_weight_v * attention_dist).sum(1)  # TODO: -1 ? what dimension here?
+        # print(attention_dist, flush=True)
+        attention_dist = (self.attention_weight_v * attention_dist).sum(2)  # TODO: -1 ? 1? what dimension here?
+        # print(attention_dist, flush=True)
+
         attention_dist = F.softmax(attention_dist, dim=1)  # TODO: dim = -1 ? what dim ?
+
+        # print(attention_dist.transpose(0, 1).unsqueeze(1), flush=True)
+        # print(encoder_outputs.transpose(0, 1), flush=True)
 
         # calculate context vectors
         # TODO: Check the unsqueeze and squeeze here
-        encoder_context = torch.bmm(attention_dist.unsqueeze(1), encoder_outputs.transpose(0, 1))
-        combined_context = torch.cat((decoder_hidden, encoder_context.squeeze(1)), 1)
+        encoder_context = torch.bmm(attention_dist.transpose(0, 1).unsqueeze(1), encoder_outputs.transpose(0, 1))
+        # sum over the length
+
+        # print(encoder_context, flush=True)
+        # exit()
+
+        # print(decoder_hidden.squeeze(0), flush=True)
+        # print(encoder_context.squeeze(1), flush=True)
+
+        combined_context = torch.cat((decoder_hidden.squeeze(0), encoder_context.squeeze(1)), 1)
+
+        # print(combined_context, flush=True)
+        # exit()
 
         p_vocab = F.softmax(self.out_vocabulary(self.out_hidden(combined_context)), dim=1)
 
-        pointer_combined = torch.cat((combined_context, embedded_input[0]), 1)  # TODO: is [0] correct?
+        # print(p_vocab, flush=True)
+        # exit()
+
+        # print(embedded_input.squeeze(0), flush=True)
+
+        pointer_combined = torch.cat((combined_context, embedded_input.squeeze(0)), 1)  # TODO: is [0] correct?
+
+
+        # print(pointer_combined, flush=True)
+        # exit()
+
         p_gen = F.sigmoid(self.pointer_linear(pointer_combined))
 
         # create temporal variable to use for distributions
-        token_input_dist = Variable(torch.zeros((batch_size, self.vocab_size + self.max_length)))
+        token_input_dist = Variable(torch.zeros((batch_size, self.vocabulary_size + self.max_length)))
         padding_matrix = Variable(torch.zeros(batch_size, self.max_length))
         if use_cuda:
             token_input_dist = token_input_dist.cuda()
             padding_matrix = padding_matrix.cuda()
+
+        # print()
+        # TODO: FIx rest here.
 
         token_input_dist.scatter_add(1, full_input, attention_dist)
 
