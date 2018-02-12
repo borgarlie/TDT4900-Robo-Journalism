@@ -40,54 +40,70 @@ class AttnDecoderRNN(nn.Module):
 
 
 class PointerGeneratorDecoder(nn.Module):
-    def __init__(self, hidden_size, output_size, max_length, n_layers=1, dropout_p=0.1):
+    """
+        The simplest pointer generator model, without coverage.
+
+        max_length = max length of input to encoder (the actual input sequence)
+    """
+    def __init__(self, hidden_size, embedding_size, vocabulary_size, max_length, n_layers=1, dropout_p=0.1):
         super(PointerGeneratorDecoder, self).__init__()
         self.hidden_size = hidden_size * 2  # * 2 because of bidirectional encoder
-        self.output_size = output_size
+        self.embedding_size = embedding_size
+        self.vocabulary_size = vocabulary_size
         self.n_layers = n_layers
         self.dropout_p = dropout_p
         self.max_length = max_length
 
-        self.embedding = nn.Embedding(self.output_size, self.hidden_size)
-        self.attn = nn.Linear(self.hidden_size * 2, self.max_length)
-        self.attn_combine = nn.Linear(self.hidden_size * 2, self.hidden_size)
+        self.embedding = nn.Embedding(self.vocabulary_size, self.embedding_size)
+        # TODO: Make sure we have fixed embedding things. Should also probably fix it for the other model (?)
         self.dropout = nn.Dropout(self.dropout_p)
-        self.gru = nn.GRU(self.hidden_size, self.hidden_size, self.n_layers)
-        self.out = nn.Linear(self.hidden_size, self.output_size)
-        self.generator_layer = nn.Linear(self.hidden_size * 2, 1)
+        self.gru = nn.GRU(input_size=self.embedding_size, hidden_size=self.hidden_size, n_layers=self.n_layers)
+
+        # used to calculate W_s*s_t + b_attn
+        self.decoder_state_linear = nn.Linear(self.hidden_size, self.hidden_size)
+        # used to calculate w_h * e_t for all t
+        self.w_h = nn.Parameter(torch.randn(self.hidden_size))
+        self.attention_weight_v = nn.Parameter(torch.randn(self.hidden_size))
+
+        self.out_hidden = nn.Linear(self.hidden_size, self.embedding_size)
+        self.out_vocabulary = nn.Linear(self.embedding_size, self.vocabulary_size)
+        self.pointer_linear = nn.Linear(self.hidden_size + self.embedding_size, 1)
 
     def forward(self, input, hidden, encoder_outputs, full_input, batch_size=1, use_cuda=True):
-        embedded = self.embedding(input).view(1, batch_size, self.hidden_size)
-        embedded = self.dropout(embedded)
+        embedded_input = self.embedding(input).view(1, batch_size, self.embedding_size)
+        embedded_input = self.dropout(embedded_input)
 
-        cat = torch.cat((embedded[0], hidden[0]), 1)
-        temp = self.attn(cat)
-        attn_weights = F.softmax(temp, dim=1)
-        attn_applied = torch.bmm(attn_weights.unsqueeze(1), encoder_outputs.transpose(0, 1))
+        # TODO: Does view still work when we use embedded input here now? Or do we need to do embedded_input[0] ?
+        # TODO: alternative: Do not use view ?
 
-        combined_context = torch.cat((embedded[0], attn_applied.squeeze(1)), 1)
-        combined_context = self.attn_combine(combined_context).unsqueeze(0)
+        # calculate new decoder state
+        decoder_output, decoder_hidden = self.gru(embedded_input, hidden)
 
-        gru_output, gru_hidden = self.gru(combined_context, hidden)
+        # calculate attention weights
+        decoder_state_linear = self.decoder_state_linear(decoder_hidden)
+        attention_dist = F.tanh((self.w_h * encoder_outputs) + decoder_state_linear)
+        attention_dist = (self.attention_weight_v * attention_dist).sum(1)  # TODO: -1 ? what dimension here?
+        attention_dist = F.softmax(attention_dist, dim=1)  # TODO: dim = -1 ? what dim ?
 
-        p_vocabulary = F.log_softmax(self.out(gru_output[0]), dim=1)
+        # calculate context vectors
+        # TODO: Check the unsqueeze and squeeze here
+        encoder_context = torch.bmm(attention_dist.unsqueeze(1), encoder_outputs.transpose(0, 1))
+        combined_context = torch.cat((decoder_hidden, encoder_context.squeeze(1)), 1)
 
-        # TODO: Fix all this shit. should it be hidden instead of gru_hidden? do hidden need a squeeze?
-        generator_layer_input = torch.cat((combined_context, hidden), 1)
-        p_generator = F.sigmoid(self.gen_layer(generator_layer_input))
+        p_vocab = F.softmax(self.out_vocabulary(self.out_hidden(combined_context)), dim=1)
 
-        token_input_dist = Variable(torch.zeros((full_input.size()[0], self.output_size + 500)))
-        padding_matrix_2 = Variable(torch.zeros(full_input.size()[0], 500))
+        pointer_combined = torch.cat((combined_context, embedded_input[0]), 1)  # TODO: is [0] correct?
+        p_gen = F.sigmoid(self.pointer_linear(pointer_combined))
+
+        # create temporal variable to use for distributions
+        token_input_dist = Variable(torch.zeros((batch_size, self.vocab_size + self.max_length)))
+        padding_matrix = Variable(torch.zeros(batch_size, self.max_length))
         if use_cuda:
             token_input_dist = token_input_dist.cuda()
-            padding_matrix_2 = padding_matrix_2.cuda()
+            padding_matrix = padding_matrix.cuda()
 
-        token_input_dist.scatter_add_(1, full_input, attn_weights)
+        token_input_dist.scatter_add(1, full_input, attention_dist)
 
-        p_vocabulary_scaled = p_vocabulary * p_generator
-        padded_vocabulary_matrix = torch.cat((p_vocabulary_scaled, padding_matrix_2), 1)
+        p_final = torch.cat((p_vocab * p_gen, padding_matrix), 1) + (1 - p_gen) * token_input_dist
 
-        p_final = padded_vocabulary_matrix + (1 - p_generator) * token_input_dist
-
-        return p_final, hidden, attn_weights
-
+        return p_final, decoder_hidden, attention_dist
