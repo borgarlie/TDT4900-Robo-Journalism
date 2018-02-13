@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
     summary_pairs, vocabulary = load_dataset(relative_path)
 
-    total_articles = len(summary_pairs) - num_throw
+    total_articles = len(summary_pairs[:num_articles]) - num_throw
     train_articles_length = total_articles - num_evaluate
 
     # Append remainder to evaluate set so that the training set has exactly a multiple of batch size
@@ -131,13 +131,13 @@ if __name__ == '__main__':
             exit()
 
     # articles = summary. TODO: Fix naming conventions when stuff works
-    train_iters(config, train_articles, test_articles, vocabulary,
-                encoder, decoder, max_article_length, max_abstract_length, encoder_optimizer, decoder_optimizer,
-                writer, start_epoch=start_epoch, total_runtime=total_runtime)
+    # train_iters(config, train_articles, test_articles, vocabulary,
+    #             encoder, decoder, max_article_length, max_abstract_length, encoder_optimizer, decoder_optimizer,
+    #             writer, start_epoch=start_epoch, total_runtime=total_runtime)
 
     encoder.eval()
     decoder.eval()
     # TODO: Fix evaluate
-    # evaluate(config, test_articles, vocabulary, encoder, decoder, max_length=max_article_length)
+    evaluate(config, test_articles, vocabulary, encoder, decoder, max_length=max_article_length)
 
     print("Done", flush=True)

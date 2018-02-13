@@ -36,6 +36,8 @@ class AttnDecoderRNN(nn.Module):
 
         # TODO: Should dim = 0 ?
         output = F.log_softmax(self.out(output[0]), dim=1)
+
+        # print(output, flush=True)
         return output, hidden, attn_weights
 
 
@@ -79,51 +81,26 @@ class PointerGeneratorDecoder(nn.Module):
         # calculate new decoder state
         decoder_output, decoder_hidden = self.gru(embedded_input, hidden)
 
-        # print(decoder_output, flush=True)
-        # print(decoder_hidden, flush=True)
-
         # TODO: They are 100% alike the first round. What happens at round 2 ? Which one should we use?
 
         # calculate attention weights
         decoder_state_linear = self.decoder_state_linear(decoder_hidden)
         attention_dist = F.tanh((self.w_h * encoder_outputs) + decoder_state_linear)
-        # print(attention_dist, flush=True)
         attention_dist = (self.attention_weight_v * attention_dist).sum(2)  # TODO: -1 ? 1? what dimension here?
-        # print(attention_dist, flush=True)
-
         attention_dist = F.softmax(attention_dist, dim=1)  # TODO: dim = -1 ? what dim ?
-
-        # print(attention_dist.transpose(0, 1).unsqueeze(1), flush=True)
-        # print(encoder_outputs.transpose(0, 1), flush=True)
 
         # calculate context vectors
         # TODO: Check the unsqueeze and squeeze here
         encoder_context = torch.bmm(attention_dist.transpose(0, 1).unsqueeze(1), encoder_outputs.transpose(0, 1))
         # sum over the length
-
-        # print(encoder_context, flush=True)
-        # exit()
-
-        # print(decoder_hidden.squeeze(0), flush=True)
-        # print(encoder_context.squeeze(1), flush=True)
-
         combined_context = torch.cat((decoder_hidden.squeeze(0), encoder_context.squeeze(1)), 1)
 
-        # print(combined_context, flush=True)
-        # exit()
-
         p_vocab = F.softmax(self.out_vocabulary(self.out_hidden(combined_context)), dim=1)
-
+        #
+        # print("p_vocab", flush=True)
         # print(p_vocab, flush=True)
-        # exit()
-
-        # print(embedded_input.squeeze(0), flush=True)
 
         pointer_combined = torch.cat((combined_context, embedded_input.squeeze(0)), 1)  # TODO: is [0] correct?
-
-
-        # print(pointer_combined, flush=True)
-        # exit()
 
         p_gen = F.sigmoid(self.pointer_linear(pointer_combined))
 
@@ -134,11 +111,24 @@ class PointerGeneratorDecoder(nn.Module):
             token_input_dist = token_input_dist.cuda()
             padding_matrix = padding_matrix.cuda()
 
-        # print()
-        # TODO: FIx rest here.
+        # in place scatter add
+        token_input_dist.scatter_add_(1, full_input.transpose(0, 1), attention_dist.transpose(0, 1))
 
-        token_input_dist.scatter_add(1, full_input, attention_dist)
+        # print("token_input_dist", flush=True)
+        # print(token_input_dist, flush=True)
+        #
+        # print("token[0]", flush=True)
+        # print(token_input_dist.data[0][10], flush=True)
+        #
+        # print("full_input", flush=True)
+        # print(full_input.transpose(0, 1), flush=True)
+        # print("attention", flush=True)
+        # print(attention_dist.transpose(0, 1), flush=True)
 
         p_final = torch.cat((p_vocab * p_gen, padding_matrix), 1) + (1 - p_gen) * token_input_dist
+
+        # print("p_final", flush=True)
+        # print(p_final, flush=True)
+        # exit()
 
         return p_final, decoder_hidden, attention_dist

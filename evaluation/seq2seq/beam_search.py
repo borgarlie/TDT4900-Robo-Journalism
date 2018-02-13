@@ -14,13 +14,16 @@ def prune_beams(beams, num_keep_beams):
 
 
 class Beam:
-    def __init__(self, decoded_word_sequence, decoded_outputs, attention_weights, scores, input_token, input_hidden):
+    def __init__(self, decoded_word_sequence, decoded_outputs, attention_weights, scores, input_token, input_hidden,
+                 full_input_variable, extended_vocab):
         self.decoded_word_sequence = decoded_word_sequence
         self.decoded_outputs = decoded_outputs
         self.scores = scores  # This is a list of log(output from softmax) for each word in the sequence
         self.input_token = input_token
         self.input_hidden = input_hidden
         self.attention_weights = attention_weights
+        self.full_input_variable = full_input_variable
+        self.extended_vocab = extended_vocab
 
     def get_avg_score(self):
         if len(self.scores) == 0:
@@ -43,14 +46,25 @@ class Beam:
                 expansions += 1
                 continue
             decoded_outputs = list(self.decoded_outputs) + [next_word]
-            decoded_words = list(self.decoded_word_sequence) + [vocabulary.index2word[next_word]]
+            if next_word >= vocabulary.n_words:
+                # next_word = self.full_input_variable[next_word]
+                next_unpacked_word = "<UNK>"
+                # self.extended_vocab[word] = index
+                for key, value in self.extended_vocab.items():
+                    if value == next_word:
+                        next_unpacked_word = key
+                        break
+            else:
+                next_unpacked_word = vocabulary.index2word[next_word]
+            decoded_words = list(self.decoded_word_sequence) + [next_unpacked_word]
             # Using log(score) to be able to sum instead of multiply,
             # so that we are able to take the average based on number of tokens in the sequence
             next_score = topv[0][i]  # already using log softmax, no need to use an additional log here
             new_scores = list(self.scores) + [next_score]
             new_attention_weights = self.attention_weights.clone()
             new_attention_weights[len(self.decoded_word_sequence)] = decoder_attention.data
-            yield Beam(decoded_words, decoded_outputs, new_attention_weights, new_scores, next_word, decoder_hidden)
+            yield Beam(decoded_words, decoded_outputs, new_attention_weights, new_scores, next_word, decoder_hidden,
+                       self.full_input_variable, self.extended_vocab)
 
     # using indexes
     def has_trigram(self, current_sequence, next_word):
@@ -75,10 +89,12 @@ class Beam:
         if self.input_token == EOS_token or self.input_token == PAD_token:
             return list([self])
         # expand beam
+        if self.input_token >= vocabulary.n_words:
+            self.input_token = UNK_token
         decoder_input = Variable(torch.LongTensor([self.input_token]))
         decoder_input = decoder_input.cuda() if use_cuda else decoder_input
         decoder_output, decoder_hidden, decoder_attention = decoder(decoder_input, self.input_hidden, encoder_outputs,
-                                                                    1)
+                                                                    self.full_input_variable, 1)
         topv, topi = decoder_output.data.topk(expansions)
         return list(self.generate_expanded_beams(vocabulary, topv, topi, decoder_hidden, decoder_attention, expansions))
 
