@@ -1,3 +1,5 @@
+import numpy as np
+
 from utils.data_prep import *
 
 
@@ -33,8 +35,6 @@ class Beam:
     def __lt__(self, other):
         return self.get_avg_score().__lt__(other.get_avg_score())
 
-    # TODO: Add no-repeat for 3grams
-    # if word-2 + word-1 + word has occured earlier, dont add word
     def generate_expanded_beams(self, vocabulary, topv, topi, decoder_hidden, decoder_attention, expansions=5):
         for i in range(expansions):
             next_word = topi[0][i]
@@ -46,21 +46,16 @@ class Beam:
                 expansions += 1
                 continue
             decoded_outputs = list(self.decoded_outputs) + [next_word]
-            if next_word >= vocabulary.n_words:
-                # next_word = self.full_input_variable[next_word]
-                next_unpacked_word = "<UNK>"
-                # self.extended_vocab[word] = index
-                for key, value in self.extended_vocab.items():
-                    if value == next_word:
-                        next_unpacked_word = key
-                        break
-            else:
-                next_unpacked_word = vocabulary.index2word[next_word]
+            next_unpacked_word = get_word_from_token(next_word, vocabulary, self.extended_vocab)
             decoded_words = list(self.decoded_word_sequence) + [next_unpacked_word]
             # Using log(score) to be able to sum instead of multiply,
             # so that we are able to take the average based on number of tokens in the sequence
-            next_score = topv[0][i]  # already using log softmax, no need to use an additional log here
-            new_scores = list(self.scores) + [next_score]
+            # also need to set a minimum value, since we can not take log of 0
+            next_score = topv[0][i] if topv[0][i] > 1e-8 else 1e-8
+            # print(next_score, flush=True)
+            log_score = np.log(next_score)
+            # print(log_score, flush=True)
+            new_scores = list(self.scores) + [log_score]
             new_attention_weights = self.attention_weights.clone()
             new_attention_weights[len(self.decoded_word_sequence)] = decoder_attention.data
             yield Beam(decoded_words, decoded_outputs, new_attention_weights, new_scores, next_word, decoder_hidden,

@@ -32,46 +32,28 @@ def train(config, vocabulary, input_variable, full_input_variable, input_lengths
 
     use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False
 
-    # TODO: FIX all below here.
-
     if use_teacher_forcing:
         # Teacher forcing: Feed the target as the next input
         for di in range(max_target_length):
             decoder_output, decoder_hidden, decoder_attention = decoder(decoder_input, decoder_hidden, encoder_outputs,
                                                                         full_input_variable, batch_size)
-            # TODO: is log correct here?
-            # loss += criterion(torch.log(decoder_output), full_target_variable[di])
-            loss += criterion(decoder_output, full_target_variable[di])
+            log_output = torch.log(decoder_output.clamp(min=1e-8))
+            loss += criterion(log_output, full_target_variable[di])
             decoder_input = target_variable[di]  # Teacher forcing
-
-            # print("decoder_input", flush=True)
-            # print(decoder_input, flush=True)
     else:
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_target_length):
             decoder_output, decoder_hidden, decoder_attention = decoder(decoder_input, decoder_hidden, encoder_outputs,
                                                                         full_input_variable, batch_size)
-
-            # print(decoder_output, flush=True)
             topv, topi = decoder_output.data.topk(1)
             ni = topi  # next input, batch of top softmax scores
-
-            # print("ni", flush=True)
-            # print(ni, flush=True)
-
             # if we produce an OOV word, then we need to replace input with UNK
-            for token_index in range(0, len(ni)):  # TODO: Is it >= or > ?
+            for token_index in range(0, len(ni)):
                 if ni[token_index][0] >= vocabulary.n_words:
                     ni[token_index][0] = UNK_token
-                    # pass
-
             decoder_input = Variable(torch.cuda.LongTensor(ni)) if use_cuda else Variable(torch.LongTensor(ni))
-
-            # print(decoder_input, flush=True)
-
-            # TODO: is log correct here?
-            # loss += criterion(torch.log(decoder_output), full_target_variable[di])
-            loss += criterion(decoder_output, full_target_variable[di])
+            log_output = torch.log(decoder_output.clamp(min=1e-8))
+            loss += criterion(log_output, full_target_variable[di])
 
     loss.backward()
 
@@ -150,13 +132,12 @@ def train_iters(config, training_pairs, eval_pairs, vocabulary, encoder, decoder
             'optimizer_state_decoder': decoder_optimizer.state_dict()
         }, config['experiment_path'] + "/" + config['save']['save_file'])
 
-        # TODO: Fix eval
-        # encoder.eval()
-        # decoder.eval()
-        # calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, writer, epoch, max_article_length,
-        #                            eval_articles, eval_titles)
-        # encoder.train()
-        # decoder.train()
+        encoder.eval()
+        decoder.eval()
+        calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, writer, epoch, max_article_length,
+                                   eval_pairs)
+        encoder.train()
+        decoder.train()
 
 
 def save_state(state, filename):

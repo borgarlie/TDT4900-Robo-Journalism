@@ -12,7 +12,6 @@ from evaluation.seq2seq.evaluate import evaluate
 from models.seq2seq.decoder import AttnDecoderRNN, PointerGeneratorDecoder
 from models.seq2seq.encoder import EncoderRNN
 from preprocess.preprocess_pointer import *
-# from preprocess import preprocess, preprocess_pointer
 from training.seq2seq.train import train_iters
 
 
@@ -67,11 +66,12 @@ if __name__ == '__main__':
     load_model = config['train']['load']
     load_file = experiment_path + "/" + config['train']['load_file']
 
-    # articles, titles, vocabulary = preprocess.generate_vocabulary(relative_path, num_articles, with_categories)
-
     summary_pairs, vocabulary = load_dataset(relative_path)
 
-    total_articles = len(summary_pairs[:num_articles]) - num_throw
+    if num_articles != -1:
+        summary_pairs = summary_pairs[:num_articles]
+
+    total_articles = len(summary_pairs) - num_throw
     train_articles_length = total_articles - num_evaluate
 
     # Append remainder to evaluate set so that the training set has exactly a multiple of batch size
@@ -83,25 +83,16 @@ if __name__ == '__main__':
     print("Test length = %d" % test_length, flush=True)
 
     train_articles = summary_pairs[0:train_length]
-    # train_titles = titles[0:train_length]
     print("Range train: %d - %d" % (0, train_length), flush=True)
 
     train_length = train_length + num_throw  # compensate for thrown away articles
     test_articles = summary_pairs[train_length:train_length + test_length]
-    # test_titles = titles[train_length:train_length + test_length]
 
     print("Range test: %d - %d" % (train_length, train_length+test_length), flush=True)
 
     encoder = EncoderRNN(vocabulary.n_words, embedding_size, hidden_size, n_layers=n_layers)
 
-    # if config['train']['with_categories']:
-    #     max_article_length = max(len(article.split(">>>")[1].strip().split(' ')) for article in articles) + 1
-    # else:
-    #     max_article_length = max(len(article.split(' ')) for article in articles) + 1
-
     max_article_length = max(len(pair.article_tokens) for pair in summary_pairs) + 1
-
-    # max_abstract_length = max(len(title.split(' ')) for title in titles) + 1
 
     max_abstract_length = max(len(pair.abstract_tokens) for pair in summary_pairs) + 1
 
@@ -131,13 +122,13 @@ if __name__ == '__main__':
             exit()
 
     # articles = summary. TODO: Fix naming conventions when stuff works
-    # train_iters(config, train_articles, test_articles, vocabulary,
-    #             encoder, decoder, max_article_length, max_abstract_length, encoder_optimizer, decoder_optimizer,
-    #             writer, start_epoch=start_epoch, total_runtime=total_runtime)
+    train_iters(config, train_articles, test_articles, vocabulary,
+                encoder, decoder, max_article_length, max_abstract_length, encoder_optimizer, decoder_optimizer,
+                writer, start_epoch=start_epoch, total_runtime=total_runtime)
 
     encoder.eval()
     decoder.eval()
-    # TODO: Fix evaluate
+
     evaluate(config, test_articles, vocabulary, encoder, decoder, max_length=max_article_length)
 
     print("Done", flush=True)

@@ -87,7 +87,8 @@ class PointerGeneratorDecoder(nn.Module):
         decoder_state_linear = self.decoder_state_linear(decoder_hidden)
         attention_dist = F.tanh((self.w_h * encoder_outputs) + decoder_state_linear)
         attention_dist = (self.attention_weight_v * attention_dist).sum(2)  # TODO: -1 ? 1? what dimension here?
-        attention_dist = F.softmax(attention_dist, dim=1)  # TODO: dim = -1 ? what dim ?
+        attention_dist = F.softmax(attention_dist, dim=0)  # TODO: dim = -1 ? what dim ?  WAS dim=1
+        # 0 is probably correct
 
         # calculate context vectors
         # TODO: Check the unsqueeze and squeeze here
@@ -96,9 +97,6 @@ class PointerGeneratorDecoder(nn.Module):
         combined_context = torch.cat((decoder_hidden.squeeze(0), encoder_context.squeeze(1)), 1)
 
         p_vocab = F.softmax(self.out_vocabulary(self.out_hidden(combined_context)), dim=1)
-        #
-        # print("p_vocab", flush=True)
-        # print(p_vocab, flush=True)
 
         pointer_combined = torch.cat((combined_context, embedded_input.squeeze(0)), 1)  # TODO: is [0] correct?
 
@@ -114,21 +112,6 @@ class PointerGeneratorDecoder(nn.Module):
         # in place scatter add
         token_input_dist.scatter_add_(1, full_input.transpose(0, 1), attention_dist.transpose(0, 1))
 
-        # print("token_input_dist", flush=True)
-        # print(token_input_dist, flush=True)
-        #
-        # print("token[0]", flush=True)
-        # print(token_input_dist.data[0][10], flush=True)
-        #
-        # print("full_input", flush=True)
-        # print(full_input.transpose(0, 1), flush=True)
-        # print("attention", flush=True)
-        # print(attention_dist.transpose(0, 1), flush=True)
-
         p_final = torch.cat((p_vocab * p_gen, padding_matrix), 1) + (1 - p_gen) * token_input_dist
-
-        # print("p_final", flush=True)
-        # print(p_final, flush=True)
-        # exit()
 
         return p_final, decoder_hidden, attention_dist

@@ -1,12 +1,12 @@
 {
   "train" : {
     "dataset" : "../../data/ntb_pickled/ntb_pointer_30k",
-    "num_articles" : 200,
-    "num_evaluate" : 10,
-    "throw" : 10,
+    "num_articles" : -1,
+    "num_evaluate" : 6500,
+    "throw" : 1000,
     "with_categories": true,
-    "num_epochs" : 5,
-    "batch_size" : 16,
+    "num_epochs" : 20,
+    "batch_size" : 32,
     "learning_rate" : 0.001,
     "teacher_forcing_ratio" : 0.9,
     "load" : false,
@@ -19,8 +19,8 @@
   },
   "model" : {
     "n_layers" : 1,
-    "embedding_size" : 50,
-    "hidden_size" : 64,
+    "embedding_size" : 100,
+    "hidden_size" : 128,
     "dropout_p" : 0.1
   },
   "save" : {
@@ -28,7 +28,7 @@
     "attention_path" : "attention/"
   },
   "log" : {
-    "print_every" : 10
+    "print_every" : 1000
   },
   "tensorboard" : {
     "log_path" : "../../log/seq2seq/ntb_test_1"

@@ -14,8 +14,9 @@ use_cuda = torch.cuda.is_available()
 
 
 def pad_seq(seq, max_length):
-    seq += [PAD_token for i in range(max_length - len(seq))]
-    return seq
+    new_seq = seq.copy()
+    new_seq += [PAD_token for i in range(max_length - len(seq))]
+    return new_seq
 
 
 def category_from_string(category_string):
@@ -56,3 +57,23 @@ def concat_encoder_hidden_directions(h):
         to compensate for two directions in a bidirectional encoder
     """
     return torch.cat([h[0:h.size(0):2], h[1:h.size(0):2]], 2)
+
+
+# Used in the pointer-generator models to get the whole sentence when we have two district vocabularies
+def get_sentence_from_tokens(tokens, vocabulary, extended_vocabulary):
+    words = []
+    for token in tokens:
+        words.append(get_word_from_token(token, vocabulary, extended_vocabulary))
+    return ' '.join(words)
+
+
+# used in the pointer-generator models
+def get_word_from_token(token, vocabulary, extended_vocabulary):
+    if token >= vocabulary.n_words:
+        next_unpacked_word = "<UNK>"
+        for key, value in extended_vocabulary.items():
+            if value == token:
+                next_unpacked_word = key
+                break
+        return next_unpacked_word
+    return vocabulary.index2word[token]
