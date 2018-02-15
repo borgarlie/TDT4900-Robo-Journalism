@@ -2,7 +2,8 @@ from utils.data_prep import *
 
 
 class GeneratorBeta:
-    def __init__(self, encoder, decoder, batch_size, use_cuda):
+    def __init__(self, vocabulary, encoder, decoder, batch_size, use_cuda):
+        self.vocabulary = vocabulary
         self.encoder = encoder
         self.decoder = decoder
         self.batch_size = batch_size
@@ -11,7 +12,8 @@ class GeneratorBeta:
         self.forced_decoder_hidden = None
         self.forced_encoder_outputs = None
 
-    def generate_sequence(self, input_variable_batch, input_lengths, max_sample_length, initial_sequence):
+    def generate_sequence(self, input_variable_batch, full_input_variable_batch, input_lengths, max_sample_length,
+                          initial_sequence):
 
         decoder_input, decoder_hidden, encoder_outputs \
             = self.get_decoder_hidden_state(input_variable_batch, input_lengths, initial_sequence)
@@ -20,10 +22,14 @@ class GeneratorBeta:
 
         updated = False
         for di in range(len(initial_sequence), max_sample_length):
-            decoder_output, decoder_hidden, _ = self.decoder(decoder_input, decoder_hidden, encoder_outputs,
-                                                             self.batch_size)
+            decoder_output, decoder_hidden, _ \
+                = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
+                               self.batch_size)
 
             ni = decoder_output.data.multinomial(1)
+            for token_index in range(0, len(ni)):
+                if ni[token_index][0] >= self.vocabulary.n_words:
+                    ni[token_index][0] = UNK_token
             decoder_input = Variable(ni)
             ni_transposed = ni.transpose(0, 1)
             decoder_input_batch = Variable(ni_transposed)

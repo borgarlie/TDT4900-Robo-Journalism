@@ -1,11 +1,11 @@
 {
   "train" : {
-    "dataset" : "../../data/cnn_preprocessed/cnn_preprocessed_200_80.unk",
+    "dataset" : "../../data/cnn_pickled/cnn_pointer_30k",
     "num_articles" : 100,
     "num_evaluate" : 5,
     "throw" : 0,
     "with_categories": false,
-    "n_epochs" : 8,
+    "n_epochs" : 2,
     "batch_size" : 8,
     "generator_learning_rate" : 0.001,
     "discriminator_learning_rate" : 0.001,

@@ -4,8 +4,9 @@ from utils.data_prep import *
 
 
 class Generator:
-    def __init__(self, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion, policy_criterion,
+    def __init__(self, vocabulary, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion, policy_criterion,
                  batch_size, use_cuda, beta, generator_beta, num_monte_carlo_samples):
+        self.vocabulary = vocabulary
         self.encoder = encoder
         self.decoder = decoder
         self.encoder_optimizer = encoder_optimizer
@@ -20,7 +21,8 @@ class Generator:
 
     # discriminator is used to calculate reward
     # target batch is used for MLE
-    def train_on_batch(self, input_variable_batch, input_lengths, target_variable_batch, target_lengths, discriminator):
+    def train_on_batch(self, input_variable_batch, full_input_variable_batch, input_lengths, full_target_variable_batch,
+                       target_lengths, discriminator):
 
         self.encoder_optimizer.zero_grad()
         self.decoder_optimizer.zero_grad()
@@ -42,12 +44,19 @@ class Generator:
 
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_target_length):
-            decoder_output, decoder_hidden, decoder_attention = self.decoder(decoder_input, decoder_hidden,
-                                                                             encoder_outputs, self.batch_size)
+            decoder_output, decoder_hidden, decoder_attention \
+                = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
+                               self.batch_size)
+
             topv, topi = decoder_output.data.topk(1)
             ni = topi  # next input, batch of top softmax
+
+            for token_index in range(0, len(ni)):
+                if ni[token_index][0] >= self.vocabulary.n_words:
+                    ni[token_index][0] = UNK_token
             decoder_input = Variable(ni)
-            mle_loss += self.mle_criterion(decoder_output, target_variable_batch[di])
+            log_output = torch.log(decoder_output.clamp(min=1e-8))
+            mle_loss += self.mle_criterion(log_output, full_target_variable_batch[di])
 
             ni_transposed = ni.transpose(0, 1)
             decoder_input_batch = Variable(ni_transposed)
@@ -58,12 +67,12 @@ class Generator:
 
             # calculate policy value
             policy_target = decoder_input.squeeze(1)
-            current_policy_value = self.policy_criterion(decoder_output, policy_target)
+            current_policy_value = self.policy_criterion(log_output, policy_target)
             # calculate policy loss using monte carlo search
             accumulated_reward = 0
             for _ in range(self.num_monte_carlo_samples):
-                sample = self.generator_beta.generate_sequence(input_variable_batch, input_lengths, max_target_length,
-                                                               accumulated_sequence)
+                sample = self.generator_beta.generate_sequence(input_variable_batch, full_input_variable_batch,
+                                                               input_lengths, max_target_length, accumulated_sequence)
                 sample = sample.transpose(1, 0)
                 accumulated_reward += discriminator.evaluate(sample)
 
@@ -85,7 +94,7 @@ class Generator:
 
     # Used to create fake data samples to train the discriminator
     # Returned values as batched sentences as variables
-    def create_samples(self, input_variable_batch, input_lengths, max_sample_length):
+    def create_samples(self, input_variable_batch, full_input_variable_batch, input_lengths, max_sample_length):
 
         self.encoder.eval()
         self.decoder.eval()
@@ -101,11 +110,16 @@ class Generator:
 
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_sample_length):
-            decoder_output, decoder_hidden, decoder_attention = self.decoder(decoder_input, decoder_hidden,
-                                                                             encoder_outputs, self.batch_size)
+            decoder_output, decoder_hidden, decoder_attention \
+                = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
+                               self.batch_size)
+
             topv, topi = decoder_output.data.topk(1)
             ni = topi  # next input, batch of top softmax scores
-            decoder_input = Variable(torch.cuda.LongTensor(ni)) if self.use_cuda else Variable(torch.LongTensor(ni))
+            for token_index in range(0, len(ni)):
+                if ni[token_index][0] >= self.vocabulary.n_words:
+                    ni[token_index][0] = UNK_token
+            decoder_input = Variable(ni)
 
             decoder_output_data = ni.cpu().numpy()
             for batch_index in range(0, len(decoder_output_data)):
