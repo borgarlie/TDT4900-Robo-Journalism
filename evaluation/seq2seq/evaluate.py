@@ -28,7 +28,7 @@ def evaluate_beams(config, vocabulary, encoder, decoder, input_variable, full_in
     input_length = len(input_variable)
     input_variable = Variable(torch.LongTensor(input_variable)).unsqueeze(1)
     input_variable = input_variable.cuda() if use_cuda else input_variable
-    full_input_variable = Variable(torch.LongTensor(full_input_variable)).unsqueeze(1)
+    full_input_variable = Variable(torch.LongTensor(full_input_variable)).unsqueeze(0)
     full_input_variable = full_input_variable.cuda() if use_cuda else full_input_variable
 
     encoder_outputs, encoder_hidden = encoder(input_variable, [input_length], None)
@@ -70,7 +70,7 @@ def calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, 
         input_variable = input_variable.cuda() if use_cuda else input_variable
 
         full_article_variable = pad_seq(full_article, max_length)
-        full_article_variable = Variable(torch.LongTensor(full_article_variable)).unsqueeze(1)
+        full_article_variable = Variable(torch.LongTensor(full_article_variable)).unsqueeze(0)
         full_article_variable = full_article_variable.cuda() if use_cuda else full_article_variable
 
         full_target_variable = Variable(torch.LongTensor(abstract)).unsqueeze(1)

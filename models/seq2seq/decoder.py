@@ -33,11 +33,8 @@ class AttnDecoderRNN(nn.Module):
         output = self.attn_combine(output).unsqueeze(0)
 
         output, hidden = self.gru(output, hidden)
-
-        # TODO: Should dim = 0 ?
         output = F.log_softmax(self.out(output[0]), dim=1)
 
-        # print(output, flush=True)
         return output, hidden, attn_weights
 
 
@@ -57,7 +54,6 @@ class PointerGeneratorDecoder(nn.Module):
         self.max_length = max_length
 
         self.embedding = nn.Embedding(self.vocabulary_size, self.embedding_size)
-        # TODO: Make sure we have fixed embedding things. Should also probably fix it for the other model (?)
         self.dropout = nn.Dropout(self.dropout_p)
         self.gru = nn.GRU(input_size=self.embedding_size, hidden_size=self.hidden_size, num_layers=self.n_layers)
 
@@ -74,32 +70,22 @@ class PointerGeneratorDecoder(nn.Module):
     def forward(self, input, hidden, encoder_outputs, full_input, batch_size=1, use_cuda=True):
         embedded_input = self.embedding(input).view(1, batch_size, self.embedding_size)
         embedded_input = self.dropout(embedded_input)
-
-        # TODO: Does view still work when we use embedded input here now? Or do we need to do embedded_input[0] ?
-        # TODO: alternative: Do not use view ?
-
         # calculate new decoder state
         decoder_output, decoder_hidden = self.gru(embedded_input, hidden)
-
-        # TODO: They are 100% alike the first round. What happens at round 2 ? Which one should we use?
 
         # calculate attention weights
         decoder_state_linear = self.decoder_state_linear(decoder_hidden)
         attention_dist = F.tanh((self.w_h * encoder_outputs) + decoder_state_linear)
-        attention_dist = (self.attention_weight_v * attention_dist).sum(2)  # TODO: -1 ? 1? what dimension here?
-        attention_dist = F.softmax(attention_dist, dim=0)  # TODO: dim = -1 ? what dim ?  WAS dim=1
-        # 0 is probably correct
+        attention_dist = (self.attention_weight_v * attention_dist).sum(2)
+        attention_dist = F.softmax(attention_dist, dim=0).transpose(0, 1)
 
         # calculate context vectors
-        # TODO: Check the unsqueeze and squeeze here
-        encoder_context = torch.bmm(attention_dist.transpose(0, 1).unsqueeze(1), encoder_outputs.transpose(0, 1))
-        # sum over the length
+        encoder_context = torch.bmm(attention_dist.unsqueeze(1), encoder_outputs.transpose(0, 1))
         combined_context = torch.cat((decoder_hidden.squeeze(0), encoder_context.squeeze(1)), 1)
 
         p_vocab = F.softmax(self.out_vocabulary(self.out_hidden(combined_context)), dim=1)
 
-        pointer_combined = torch.cat((combined_context, embedded_input.squeeze(0)), 1)  # TODO: is [0] correct?
-
+        pointer_combined = torch.cat((combined_context, embedded_input.squeeze(0)), 1)
         p_gen = F.sigmoid(self.pointer_linear(pointer_combined))
 
         # create temporal variable to use for distributions
@@ -110,7 +96,7 @@ class PointerGeneratorDecoder(nn.Module):
             padding_matrix = padding_matrix.cuda()
 
         # in place scatter add
-        token_input_dist.scatter_add_(1, full_input.transpose(0, 1), attention_dist.transpose(0, 1))
+        token_input_dist.scatter_add_(1, full_input, attention_dist)
 
         p_final = torch.cat((p_vocab * p_gen, padding_matrix), 1) + (1 - p_gen) * token_input_dist
 

@@ -34,7 +34,7 @@ def prepare_batch(batch_size, summary_pairs, max_article_length, max_abstract_le
 
     # Turn padded arrays into (batch_size x max_len) tensors, transpose into (max_len x batch_size)
     input_var = Variable(torch.LongTensor(input_padded)).transpose(0, 1)
-    full_input_var = Variable(torch.LongTensor(full_input_padded)).transpose(0, 1)
+    full_input_var = Variable(torch.LongTensor(full_input_padded))  # No need to transpose full input
     target_var = Variable(torch.LongTensor(target_padded)).transpose(0, 1)
     full_target_var = Variable(torch.LongTensor(full_target_padded)).transpose(0, 1)
 
