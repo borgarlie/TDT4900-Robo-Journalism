@@ -30,11 +30,19 @@ def read_file(path):
 
 
 def avg_bleu_score(titles, output):
+    smoothing = nltk.translate.bleu_score.SmoothingFunction()
+    smoothing_functions = [smoothing.method0, smoothing.method1, smoothing.method2, smoothing.method3,
+                           smoothing.method4]
+    for i in range(0, len(smoothing_functions)):
+        score = avg_bleu_score_smoothing_function(titles, output, smoothing_functions[i])
+        print("Bleu score with smoothing %d: %.4f " % (i, score))
+
+
+def avg_bleu_score_smoothing_function(titles, output, smoothing_function):
     avg_bleu = 0
     num_examples = len(titles)
-    cc = nltk.translate.bleu_score.SmoothingFunction()
     for i in range(num_examples):
-        avg_bleu += nltk.translate.bleu_score.sentence_bleu(titles[i], output[i], smoothing_function=cc.method4)
+        avg_bleu += nltk.translate.bleu_score.sentence_bleu(titles[i], output[i], smoothing_function=smoothing_function)
     return avg_bleu/num_examples
 
 
@@ -59,6 +67,7 @@ if __name__ == '__main__':
     # nltk.download('punkt')
     # path = 'experiments/ntb_paramsearch_1/output.txt'
     path = '../output_for_eval/pointer_gen_ntb_baseline.txt'
+    # path = '../output_for_eval/pointer_gen_ntb_baseline_2.txt'
     print("Started extracting titles...")
     titles, output = read_file(path)
     print(titles[1])
@@ -67,4 +76,4 @@ if __name__ == '__main__':
     print(len(output))
     print("Done extracting titles...")
     print("starting to evaluate %d examples..." % len(titles))
-    print("Got a BLEU score equal: %.4f " % avg_bleu_score(titles, output))
+    avg_bleu_score(titles, output)
