@@ -6,16 +6,16 @@ dm_double_close_quote = u'\u201d'  # unicode
 # acceptable ways to end a sentence
 end_tokens = ['.', '!', '?', '...', "'", "`", '"', dm_single_close_quote, dm_double_close_quote, ")"]
 
-max_article_tokens = 200
-min_article_tokens = 40
-max_abstract_tokens = 80
-min_abstract_tokens = 10
+max_article_tokens = 400
+min_article_tokens = 200
+max_abstract_tokens = 100
+min_abstract_tokens = 50
 
 cnn_directory = os.fsencode("../data/cnn_clean/cnn_stories_tokenized/")
 dm_directory = os.fsencode("../data/cnn_clean/dm_stories_tokenized/")
 
 relative_save_path = "../data/cnn_preprocessed/"
-save_name = "cnn_preprocessed_200_80"
+save_name = "cnn_preprocessed_400_100"
 
 
 class Errors:
