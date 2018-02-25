@@ -1,14 +1,14 @@
 {
   "train" : {
-    "dataset" : "../../data/cnn_pickled/cnn_pointer_30k",
-    "num_articles" : 90000,
-    "num_evaluate" : 5000,
+    "dataset" : "../../data/cnn_pickled/cnn_pointer_50k",
+    "num_articles" : -1,
+    "num_evaluate" : 13000,
     "throw" : 0,
     "with_categories": false,
-    "num_epochs" : 10,
-    "batch_size" : 32,
+    "num_epochs" : 33,
+    "batch_size" : 16,
     "learning_rate" : 0.15,
-    "teacher_forcing_ratio" : 0.9,
+    "teacher_forcing_ratio" : 0.0,
     "load" : false,
     "load_file" : "test1.pth.tar"
   },
@@ -21,14 +21,15 @@
     "n_layers" : 1,
     "embedding_size" : 100,
     "hidden_size" : 128,
-    "dropout_p" : 0.1
+    "dropout_p" : 0.0
   },
   "save" : {
     "save_file" : "cnn_test1.pth.tar",
     "attention_path" : "attention/"
   },
   "log" : {
-    "print_every" : 1000
+    "print_every" : 1000,
+    "filename" : "experiments/cnn_test_1/output.log"
   },
   "tensorboard" : {
     "log_path" : "../../log/seq2seq/cnn_test1"

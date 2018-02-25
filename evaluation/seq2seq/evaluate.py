@@ -1,5 +1,6 @@
 from evaluation.seq2seq.beam_search import *
 from utils.data_prep import *
+from utils.logger import *
 
 
 def evaluate(config, test_articles, vocabulary, encoder, decoder, max_length):
@@ -12,15 +13,15 @@ def evaluate(config, test_articles, vocabulary, encoder, decoder, max_length):
         full_input_sentence_unpacked = get_sentence_from_tokens(full_input_sentence, vocabulary, extended_vocab)
         full_target_sentence_unpacked = get_sentence_from_tokens(full_target_sentence, vocabulary, extended_vocab)
 
-        print('>', full_input_sentence_unpacked, flush=True)
-        print('=', full_target_sentence_unpacked, flush=True)
+        log_message('> %s' % full_input_sentence_unpacked)
+        log_message('= %s' % full_target_sentence_unpacked)
         output_beams = evaluate_beams(config, vocabulary, encoder, decoder, input_sentence, full_input_sentence,
                                       max_length, extended_vocab)
         for beam in output_beams:
             output_words = beam.decoded_word_sequence
             output_sentence = ' '.join(output_words)
-            print('<', str(beam.get_avg_score()), output_sentence, flush=True)
-        print('', flush=True)
+            log_message('< %s %s' % (str(beam.get_avg_score()), output_sentence))
+            log_message('')
 
 
 def evaluate_beams(config, vocabulary, encoder, decoder, input_variable, full_input_variable, max_length,
@@ -79,8 +80,8 @@ def calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, 
         loss += calculate_loss_on_single_eval_article(config, vocabulary, encoder, decoder, criterion, input_variable,
                                                       full_target_variable, input_length, full_article_variable)
     loss_avg = loss / len(eval_pairs)
-    writer.add_scalar('Evaluation loss', loss_avg, epoch)
-    print("Evaluation set loss for epoch %d: %.4f" % (epoch, loss_avg), flush=True)
+    writer.add_scalar('Evaluation_loss', loss_avg, epoch)
+    log_message("Evaluation set loss for epoch %d: %.4f" % (epoch, loss_avg))
 
 
 def calculate_loss_on_single_eval_article(config, vocabulary, encoder, decoder, criterion, input_variable,

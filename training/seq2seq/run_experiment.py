@@ -3,6 +3,7 @@ import sys
 import os
 import torch
 
+
 from torch import optim
 from tensorboardX import SummaryWriter
 
@@ -13,6 +14,7 @@ from models.seq2seq.decoder import AttnDecoderRNN, PointerGeneratorDecoder
 from models.seq2seq.encoder import EncoderRNN
 from preprocess.preprocess_pointer import *
 from training.seq2seq.train import train_iters
+from utils.logger import *
 
 
 def load_state(filename):
@@ -27,26 +29,29 @@ def load_state(filename):
 
 if __name__ == '__main__':
 
-    use_cuda = torch.cuda.is_available()
-
-    if use_cuda:
-        if len(sys.argv) < 3:
-            print("Expected 2 arguments: [0] = experiment path (e.g. test_experiment1), [1] = GPU (0 or 1)", flush=True)
-            exit()
-        torch.cuda.set_device(int(sys.argv[2]))
-        print("Using GPU: %s" % sys.argv[2], flush=True)
-    else:
-        if len(sys.argv) < 2:
-            print("Expected 1 argument: [0] = experiment path (e.g. test_experiment1)", flush=True)
-            exit()
-
     experiment_path = sys.argv[1]
     config_file_path = experiment_path + "/config.json"
     with open(config_file_path) as config_file:
         config = json.load(config_file)
 
     config['experiment_path'] = experiment_path
-    print(json.dumps(config, indent=2), flush=True)
+    filename = config['log']['filename']
+    init_logger(filename)
+
+    use_cuda = torch.cuda.is_available()
+
+    if use_cuda:
+        if len(sys.argv) < 3:
+            log_error_message("Expected 2 arguments: [0] = experiment path (e.g. test_experiment1), [1] = GPU (0 or 1)")
+            exit()
+        torch.cuda.set_device(int(sys.argv[2]))
+        log_message("Using GPU: %s" % sys.argv[2])
+    else:
+        if len(sys.argv) < 2:
+            log_error_message("Expected 1 argument: [0] = experiment path (e.g. test_experiment1)")
+            exit()
+
+    log_message(json.dumps(config, indent=2))
 
     writer = SummaryWriter(config['tensorboard']['log_path'])
     relative_path = config['train']['dataset']
@@ -78,17 +83,17 @@ if __name__ == '__main__':
     num_evaluate += train_articles_length % batch_size
     train_length = total_articles - num_evaluate
     test_length = num_evaluate
-    print("Train length = %d" % train_length, flush=True)
-    print("Throw length = %d" % num_throw, flush=True)
-    print("Test length = %d" % test_length, flush=True)
+    log_message("Train length = %d" % train_length)
+    log_message("Throw length = %d" % num_throw)
+    log_message("Test length = %d" % test_length)
 
     train_articles = summary_pairs[0:train_length]
-    print("Range train: %d - %d" % (0, train_length), flush=True)
+    log_message("Range train: %d - %d" % (0, train_length))
 
     train_length = train_length + num_throw  # compensate for thrown away articles
     test_articles = summary_pairs[train_length:train_length + test_length]
 
-    print("Range test: %d - %d" % (train_length, train_length+test_length), flush=True)
+    log_message("Range test: %d - %d" % (train_length, train_length+test_length))
 
     encoder = EncoderRNN(vocabulary.n_words, embedding_size, hidden_size, n_layers=n_layers)
 
@@ -116,9 +121,9 @@ if __name__ == '__main__':
             decoder.load_state_dict(model_state_decoder)
             encoder_optimizer.load_state_dict(optimizer_state_encoder)
             decoder_optimizer.load_state_dict(optimizer_state_decoder)
-            print("Resuming training from epoch: %d" % start_epoch, flush=True)
+            log_message("Resuming training from epoch: %d" % start_epoch)
         except FileNotFoundError as e:
-            print("No file found: exiting", flush=True)
+            log_error_message("No file found: exiting")
             exit()
 
     # articles = summary. TODO: Fix naming conventions when stuff works
@@ -131,4 +136,4 @@ if __name__ == '__main__':
 
     evaluate(config, test_articles, vocabulary, encoder, decoder, max_length=max_article_length)
 
-    print("Done", flush=True)
+    log_message("Done")

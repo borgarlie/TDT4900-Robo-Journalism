@@ -6,6 +6,7 @@ from evaluation.seq2seq.evaluate import *
 from utils.batching import *
 from utils.data_prep import *
 from utils.time_utils import *
+from utils.logger import *
 
 
 # Train one batch
@@ -79,9 +80,9 @@ def train_iters(config, training_pairs, eval_pairs, vocabulary, encoder, decoder
     num_batches = int(len(training_pairs) / batch_size)
     n_iters = num_batches * n_epochs
 
-    print("Starting training", flush=True)
+    log_message("Starting training")
     for epoch in range(start_epoch, n_epochs + 1):
-        print("Starting epoch: %d" % epoch, flush=True)
+        log_message("Starting epoch: %d" % epoch)
         batch_loss_avg = 0
 
         # shuffle articles and titles (equally)
@@ -111,16 +112,13 @@ def train_iters(config, training_pairs, eval_pairs, vocabulary, encoder, decoder
                 print_loss_total = 0
                 progress, total_runtime = time_since(start, itr / n_iters, total_runtime)
                 start = time.time()
-                print('%s (%d %d%%) %.4f' % (progress, itr, itr / n_iters * 100, print_loss_avg), flush=True)
-                if print_loss_avg < lowest_loss:
-                    lowest_loss = print_loss_avg
-                    print(" ^ Lowest loss so far", flush=True)
+                lowest_loss = log_training_message(progress, itr, itr / n_iters * 100, print_loss_avg, lowest_loss)
 
         # log to tensorboard
         writer.add_scalar('loss', batch_loss_avg / num_batches, epoch)
 
         # save each epoch
-        print("Saving model", flush=True)
+        log_message("Saving model")
         itr = epoch * num_batches
         _, total_runtime = time_since(start, itr / n_iters, total_runtime)
         save_state({
