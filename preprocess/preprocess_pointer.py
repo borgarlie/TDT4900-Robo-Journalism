@@ -122,7 +122,7 @@ def load_dataset(path):
     total_path = path + ".pickle"
     with open(total_path, 'rb') as f:
         dataset = pickle.load(f)
-    print("Done loading dataset")
+    # print("Done loading dataset")
     return dataset.summary_pairs, dataset.vocabulary
 
 

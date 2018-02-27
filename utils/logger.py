@@ -9,11 +9,11 @@ def init_logger(filename):
     logger.setLevel(logging.DEBUG)
 
     # create console handler and set level to debug
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.INFO)
+    # ch = logging.StreamHandler()
+    # ch.setLevel(logging.INFO)
 
     # add ch to logger
-    logger.addHandler(ch)
+    # logger.addHandler(ch)
     # return logger
 
 

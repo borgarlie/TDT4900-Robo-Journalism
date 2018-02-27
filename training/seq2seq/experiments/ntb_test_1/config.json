@@ -7,7 +7,7 @@
     "with_categories": true,
     "num_epochs" : 20,
     "batch_size" : 32,
-    "learning_rate" : 0.001,
+    "learning_rate" : 0.15,
     "teacher_forcing_ratio" : 0.9,
     "load" : false,
     "load_file" : "test1.pth.tar"
@@ -28,7 +28,8 @@
     "attention_path" : "attention/"
   },
   "log" : {
-    "print_every" : 1000
+    "print_every" : 1000,
+    "filename" : "experiments/ntb_test_1/output.log"
   },
   "tensorboard" : {
     "log_path" : "../../log/seq2seq/ntb_test_1"

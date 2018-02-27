@@ -58,6 +58,10 @@ def train(config, vocabulary, input_variable, full_input_variable, input_lengths
 
     loss.backward()
 
+    clip = 2
+    torch.nn.utils.clip_grad_norm(encoder.parameters(), clip)
+    torch.nn.utils.clip_grad_norm(decoder.parameters(), clip)
+
     encoder_optimizer.step()
     decoder_optimizer.step()
 
@@ -134,6 +138,10 @@ def train_iters(config, training_pairs, eval_pairs, vocabulary, encoder, decoder
         decoder.eval()
         calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, writer, epoch, max_article_length,
                                    eval_pairs)
+        # run beam search evaluation for a smaller subset
+        if len(eval_pairs) > 20:
+            eval_pairs_subset = eval_pairs[0:20]
+            evaluate(config, eval_pairs_subset, vocabulary, encoder, decoder, max_length=max_article_length)
         encoder.train()
         decoder.train()
 
