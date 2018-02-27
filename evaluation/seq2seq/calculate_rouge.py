@@ -17,7 +17,7 @@ def read_file(path):
             output.append(line[1:])
             not_truth = False
     output = clean_text(output)
-
+    titles = clean_text(titles)
     return titles, output
 
 
@@ -27,12 +27,13 @@ def clean_text(input_txt):
         line = re.sub(r'\d+', ' ', line)
         line = re.sub(r'[-.]', ' ', line)
         line = re.sub(r'<EOS>', ' ', line)
+        line = line.strip()
         output_txt.append(line)
     return output_txt
 
 
 if __name__ == '__main__':
-    path = '../../output_for_eval/baseline_adam_test.txt'
+    path = '../output_for_eval/pointer_gen_ntb_baseline_2.txt'
     print("Started extracting titles...")
     reference, hypothesis = read_file(path)
     print("Done extracting titles...")

@@ -23,6 +23,7 @@ def read_file(path):
     output = tokenize_list(output)
     tokenized_titles = []
     for title_list in titles:
+        title_list = clean_text(title_list)
         tokenized = tokenize_list(title_list)
         tokenized_titles.append(tokenized)
 
@@ -52,7 +53,9 @@ def clean_text(input_txt):
         line = re.sub(r'\d+', ' ', line)
         line = re.sub(r'[-.]', ' ', line)
         line = re.sub(r'<EOS>', ' ', line)
-        output_txt.append(line)
+        line = line.strip()
+        if len(line) > 0:
+            output_txt.append(line)
     return output_txt
 
 
@@ -66,8 +69,8 @@ def tokenize_list(input_list):
 if __name__ == '__main__':
     # nltk.download('punkt')
     # path = 'experiments/ntb_paramsearch_1/output.txt'
-    path = '../output_for_eval/pointer_gen_ntb_baseline.txt'
-    # path = '../output_for_eval/pointer_gen_ntb_baseline_2.txt'
+    # path = '../output_for_eval/pointer_gen_ntb_baseline.txt'
+    path = '../output_for_eval/pointer_gen_ntb_baseline_2.txt'
     print("Started extracting titles...")
     titles, output = read_file(path)
     print(titles[1])
