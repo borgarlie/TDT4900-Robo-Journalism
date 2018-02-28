@@ -1,13 +1,13 @@
 {
   "train" : {
-    "dataset" : "../../data/ntb_pickled/ntb_pointer_30k",
+    "dataset" : "../../data/ntb_pickled/ntb_pointer_numbers_30k",
     "num_articles" : -1,
     "num_evaluate" : 6500,
     "throw" : 1000,
     "with_categories": true,
     "num_epochs" : 20,
     "batch_size" : 32,
-    "learning_rate" : 0.15,
+    "learning_rate" : 0.001,
     "teacher_forcing_ratio" : 0.9,
     "load" : false,
     "load_file" : "test1.pth.tar"
