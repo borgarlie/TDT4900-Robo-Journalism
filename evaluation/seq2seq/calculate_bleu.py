@@ -5,6 +5,7 @@ from nltk import tokenize
 
 def read_file(path):
     text = open(path, encoding='utf-8').read()
+    text = clean_logger_output(text)  # when using logger
     titles = []
     output = []
     not_truth = False
@@ -26,7 +27,6 @@ def read_file(path):
         title_list = clean_text(title_list)
         tokenized = tokenize_list(title_list)
         tokenized_titles.append(tokenized)
-
     return tokenized_titles, output
 
 
@@ -59,6 +59,16 @@ def clean_text(input_txt):
     return output_txt
 
 
+def clean_logger_output(text):
+    output = ""
+    for line in text.split('\n'):
+        cleaned_line = re.sub('^(.*?)INFO - ', '', line)
+        cleaned_line = re.sub('^(.*?)ERROR - ', '', cleaned_line)
+        if len(cleaned_line) > 0:
+            output += cleaned_line + '\n'
+    return output
+
+
 def tokenize_list(input_list):
     output_list = []
     for line in input_list:
@@ -70,7 +80,8 @@ if __name__ == '__main__':
     # nltk.download('punkt')
     # path = 'experiments/ntb_paramsearch_1/output.txt'
     # path = '../output_for_eval/pointer_gen_ntb_baseline.txt'
-    path = '../output_for_eval/pointer_gen_ntb_baseline_2.txt'
+    # path = '../output_for_eval/pointer_gen_ntb_baseline_2.txt'
+    path = '../output_for_eval/ntb_adagrad_test1.txt'
     print("Started extracting titles...")
     titles, output = read_file(path)
     print(titles[1])
