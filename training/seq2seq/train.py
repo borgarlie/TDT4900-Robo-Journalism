@@ -58,9 +58,9 @@ def train(config, vocabulary, input_variable, full_input_variable, input_lengths
 
     loss.backward()
 
-    clip = 2
-    torch.nn.utils.clip_grad_norm(encoder.parameters(), clip)
-    torch.nn.utils.clip_grad_norm(decoder.parameters(), clip)
+    # clip = 2
+    # torch.nn.utils.clip_grad_norm(encoder.parameters(), clip)
+    # torch.nn.utils.clip_grad_norm(decoder.parameters(), clip)
 
     encoder_optimizer.step()
     decoder_optimizer.step()
