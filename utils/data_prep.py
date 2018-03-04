@@ -77,3 +77,16 @@ def get_word_from_token(token, vocabulary, extended_vocabulary):
                 break
         return next_unpacked_word
     return vocabulary.index2word[token]
+
+
+def get_sentence_from_tokens_unked(tokens, vocabulary):
+    words = []
+    for token in tokens:
+        words.append(get_word_from_token_unked(token, vocabulary))
+    return ' '.join(words)
+
+
+def get_word_from_token_unked(token, vocabulary):
+    if token >= vocabulary.n_words:
+        return "<UNK>"
+    return vocabulary.index2word[token]
