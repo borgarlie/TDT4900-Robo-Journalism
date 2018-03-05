@@ -68,7 +68,7 @@ def generate_vocabulary_for_classifier(relative_path, relative_path_fake_data, m
     print("Reading lines...")
     article = open(relative_path + '.article.txt', encoding='utf-8').read().strip().split('\n')
     title = open(relative_path + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
-    fake_titles = open(relative_path_fake_data + '.title.txt', encoding='utf-8').read().strip().split('\n')
+    fake_titles = open(relative_path_fake_data + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
     print("Read %s articles" % len(article))
     print("Read %s title" % len(title))
     print("Read %s fake_titles" % len(fake_titles))

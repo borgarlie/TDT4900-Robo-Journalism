@@ -8,8 +8,8 @@ from tensorboardX import SummaryWriter
 sys.path.append('../..')  # ugly dirtyfix for imports to work
 
 from models.classifier.cnn_classifier import CNNDiscriminator
-from preprocess import preprocess
 from training.classifier.train import train_iters
+from preprocess.preprocess_pointer import *
 
 
 def save_state(state, filename):
@@ -53,7 +53,6 @@ if __name__ == '__main__':
     relative_path_fake_data = config['train']['fake_dataset']
     num_articles = config['train']['num_articles']
     num_evaluate = config['train']['num_evaluate']
-    with_categories = config['train']['with_categories']
 
     batch_size = config['train']['batch_size']
     learning_rate = config['train']['learning_rate']
@@ -65,8 +64,15 @@ if __name__ == '__main__':
 
     print("Using cuda: " + str(use_cuda), flush=True)
 
-    _, titles, fake_titles, vocabulary = preprocess.generate_vocabulary_for_classifier(relative_path,
-         relative_path_fake_data, num_articles, True)
+    vocabulary_path = config['train']['vocabulary_path']
+    _, vocabulary = load_dataset(vocabulary_path)
+
+    titles = open(relative_path + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
+    fake_titles = open(relative_path_fake_data + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
+
+    if num_articles != -1:
+        titles = titles[:num_articles]
+        fake_titles = fake_titles[:num_articles]
 
     all_titles = titles + fake_titles
     ground_truth = [1 for i in titles] + [0 for i in fake_titles]

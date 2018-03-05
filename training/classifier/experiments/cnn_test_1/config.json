@@ -1,0 +1,27 @@
+{
+  "train" : {
+    "dataset" : "../../data/cnn_real_data/cnn_real_1",
+    "fake_dataset" : "../../data/cnn_fake_data/cnn_fake_1",
+    "vocabulary_path" : "../../data/cnn_pickled/cnn_pointer_50k",
+    "num_articles" : -1,
+    "num_evaluate" : 13000,
+    "num_epochs" : 20,
+    "batch_size" : 32,
+    "learning_rate" : 0.001
+  },
+  "model" : {
+    "hidden_size" : 128,
+    "dropout_p" : 0.5,
+    "num_kernels" : 100,
+    "kernel_sizes" : [2, 3, 4]
+  },
+  "save" : {
+    "save_file" : "test1.pth.tar"
+  },
+  "log" : {
+    "print_every" : 1000
+  },
+  "tensorboard" : {
+    "log_path" : "../../log/classifier/cnn_test_1"
+  }
+}
