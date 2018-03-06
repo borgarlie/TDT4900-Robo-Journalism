@@ -24,6 +24,57 @@ def evaluate(config, test_articles, vocabulary, encoder, decoder, max_length):
             log_message('')
 
 
+def evaluate_argmax(vocabulary, test_articles, encoder, decoder, max_length):
+    for i in range(len(test_articles)):
+        input_sentence = test_articles[i].unked_article_tokens
+        full_input_sentence = test_articles[i].article_tokens
+        full_target_sentence = test_articles[i].abstract_tokens
+        extended_vocab = test_articles[i].unknown_tokens
+        input_length = [len(input_sentence)]
+        input_variable = Variable(torch.LongTensor(input_sentence)).unsqueeze(1)
+        input_variable = input_variable.cuda() if use_cuda else input_variable
+        full_input_variable = Variable(torch.LongTensor(full_input_sentence)).unsqueeze(0)
+        full_input_variable = full_input_variable.cuda() if use_cuda else full_input_variable
+        decoder_outputs = evaluate_single_argmax(vocabulary, input_variable, full_input_variable, input_length,
+                                                 max_length, encoder, decoder)
+        full_target_sentence_unpacked = get_sentence_from_tokens(full_target_sentence, vocabulary, extended_vocab)
+        full_generated_sentence_unpacked = get_sentence_from_tokens(decoder_outputs, vocabulary, extended_vocab)
+        print("TARGET SENTENCE >>> " + full_target_sentence_unpacked, flush=True)
+        print("GENERATED SENTENCE >>> " + full_generated_sentence_unpacked, flush=True)
+
+
+def evaluate_single_argmax(vocabulary, input_variable, full_input_variable, input_lengths, max_sample_length, encoder,
+                           decoder):
+
+    encoder_outputs, encoder_hidden = encoder(input_variable, input_lengths, None)
+    encoder_hidden = concat_encoder_hidden_directions(encoder_hidden)
+
+    decoder_input = Variable(torch.LongTensor([SOS_token]))
+    decoder_input = decoder_input.cuda() if use_cuda else decoder_input
+    decoder_hidden = encoder_hidden
+
+    decoder_outputs = []
+    # Without teacher forcing: use its own predictions as the next input
+    for di in range(max_sample_length):
+        decoder_output, decoder_hidden, decoder_attention \
+            = decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable, 1)
+
+        topv, topi = decoder_output.data.topk(1)
+        ni = topi  # next input, batch of top softmax scores
+
+        if ni == EOS_token or ni == PAD_token:
+            break
+
+        decoder_output_data = ni.cpu().numpy()
+        decoder_outputs.append(decoder_output_data[0].item())
+
+        if ni[0][0] >= vocabulary.n_words:
+            ni[0][0] = UNK_token
+        decoder_input = Variable(ni)
+
+    return decoder_outputs
+
+
 def evaluate_beams(config, vocabulary, encoder, decoder, input_variable, full_input_variable, max_length,
                    extended_vocab):
     input_length = len(input_variable)
