@@ -89,6 +89,14 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     if print_loss_avg < lowest_loss_generator:
                         lowest_loss_generator = print_loss_avg
                         print(" ^ Lowest generator loss so far", flush=True)
+                    # Generating a few arg max summaries to see if there are differences
+                    generator.encoder.eval()
+                    generator.decoder.eval()
+                    samples = eval_pairs[0:3]
+                    evaluate_argmax(generator.vocabulary, samples, generator.encoder, generator.decoder,
+                                    max_abstract_length)
+                    generator.encoder.train()
+                    generator.decoder.train()
                 batch += 1
                 # generate n_discriminator batches to train discriminator on
                 discriminator_training_data = []
@@ -125,13 +133,6 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                                 print(" ^ Lowest discriminator loss so far", flush=True)
             # update generator beta - the parameters of the sampling model is now freezed until next round
             generator.update_generator_beta_params()
-            # Generating a few arg max summaries to see if there are differences
-            generator.encoder.eval()
-            generator.decoder.eval()
-            samples = eval_pairs[0:3]
-            evaluate_argmax(generator.vocabulary, samples, generator.encoder, generator.decoder, max_abstract_length)
-            generator.encoder.train()
-            generator.decoder.train()
         # save each epoch
         print("Saving model", flush=True)
         save_state({
