@@ -1,20 +1,19 @@
 {
   "train" : {
-    "dataset" : "../../data/cnn_pickled/cnn_pointer_30k",
-    "num_articles" : 100,
-    "num_evaluate" : 5,
+    "dataset" : "../../data/cnn_pickled/cnn_pointer_50k",
+    "num_articles" : 10000,
+    "num_evaluate" : 100,
     "throw" : 0,
-    "with_categories": false,
     "n_epochs" : 2,
-    "batch_size" : 8,
-    "generator_learning_rate" : 0.001,
+    "batch_size" : 32,
+    "generator_learning_rate" : 0.01,
     "discriminator_learning_rate" : 0.001,
     "beta" : 0.9,
     "n_generator" : 2,
     "n_discriminator" : 2,
     "discriminator_n_epochs" : 1,
-    "num_monte_carlo_samples" : 1,
-    "max_sample_length" : 80
+    "num_monte_carlo_samples" : 2,
+    "max_sample_length" : 100
   },
   "evaluate" : {
     "expansions" : 3,
@@ -22,27 +21,27 @@
     "return_beams": 5
   },
   "generator_model" : {
-    "embedding_size" : 40,
+    "embedding_size" : 100,
     "n_layers" : 1,
-    "hidden_size" : 50,
-    "dropout_p" : 0.1,
-    "load" : false,
-    "load_file" : "generator_test.pth.tar"
+    "hidden_size" : 128,
+    "dropout_p" : 0.0,
+    "load" : true,
+    "load_file" : "../../models/pretrained_models/cnn/pretrained_1.tar"
   },
   "discriminator_model" : {
-    "hidden_size" : 50,
+    "hidden_size" : 128,
     "dropout_p" : 0.5,
     "num_kernels" : 100,
-    "kernel_sizes" : [3, 4, 5],
-    "load" : false,
-    "load_file" : "discriminator_test.pth.tar"
+    "kernel_sizes" : [2, 3, 4],
+    "load" : true,
+    "load_file" : "../../models/pretrained_models/classifier/cnn/pretrained_1.tar"
   },
   "save" : {
     "save_file_generator" : "generator_test_save.pth.tar",
     "save_file_discriminator" : "discriminator_test_save.pth.tar"
   },
   "log" : {
-    "print_every" : 10
+    "print_every" : 50
   },
   "tensorboard" : {
     "log_path" : "../../log/GAN/test_1"

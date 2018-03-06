@@ -20,7 +20,6 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
     n_epochs = config['train']['n_epochs']
     batch_size = config['train']['batch_size']
     print_every = config['log']['print_every']
-    with_categories = config['train']['with_categories']
 
     start = time.time()
     print_loss_generator = 0

@@ -118,7 +118,7 @@ if __name__ == '__main__':
 
     save_state({
         'model': model.state_dict()
-    }, "model" + config['save']['save_file'])
+    }, config['save']['save_file'])
 
     print("Model saved", flush=True)
     print("Done", flush=True)

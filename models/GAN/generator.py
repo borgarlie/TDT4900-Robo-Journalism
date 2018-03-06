@@ -67,6 +67,7 @@ class Generator:
 
             # calculate policy value
             policy_target = decoder_input.squeeze(1)
+            # TODO: Should we use multinomial sampling to estimate policy target instead?
             current_policy_value = self.policy_criterion(log_output, policy_target)
             # calculate policy loss using monte carlo search
             accumulated_reward = 0
