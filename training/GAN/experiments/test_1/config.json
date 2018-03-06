@@ -1,18 +1,18 @@
 {
   "train" : {
     "dataset" : "../../data/cnn_pickled/cnn_pointer_50k",
-    "num_articles" : 10000,
-    "num_evaluate" : 100,
+    "num_articles" : 1000,
+    "num_evaluate" : 40,
     "throw" : 0,
-    "n_epochs" : 2,
+    "n_epochs" : 10,
     "batch_size" : 32,
     "generator_learning_rate" : 0.01,
     "discriminator_learning_rate" : 0.001,
-    "beta" : 0.9,
+    "beta" : 0.8,
     "n_generator" : 2,
     "n_discriminator" : 2,
     "discriminator_n_epochs" : 1,
-    "num_monte_carlo_samples" : 2,
+    "num_monte_carlo_samples" : 1,
     "max_sample_length" : 100
   },
   "evaluate" : {
@@ -41,7 +41,7 @@
     "save_file_discriminator" : "discriminator_test_save.pth.tar"
   },
   "log" : {
-    "print_every" : 50
+    "print_every" : 20
   },
   "tensorboard" : {
     "log_path" : "../../log/GAN/test_1"

@@ -1,5 +1,3 @@
-import numpy as np
-
 from utils.data_prep import *
 
 
@@ -18,6 +16,10 @@ class Generator:
         self.beta = beta
         self.generator_beta = generator_beta
         self.num_monte_carlo_samples = num_monte_carlo_samples
+        self.cummulative_reward = 0.0
+        self.updates = 0
+        self.baseline = Variable(torch.zeros(1)).cuda()
+        # self.baseline = Variable(torch.cuda.FloatTensor([0] * self.batch_size))
 
     # discriminator is used to calculate reward
     # target batch is used for MLE
@@ -66,7 +68,8 @@ class Generator:
                 accumulated_sequence = torch.cat((accumulated_sequence, decoder_input_batch), 0)
 
             # calculate policy value
-            policy_target = decoder_input.squeeze(1)
+            # policy_target = decoder_input.squeeze(1) # should at least not use UNKed value.
+            policy_target = Variable(decoder_output.data.multinomial(1).squeeze(1))
             # TODO: Should we use multinomial sampling to estimate policy target instead?
             current_policy_value = self.policy_criterion(log_output, policy_target)
             # calculate policy loss using monte carlo search
@@ -75,13 +78,43 @@ class Generator:
                 sample = self.generator_beta.generate_sequence(input_variable_batch, full_input_variable_batch,
                                                                input_lengths, max_target_length, accumulated_sequence)
                 sample = sample.transpose(1, 0)
+
+                # print(sample, flush=True)
                 accumulated_reward += discriminator.evaluate(sample)
 
             reward = accumulated_reward / self.num_monte_carlo_samples
             total_reward += reward
-            policy_loss_batch = (1-reward) * current_policy_value
+            # if self.updates > 5:
+            #     print("####################", flush=True)
+            #     print(reward.mean().data[0], flush=True)
+            #     print(self.baseline.data[0], flush=True)
+            #     print(reward, flush=True)
+            #     print(self.baseline, flush=True)
+            #     print(reward - self.baseline, flush=True)
+            #     print("####################", flush=True)
+            #     exit()
+            policy_loss_batch = (reward - self.baseline) * current_policy_value
+            # policy_loss_batch = (1-reward) * current_policy_value
             reduced_policy_loss = policy_loss_batch.mean()
             policy_loss += reduced_policy_loss
+
+        # print(accumulated_sequence, flush=True)
+
+        # print("Printing val mean and data", flush=True)
+
+        # update baseline value
+        # val = discriminator.evaluate(accumulated_sequence.transpose(1, 0))
+        # mean = val.mean()
+        # data = mean.data[0]
+        # print(val, flush=True)
+        # print(mean, flush=True)
+        # print(data, flush=True)
+        # exit()
+        self.cummulative_reward += discriminator.evaluate(accumulated_sequence.transpose(1, 0)).mean().data[0]
+        self.updates += 1
+        avg = self.cummulative_reward / self.updates
+        self.baseline = Variable(torch.cuda.FloatTensor([avg]))
+        print("Current baseline value: %.8f" % avg, flush=True)
 
         total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
         total_loss.backward()

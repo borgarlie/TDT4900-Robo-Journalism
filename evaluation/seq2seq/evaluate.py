@@ -62,11 +62,10 @@ def evaluate_single_argmax(vocabulary, input_variable, full_input_variable, inpu
         topv, topi = decoder_output.data.topk(1)
         ni = topi  # next input, batch of top softmax scores
 
-        if ni == EOS_token or ni == PAD_token:
-            break
+        decoder_outputs.append(ni[0][0])
 
-        decoder_output_data = ni.cpu().numpy()
-        decoder_outputs.append(decoder_output_data[0].item())
+        if ni[0][0] == EOS_token or ni[0][0] == PAD_token:
+            break
 
         if ni[0][0] >= vocabulary.n_words:
             ni[0][0] = UNK_token

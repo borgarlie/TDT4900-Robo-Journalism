@@ -1,6 +1,6 @@
 import random
 
-from evaluation.seq2seq.evaluate import calculate_loss_on_eval_set
+from evaluation.seq2seq.evaluate import calculate_loss_on_eval_set, evaluate_argmax
 from training.seq2seq.train import save_state
 from utils.batching import *
 from utils.data_prep import *
@@ -125,6 +125,13 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                                 print(" ^ Lowest discriminator loss so far", flush=True)
             # update generator beta - the parameters of the sampling model is now freezed until next round
             generator.update_generator_beta_params()
+            # Generating a few arg max summaries to see if there are differences
+            generator.encoder.eval()
+            generator.decoder.eval()
+            samples = eval_pairs[0:3]
+            evaluate_argmax(generator.vocabulary, samples, generator.encoder, generator.decoder, max_abstract_length)
+            generator.encoder.train()
+            generator.decoder.train()
         # save each epoch
         print("Saving model", flush=True)
         save_state({
