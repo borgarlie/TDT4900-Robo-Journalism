@@ -58,7 +58,6 @@ if __name__ == '__main__':
     num_articles = config['train']['num_articles']
     num_evaluate = config['train']['num_evaluate']
     num_throw = config['train']['throw']
-    with_categories = config['train']['with_categories']
 
     batch_size = config['train']['batch_size']
     learning_rate = config['train']['learning_rate']

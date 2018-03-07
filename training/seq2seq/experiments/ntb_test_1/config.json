@@ -1,11 +1,10 @@
 {
   "train" : {
-    "dataset" : "../../data/ntb_pickled/ntb_pointer_numbers_30k",
+    "dataset" : "../../data/ntb_pickled/ntb_pointer_30k",
     "num_articles" : -1,
     "num_evaluate" : 6500,
     "throw" : 1000,
-    "with_categories": true,
-    "num_epochs" : 20,
+    "num_epochs" : 2,
     "batch_size" : 32,
     "learning_rate" : 0.001,
     "teacher_forcing_ratio" : 0.9,
@@ -21,10 +20,10 @@
     "n_layers" : 1,
     "embedding_size" : 100,
     "hidden_size" : 128,
-    "dropout_p" : 0.1
+    "dropout_p" : 0.0
   },
   "save" : {
-    "save_file" : "test1.pth.tar",
+    "save_file" : "ntb_pretrain_2epochs.tar",
     "attention_path" : "attention/"
   },
   "log" : {

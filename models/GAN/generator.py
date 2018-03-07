@@ -43,7 +43,7 @@ class Generator:
         full_sequence_rewards = []
         full_policy_values = []
 
-        # Without teacher forcing: use its own predictions as the next input
+        # calculate baseline value
         for di in range(max_target_length):
             decoder_output, decoder_hidden, decoder_attention \
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
@@ -55,11 +55,22 @@ class Generator:
                 if ni[token_index][0] >= self.vocabulary.n_words:
                     ni[token_index][0] = UNK_token
 
-            var_ni = Variable(ni)
+            decoder_input = Variable(ni)
             if di == 0:
-                accumulated_sequence_argmax = var_ni
+                accumulated_sequence_argmax = decoder_input
             else:
-                accumulated_sequence_argmax = torch.cat((accumulated_sequence_argmax, var_ni), 1)
+                accumulated_sequence_argmax = torch.cat((accumulated_sequence_argmax, decoder_input), 1)
+
+        baseline = discriminator.evaluate(accumulated_sequence_argmax)
+        # Printing mean baseline value
+        print(baseline.mean().data[0], flush=True)
+
+        # Do policy iteration
+        # Without teacher forcing: use its own predictions as the next input
+        for di in range(max_target_length):
+            decoder_output, decoder_hidden, decoder_attention \
+                = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
+                               self.batch_size)
 
             log_output = torch.log(decoder_output.clamp(min=1e-8))
             mle_loss += self.mle_criterion(log_output, full_target_variable_batch[di])
@@ -94,14 +105,10 @@ class Generator:
             full_sequence_rewards.append(reward)
             total_reward += reward  # used for printing only
 
-        baseline = discriminator.evaluate(accumulated_sequence_argmax)
         for i in range(0, len(full_sequence_rewards)):
             current_policy_loss = (full_sequence_rewards[i] - baseline) * full_policy_values[i]
             reduced_policy_loss = current_policy_loss.mean()
             policy_loss += reduced_policy_loss
-
-        # Printing mean baseline value
-        print(baseline.mean().data[0], flush=True)
 
         total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
         total_loss.backward()
