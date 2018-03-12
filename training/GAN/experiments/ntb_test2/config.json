@@ -4,15 +4,15 @@
     "num_articles" : -1,
     "num_evaluate" : 6500,
     "throw" : 1000,
-    "n_epochs" : 2,
+    "n_epochs" : 3,
     "batch_size" : 32,
     "generator_learning_rate" : 0.01,
     "discriminator_learning_rate" : 0.001,
-    "beta" : 0.00,
+    "beta" : 0.75,
     "n_generator" : 2,
     "n_discriminator" : 2,
     "discriminator_n_epochs" : 2,
-    "num_monte_carlo_samples" : 1,
+    "num_monte_carlo_samples" : 2,
     "max_sample_length" : 20
   },
   "evaluate" : {
@@ -41,7 +41,7 @@
     "save_file_discriminator" : "ntb_discriminator_test_save_2.tar"
   },
   "log" : {
-    "print_every" : 100
+    "print_every" : 200
   },
   "tensorboard" : {
     "log_path" : "../../log/GAN/ntb_test_1"

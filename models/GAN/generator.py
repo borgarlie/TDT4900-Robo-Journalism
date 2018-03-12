@@ -38,6 +38,7 @@ class Generator:
         mle_loss = 0
         policy_loss = 0
         total_reward = 0
+        adjusted_reward = 0
         accumulated_sequence = None
         accumulated_sequence_argmax = None
         full_sequence_rewards = []
@@ -63,7 +64,12 @@ class Generator:
 
         baseline = discriminator.evaluate(accumulated_sequence_argmax)
         # Printing mean baseline value
-        print(baseline.mean().data[0], flush=True)
+        # print(baseline.mean().data[0], flush=True)
+
+        # reset values
+        decoder_input = Variable(torch.LongTensor([SOS_token] * self.batch_size))
+        decoder_input = decoder_input.cuda() if self.use_cuda else decoder_input
+        decoder_hidden = encoder_hidden
 
         # Do policy iteration
         # Without teacher forcing: use its own predictions as the next input
@@ -106,7 +112,9 @@ class Generator:
             total_reward += reward  # used for printing only
 
         for i in range(0, len(full_sequence_rewards)):
-            current_policy_loss = (full_sequence_rewards[i] - baseline) * full_policy_values[i]
+            temp_adjusted_reward = full_sequence_rewards[i] - baseline
+            adjusted_reward += temp_adjusted_reward
+            current_policy_loss = temp_adjusted_reward * full_policy_values[i]
             reduced_policy_loss = current_policy_loss.mean()
             policy_loss += reduced_policy_loss
 
@@ -117,8 +125,9 @@ class Generator:
         self.decoder_optimizer.step()
 
         total_reward = (total_reward / max_target_length).mean()
+        adjusted_reward = (adjusted_reward / max_target_length).mean()
 
-        return total_loss.data[0], mle_loss.data[0], policy_loss.data[0], total_reward
+        return total_loss.data[0], mle_loss.data[0], policy_loss.data[0], total_reward, adjusted_reward
 
     # Used to create fake data samples to train the discriminator
     # Returned values as batched sentences as variables

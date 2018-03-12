@@ -107,7 +107,7 @@ def evaluate_beams(config, vocabulary, encoder, decoder, input_variable, full_in
 
 # Calculate loss on the evaluation set. Does not modify anything.
 def calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, writer, epoch, max_length,
-                               eval_pairs):
+                               eval_pairs, use_logger=True):
     loss = 0
     for i in range(0, len(eval_pairs)):
         article = eval_pairs[i].unked_article_tokens
@@ -131,7 +131,11 @@ def calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, 
                                                       full_target_variable, input_length, full_article_variable)
     loss_avg = loss / len(eval_pairs)
     writer.add_scalar('Evaluation_loss', loss_avg, epoch)
-    log_message("Evaluation set loss for epoch %d: %.4f" % (epoch, loss_avg))
+    message = "Evaluation set loss for epoch %d: %.4f" % (epoch, loss_avg)
+    if use_logger:
+        log_message(message)
+    else:
+        print(message, flush=True)
 
 
 def calculate_loss_on_single_eval_article(config, vocabulary, encoder, decoder, criterion, input_variable,

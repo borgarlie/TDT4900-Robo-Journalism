@@ -172,7 +172,8 @@ if __name__ == '__main__':
     policy_criterion = torch.nn.NLLLoss(reduce=False)
 
     # TODO: should this one be loaded?
-    discriminator_optimizer = torch.optim.Adam(discriminator_model.parameters(), lr=discriminator_learning_rate)
+    discriminator_optimizer = torch.optim.Adam(discriminator_model.parameters(), lr=discriminator_learning_rate,
+                                               weight_decay=1e-05)
     discriminator_criterion = torch.nn.BCEWithLogitsLoss()
 
     generator_beta = GeneratorBeta(vocabulary, generator_beta_encoder, generator_beta_decoder, batch_size, use_cuda)
