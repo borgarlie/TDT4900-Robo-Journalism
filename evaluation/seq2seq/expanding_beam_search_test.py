@@ -20,7 +20,7 @@ def load_state(filename):
 if __name__ == '__main__':
     use_cuda = torch.cuda.is_available()
 
-    filename = "beam_expansion.log"
+    filename = "beam_expansion2.log"
     init_logger(filename)
 
     if use_cuda:
@@ -30,12 +30,13 @@ if __name__ == '__main__':
         torch.cuda.set_device(int(sys.argv[1]))
         log_message("Using GPU: %s" % sys.argv[1])
 
-    relative_path = "../../data/cnn_pickled/cnn_pointer_50k"
+    # relative_path = "../../data/cnn_pickled/cnn_pointer_50k"
+    relative_path = "../../data/ntb_pickled/ntb_pointer_30k"
     hidden_size = 128
     embedding_size = 100
     n_layers = 1
     dropout_p = 0.0
-    load_file = "../../models/pretrained_models/cnn/pretrained_1.tar"
+    load_file = "../../models/pretrained_models/ntb/ntb_pretrain_2epochs.tar"
 
     summary_pairs, vocabulary = load_dataset(relative_path)
 

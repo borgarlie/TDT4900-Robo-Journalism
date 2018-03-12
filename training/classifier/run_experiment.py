@@ -108,7 +108,7 @@ if __name__ == '__main__':
     if use_cuda:
         model = model.cuda()
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-05)
     train_iters(config, ground_truth_train, train_titles, vocabulary, model, optimizer, ground_truth_eval, train_eval,
                 writer)
 

@@ -89,12 +89,14 @@ if __name__ == '__main__':
         torch.cuda.set_device(int(sys.argv[1]))
         print("Using GPU: %s" % sys.argv[1], flush=True)
 
-    relative_path = "../../data/cnn_pickled/cnn_pointer_50k"
+    # relative_path = "../../data/cnn_pickled/cnn_pointer_50k"
+    relative_path = "../../data/ntb_pickled/ntb_pointer_30k"
     hidden_size = 128
     embedding_size = 100
     n_layers = 1
     dropout_p = 0.0
-    load_file = "../../models/pretrained_models/cnn/pretrained_1.tar"
+    # load_file = "../../models/pretrained_models/cnn/pretrained_1.tar"
+    load_file = "../../models/pretrained_models/ntb/ntb_pretrain_2epochs.tar"
 
     summary_pairs, vocabulary = load_dataset(relative_path)
 
@@ -132,7 +134,7 @@ if __name__ == '__main__':
 
     print("Writing to file", flush=True)
 
-    fake_data_save_file = "../../data/cnn_fake_data/cnn_fake_1.abstract.txt"
+    fake_data_save_file = "../../data/ntb_fake_data/ntb_fake_1.abstract.txt"
     with open(fake_data_save_file, 'w') as file:
         for sample in fake_data:
             file.write(sample)

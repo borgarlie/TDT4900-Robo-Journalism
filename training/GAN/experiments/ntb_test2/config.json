@@ -1,0 +1,49 @@
+{
+  "train" : {
+    "dataset" : "../../data/ntb_pickled/ntb_pointer_30k",
+    "num_articles" : -1,
+    "num_evaluate" : 6500,
+    "throw" : 1000,
+    "n_epochs" : 2,
+    "batch_size" : 32,
+    "generator_learning_rate" : 0.01,
+    "discriminator_learning_rate" : 0.001,
+    "beta" : 0.00,
+    "n_generator" : 2,
+    "n_discriminator" : 2,
+    "discriminator_n_epochs" : 2,
+    "num_monte_carlo_samples" : 1,
+    "max_sample_length" : 20
+  },
+  "evaluate" : {
+    "expansions" : 3,
+    "keep_beams" : 20,
+    "return_beams": 5
+  },
+  "generator_model" : {
+    "embedding_size" : 100,
+    "n_layers" : 1,
+    "hidden_size" : 128,
+    "dropout_p" : 0.0,
+    "load" : true,
+    "load_file" : "../../models/pretrained_models/ntb/ntb_pretrain_2epochs.tar"
+  },
+  "discriminator_model" : {
+    "hidden_size" : 128,
+    "dropout_p" : 0.5,
+    "num_kernels" : 100,
+    "kernel_sizes" : [2, 3, 4],
+    "load" : true,
+    "load_file" : "../../models/pretrained_models/classifier/ntb/ntb_pretrained_1.tar"
+  },
+  "save" : {
+    "save_file_generator" : "ntb_generator_test_save_2.tar",
+    "save_file_discriminator" : "ntb_discriminator_test_save_2.tar"
+  },
+  "log" : {
+    "print_every" : 100
+  },
+  "tensorboard" : {
+    "log_path" : "../../log/GAN/ntb_test_1"
+  }
+}

@@ -1,11 +1,11 @@
 {
   "train" : {
-    "dataset" : "../../data/ntb_preprocessed/ntb_80_5cat.unk",
-    "fake_dataset" : "../../data/ntb_fake_data/test_generated_fake_data.unk",
+    "dataset" : "../../data/ntb_real_data/ntb_real_1",
+    "fake_dataset" : "../../data/ntb_fake_data/ntb_fake_1",
+    "vocabulary_path" : "../../data/ntb_pickled/ntb_pointer_30k",
     "num_articles" : -1,
-    "num_evaluate" : 10000,
-    "with_categories": true,
-    "num_epochs" : 20,
+    "num_evaluate" : 11000,
+    "num_epochs" : 8,
     "batch_size" : 32,
     "learning_rate" : 0.001
   },
@@ -16,7 +16,7 @@
     "kernel_sizes" : [2, 3, 4]
   },
   "save" : {
-    "save_file" : "test1.pth.tar"
+    "save_file" : "ntb_pretrained_1.tar"
   },
   "log" : {
     "print_every" : 1000

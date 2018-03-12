@@ -71,8 +71,8 @@ def tokenize_data_file(data):
 if __name__ == '__main__':
     # nltk.download('punkt')
 
-    path_real = "../../data/ntb_preprocessed/ntb_80_5cat.unk.title.txt"
-    path_fake = "../../data/ntb_fake_data/test_generated_fake_data.unk.title.txt"
+    path_real = "../../data/ntb_real_data/ntb_real_1.abstract.txt"
+    path_fake = "../../data/ntb_fake_data/ntb_fake_1.abstract.txt"
 
     print("Started extracting titles...")
     references, samples = read_real_and_fake_data(path_real, path_fake)
