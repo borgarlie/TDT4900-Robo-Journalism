@@ -36,11 +36,6 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
 
     num_batches = int(len(training_pairs) / batch_size)
     n_iters = num_batches * n_epochs
-
-    g_articles = training_pairs
-    # TODO: Save space?
-    d_articles = training_pairs * n_discriminator
-
     total_runtime = 0
 
     # generate ground truth to use for discriminator (always the same number of positive and negative samples)
@@ -52,13 +47,10 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
     # train GAN for n_epochs
     for epoch in range(1, n_epochs+1):
         print("Starting epoch %d" % epoch, flush=True)
-        # shuffle articles and titles (equally)
-        random.shuffle(g_articles)
-        random.shuffle(d_articles)
-
+        # shuffle articles
+        random.shuffle(training_pairs)
         # split into batches
-        g_article_batches = list(chunks(g_articles, batch_size))
-        d_article_batches = list(chunks(d_articles, batch_size))
+        training_batches = list(chunks(training_pairs, batch_size))
 
         count_disc = 0
         batch = 0
@@ -66,7 +58,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
             # train generator for n_generator batches
             for n in range(n_generator):
                 input_variable, full_input_variable, input_lengths, _, full_target_var, target_lengths \
-                    = prepare_batch(batch_size, g_article_batches[batch], max_article_length, max_abstract_length)
+                    = prepare_batch(batch_size, training_batches[batch], max_article_length, max_abstract_length)
 
                 loss, mle_loss, policy_loss, reward, adjusted_reward = generator.train_on_batch(
                     input_variable, full_input_variable, input_lengths, full_target_var, target_lengths, discriminator)
@@ -113,7 +105,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     pad_abstract_length = max_sample_length
 
                     real_data_article_variable, full_real_data_article_variable, real_data_article_lengths, \
-                    real_data_variable, _, _ = prepare_batch(batch_size, d_article_batches[count_disc],
+                    real_data_variable, _, _ = prepare_batch(batch_size, training_batches[count_disc],
                                                              max_article_length, pad_abstract_length)
 
                     real_data_variable = real_data_variable.transpose(1, 0)
@@ -123,6 +115,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     d_titles_real_and_fake = torch.cat((real_data_variable, fake_data_variable), 0)
                     discriminator_training_data.append(d_titles_real_and_fake)
                     count_disc += 1
+                    count_disc = count_disc % len(training_batches)
                 # train discriminator for discriminator_n_epochs epochs
                 for k in range(discriminator_n_epochs):
                     # train discriminator on all sample batches
