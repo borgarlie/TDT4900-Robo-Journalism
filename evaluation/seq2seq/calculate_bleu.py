@@ -81,7 +81,9 @@ if __name__ == '__main__':
     # path = 'experiments/ntb_paramsearch_1/output.txt'
     # path = '../output_for_eval/pointer_gen_ntb_baseline.txt'
     # path = '../output_for_eval/pointer_gen_ntb_baseline_2.txt'
-    path = '../output_for_eval/ntb_adagrad_test1.txt'
+    # path = '../output_for_eval/ntb_adagrad_test1.txt'
+    # path = '../output_for_eval/cnn_pretrained_1.log'
+    path = '../output_for_eval/ntb_beam_output_2.log'
     print("Started extracting titles...")
     titles, output = read_file(path)
     print(titles[1])

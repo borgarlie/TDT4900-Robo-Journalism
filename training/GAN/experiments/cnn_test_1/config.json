@@ -4,14 +4,14 @@
     "num_articles" : -1,
     "num_evaluate" : 13000,
     "throw" : 0,
-    "n_epochs" : 2,
+    "n_epochs" : 1,
     "batch_size" : 32,
     "generator_learning_rate" : 0.01,
     "discriminator_learning_rate" : 0.001,
     "beta" : 0.8,
     "n_generator" : 2,
     "n_discriminator" : 2,
-    "discriminator_n_epochs" : 2,
+    "discriminator_n_epochs" : 1,
     "num_monte_carlo_samples" : 1,
     "max_sample_length" : 100
   },
@@ -41,7 +41,7 @@
     "save_file_discriminator" : "cnn_discriminator_test_save.pth.tar"
   },
   "log" : {
-    "print_every" : 200
+    "print_every" : 100
   },
   "tensorboard" : {
     "log_path" : "../../log/GAN/cnn_test_1"

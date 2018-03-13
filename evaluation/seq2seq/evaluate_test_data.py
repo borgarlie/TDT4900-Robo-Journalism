@@ -20,7 +20,7 @@ def load_state(filename):
 if __name__ == '__main__':
     use_cuda = torch.cuda.is_available()
 
-    filename = "ntb_beam_output_1.log"
+    filename = "ntb_beam_output_2.log"
     init_logger(filename)
 
     if use_cuda:
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     embedding_size = 100
     n_layers = 1
     dropout_p = 0.0
-    load_file = "../../models/pretrained_models/ntb/ntb_pretrain_2epochs.tar"
+    load_file = "../../models/pretrained_models/after_gan/ntb_generator_test_save_2.tar"
 
     summary_pairs, vocabulary = load_dataset(relative_path)
 
@@ -75,3 +75,4 @@ if __name__ == '__main__':
     evaluate(config, summary_pairs, vocabulary, encoder, decoder, max_article_length, print_status=True)
 
     log_message("Done")
+    print("Done", flush=True)

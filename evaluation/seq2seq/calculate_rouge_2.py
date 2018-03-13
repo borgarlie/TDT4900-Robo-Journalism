@@ -1,6 +1,5 @@
-from rouge import Rouge
 import re
-import json
+from sumeval.metrics.rouge import RougeCalculator
 
 
 def read_file(path):
@@ -60,6 +59,42 @@ if __name__ == '__main__':
     print("Done extracting titles...")
     print("starting to evaluate %d examples..." % len(reference))
 
-    rouge = Rouge()
-    scores = rouge.get_scores(hypothesis, reference, avg=True)
-    print(json.dumps(scores, indent=2))
+    rouge = RougeCalculator(stopwords=False, lang="en")
+
+    rouge_1_points = 0.0
+    for i in range(0, len(reference)):
+        rouge_1 = rouge.rouge_n(
+            summary=hypothesis[i],
+            references=reference[i],
+            n=1)
+        rouge_1_points += rouge_1
+    rouge_1_points = rouge_1_points / len(reference)
+
+    print("ROUGE-1: {}".format(
+        rouge_1_points
+    ).replace(", ", "\n"))
+
+    rouge_2_points = 0.0
+    for i in range(0, len(reference)):
+        rouge_2 = rouge.rouge_n(
+            summary=hypothesis[i],
+            references=reference[i],
+            n=2)
+        rouge_2_points += rouge_2
+    rouge_2_points = rouge_2_points / len(reference)
+
+    print("ROUGE-2: {}".format(
+        rouge_2_points
+    ).replace(", ", "\n"))
+
+    rouge_l_points = 0.0
+    for i in range(0, len(reference)):
+        rouge_l = rouge.rouge_l(
+            summary=hypothesis[i],
+            references=reference[i])
+        rouge_l_points += rouge_l
+    rouge_l_points = rouge_l_points / len(reference)
+
+    print("ROUGE-L: {}".format(
+        rouge_l_points
+    ).replace(", ", "\n"))
