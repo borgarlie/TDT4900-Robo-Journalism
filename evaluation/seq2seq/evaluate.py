@@ -3,8 +3,13 @@ from utils.data_prep import *
 from utils.logger import *
 
 
-def evaluate(config, test_articles, vocabulary, encoder, decoder, max_length):
+def evaluate(config, test_articles, vocabulary, encoder, decoder, max_length, print_status=False):
+    print_every = 100
     for i in range(len(test_articles)):
+        if print_status:
+            if i % print_every == 0:
+                print("Evaluating example %d of %d" % (i+1, len(test_articles)), flush=True)
+
         input_sentence = test_articles[i].unked_article_tokens
         full_input_sentence = test_articles[i].article_tokens
         full_target_sentence = test_articles[i].abstract_tokens

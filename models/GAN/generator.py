@@ -112,7 +112,11 @@ class Generator:
             total_reward += reward  # used for printing only
 
         for i in range(0, len(full_sequence_rewards)):
+            # Not allowing negative rewards
             temp_adjusted_reward = full_sequence_rewards[i] - baseline
+            for j in range(0, len(temp_adjusted_reward.data)):
+                if temp_adjusted_reward.data[j] < 0.0:
+                    temp_adjusted_reward.data[j] = 0.0
             adjusted_reward += temp_adjusted_reward
             current_policy_loss = temp_adjusted_reward * full_policy_values[i]
             reduced_policy_loss = current_policy_loss.mean()
