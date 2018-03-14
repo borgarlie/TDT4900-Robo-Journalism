@@ -6,7 +6,7 @@
     "throw" : 0,
     "n_epochs" : 1,
     "batch_size" : 32,
-    "generator_learning_rate" : 0.01,
+    "generator_learning_rate" : 0.001,
     "discriminator_learning_rate" : 0.001,
     "beta" : 0.75,
     "n_generator" : 2,

@@ -125,6 +125,13 @@ class Generator:
             reduced_policy_loss = current_policy_loss.mean()
             policy_loss += reduced_policy_loss
 
+        # Test to look at difference between argmax and multinomial samples
+        # argmax_1 = accumulated_sequence_argmax[0].data
+        # print(get_sentence_from_tokens_unked(argmax_1, self.vocabulary), flush=True)
+        # multinomial_1 = accumulated_sequence.transpose(1, 0)[0].data
+        # print(get_sentence_from_tokens_unked(multinomial_1, self.vocabulary), flush=True)
+        # exit()
+
         total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
         total_loss.backward()
 
