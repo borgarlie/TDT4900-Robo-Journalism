@@ -1,4 +1,6 @@
 from utils.data_prep import *
+from utils.logger import *
+import time
 
 
 class GeneratorBeta:
@@ -15,16 +17,23 @@ class GeneratorBeta:
     def generate_sequence(self, input_variable_batch, full_input_variable_batch, input_lengths, max_sample_length,
                           initial_sequence):
 
+        monte_carlo_encoder_time_start = time.time()
+
         decoder_input, decoder_hidden, encoder_outputs \
             = self.get_decoder_hidden_state(input_variable_batch, input_lengths, initial_sequence)
 
         decoder_output_variables = initial_sequence
+        timings[timings_var_monte_carlo_encoder] += (time.time() - monte_carlo_encoder_time_start)
 
         updated = False
         for di in range(len(initial_sequence), max_sample_length):
+            monte_carlo_inner_time_start = time.time()
             decoder_output, decoder_hidden, _ \
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
                                self.batch_size)
+            timings[timings_var_monte_carlo_inner] += (time.time() - monte_carlo_inner_time_start)
+
+            monte_carlo_inner_transpose_time_start = time.time()
 
             ni = decoder_output.data.multinomial(1)
             for token_index in range(0, len(ni)):
@@ -34,7 +43,13 @@ class GeneratorBeta:
             ni_transposed = ni.transpose(0, 1)
             decoder_input_batch = Variable(ni_transposed)
 
+            timings[timings_var_monte_carlo_inner_transpose] += (time.time() - monte_carlo_inner_transpose_time_start)
+
+            monte_carlo_cat_time_start = time.time()
+
             decoder_output_variables = torch.cat((decoder_output_variables, decoder_input_batch), 0)
+
+            timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
 
             if not updated:
                 self.forced_decoder_hidden = decoder_hidden

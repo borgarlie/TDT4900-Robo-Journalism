@@ -1,4 +1,6 @@
 from utils.data_prep import *
+from utils.logger import *
+import time
 
 
 class Generator:
@@ -26,7 +28,12 @@ class Generator:
         self.decoder_optimizer.zero_grad()
 
         max_target_length = max(target_lengths)
+
+        init_encoder_time_start = time.time()
+
         encoder_outputs, encoder_hidden = self.encoder(input_variable_batch, input_lengths, None)
+
+        timings[timings_var_init_encoder] += (time.time() - init_encoder_time_start)
 
         encoder_hidden = concat_encoder_hidden_directions(encoder_hidden)
         # Multiple layers are currently removed for simplicity
@@ -47,11 +54,15 @@ class Generator:
         full_sequence_rewards = []
         full_policy_values = []
 
+        baseline_time_start = time.time()
+
         # calculate baseline value
         for di in range(max_target_length):
+            baseline_inner_time_start = time.time()
             decoder_output, decoder_hidden, decoder_attention \
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
                                self.batch_size)
+            timings[timings_var_baseline_inner] += (time.time() - baseline_inner_time_start)
 
             topv, topi = decoder_output.data.topk(1)
             ni = topi  # next input, batch of top softmax
@@ -66,6 +77,9 @@ class Generator:
                 accumulated_sequence_argmax = torch.cat((accumulated_sequence_argmax, decoder_input), 1)
 
         baseline = discriminator.evaluate(accumulated_sequence_argmax)
+
+        timings[timings_var_baseline] += (time.time() - baseline_time_start)
+
         # Printing mean baseline value
         # print(baseline.mean().data[0], flush=True)
 
@@ -74,6 +88,8 @@ class Generator:
         decoder_input = decoder_input.cuda() if self.use_cuda else decoder_input
         decoder_hidden = encoder_hidden
 
+
+        policy_iteration_time_start = time.time()
         # Do policy iteration
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_target_length):
@@ -104,11 +120,18 @@ class Generator:
             # calculate policy loss using monte carlo search
             accumulated_reward = 0
 
+            monte_carlo_time_start = time.time()
+
             for _ in range(self.num_monte_carlo_samples):
                 sample = self.generator_beta.generate_sequence(input_variable_batch, full_input_variable_batch,
                                                                input_lengths, monte_carlo_length, accumulated_sequence)
+
+                monte_carlo_outer_time_start = time.time()
                 sample = sample.transpose(1, 0)
                 accumulated_reward += discriminator.evaluate(sample)
+                timings[timings_var_monte_carlo_outer] += (time.time() - monte_carlo_outer_time_start)
+
+            timings[timings_var_monte_carlo] += (time.time() - monte_carlo_time_start)
 
             reward = accumulated_reward / self.num_monte_carlo_samples
             full_sequence_rewards.append(reward)
@@ -133,10 +156,17 @@ class Generator:
         # exit()
 
         total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
+
+        timings[timings_var_policy_iteration] += (time.time() - policy_iteration_time_start)
+
+        backprop_time_start = time.time()
+
         total_loss.backward()
 
         self.encoder_optimizer.step()
         self.decoder_optimizer.step()
+
+        timings[timings_var_backprop] += (time.time() - backprop_time_start)
 
         total_reward = (total_reward / max_target_length).mean()
         adjusted_reward = (adjusted_reward / max_target_length).mean()
@@ -162,9 +192,12 @@ class Generator:
 
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_sample_length):
+
+            create_fake_inner_time_start = time.time()
             decoder_output, decoder_hidden, decoder_attention \
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
                                self.batch_size)
+            timings[timings_var_create_fake_inner] += (time.time() - create_fake_inner_time_start)
 
             topv, topi = decoder_output.data.topk(1)
             ni = topi  # next input, batch of top softmax scores

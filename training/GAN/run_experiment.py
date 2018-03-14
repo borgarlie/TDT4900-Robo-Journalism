@@ -38,29 +38,27 @@ if __name__ == '__main__':
 
     use_cuda = torch.cuda.is_available()
 
-    # TODO: Fix logger for everything
-    # TODO: Add log file in config
-    log_file = "experiments/test_1/output.log"
-    init_logger(log_file)
-
-    if use_cuda:
-        if len(sys.argv) < 3:
-            print("Expected 2 arguments: [0] = experiment path (e.g. test_experiment1), [1] = GPU (0 or 1)", flush=True)
-            exit()
-        torch.cuda.set_device(int(sys.argv[2]))
-        print("Using GPU: %s" % sys.argv[2], flush=True)
-    else:
-        if len(sys.argv) < 2:
-            print("Expected 1 argument: [0] = experiment path (e.g. test_experiment1)", flush=True)
-            exit()
-
     experiment_path = sys.argv[1]
     config_file_path = experiment_path + "/config.json"
     with open(config_file_path) as config_file:
         config = json.load(config_file)
 
     config['experiment_path'] = experiment_path
-    print(json.dumps(config, indent=2), flush=True)
+    log_file = config['log']['filename']
+    init_logger(log_file)
+
+    if use_cuda:
+        if len(sys.argv) < 3:
+            log_error_message("Expected 2 arguments: [0] = experiment path (e.g. test_experiment1), [1] = GPU (0 or 1)")
+            exit()
+        torch.cuda.set_device(int(sys.argv[2]))
+        log_message("Using GPU: %s" % sys.argv[2])
+    else:
+        if len(sys.argv) < 2:
+            log_error_message("Expected 1 argument: [0] = experiment path (e.g. test_experiment1)")
+            exit()
+
+    log_message(json.dumps(config, indent=2))
 
     # load shared parameters
     writer = SummaryWriter(config['tensorboard']['log_path'])
@@ -107,17 +105,17 @@ if __name__ == '__main__':
     num_evaluate += int((temp_train_length / batch_size) % n_generator) * batch_size
     train_length = total_articles - num_evaluate
     test_length = num_evaluate
-    print("Train length = %d" % train_length, flush=True)
-    print("Throw length = %d" % num_throw, flush=True)
-    print("Test length = %d" % test_length, flush=True)
+    log_message("Train length = %d" % train_length)
+    log_message("Throw length = %d" % num_throw)
+    log_message("Test length = %d" % test_length)
 
     train_articles = summary_pairs[0:train_length]
-    print("Range train: %d - %d" % (0, train_length), flush=True)
+    log_message("Range train: %d - %d" % (0, train_length))
 
     train_length = train_length + num_throw  # compensate for thrown away articles
     test_articles = summary_pairs[train_length:train_length + test_length]
 
-    print("Range test: %d - %d" % (train_length, train_length+test_length), flush=True)
+    log_message("Range test: %d - %d" % (train_length, train_length+test_length))
 
     generator_encoder = EncoderRNN(vocabulary.n_words, generator_embedding_size, generator_hidden_size,
                                    n_layers=generator_n_layers)
@@ -140,9 +138,9 @@ if __name__ == '__main__':
             model_state_encoder, model_state_decoder = load_pretrained_generator(generator_load_file)
             generator_encoder.load_state_dict(model_state_encoder)
             generator_decoder.load_state_dict(model_state_decoder)
-            print("Loaded pretrained generator", flush=True)
+            log_message("Loaded pretrained generator")
         except FileNotFoundError as e:
-            print("No generator model file found: exiting", flush=True)
+            log_error_message("No generator model file found: exiting")
             exit()
 
     discriminator_model = CNNDiscriminator(vocabulary.n_words, discriminator_hidden_size, discriminator_num_kernels,
@@ -152,9 +150,9 @@ if __name__ == '__main__':
         try:
             model_parameters = load_pretrained_discriminator(discriminator_load_file)
             discriminator_model.load_state_dict(model_parameters)
-            print("Loaded pretrained discriminator", flush=True)
+            log_message("Loaded pretrained discriminator")
         except FileNotFoundError as e:
-            print("No discriminator model file found: exiting", flush=True)
+            log_message("No discriminator model file found: exiting")
             exit()
 
     if use_cuda:
@@ -195,6 +193,6 @@ if __name__ == '__main__':
     generator_encoder.eval()
     generator_decoder.eval()
 
-    evaluate(config, test_articles, vocabulary, generator_encoder, generator_decoder, max_length=max_article_length)
+    # evaluate(config, test_articles, vocabulary, generator_encoder, generator_decoder, max_length=max_article_length)
 
-    print("Done", flush=True)
+    log_message("Done")

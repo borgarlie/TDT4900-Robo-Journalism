@@ -44,8 +44,8 @@ def evaluate_argmax(vocabulary, test_articles, encoder, decoder, max_length):
                                                  max_length, encoder, decoder)
         full_target_sentence_unpacked = get_sentence_from_tokens(full_target_sentence, vocabulary, extended_vocab)
         full_generated_sentence_unpacked = get_sentence_from_tokens(decoder_outputs, vocabulary, extended_vocab)
-        print("TARGET SENTENCE >>> " + full_target_sentence_unpacked, flush=True)
-        print("GENERATED SENTENCE >>> " + full_generated_sentence_unpacked, flush=True)
+        log_message("TARGET SENTENCE >>> " + full_target_sentence_unpacked)
+        log_message("GENERATED SENTENCE >>> " + full_generated_sentence_unpacked)
 
 
 def evaluate_single_argmax(vocabulary, input_variable, full_input_variable, input_lengths, max_sample_length, encoder,

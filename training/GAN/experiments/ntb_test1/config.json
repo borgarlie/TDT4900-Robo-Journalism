@@ -4,11 +4,11 @@
     "num_articles" : -1,
     "num_evaluate" : 6500,
     "throw" : 1000,
-    "n_epochs" : 2,
+    "n_epochs" : 1,
     "batch_size" : 32,
-    "generator_learning_rate" : 0.01,
+    "generator_learning_rate" : 0.001,
     "discriminator_learning_rate" : 0.001,
-    "beta" : 0.95,
+    "beta" : 0.80,
     "n_generator" : 2,
     "n_discriminator" : 2,
     "discriminator_n_epochs" : 2,
@@ -41,7 +41,8 @@
     "save_file_discriminator" : "ntb_discriminator_test_save.tar"
   },
   "log" : {
-    "print_every" : 100
+    "print_every" : 100,
+    "filename": "experiments/ntb_test1/output.log"
   },
   "tensorboard" : {
     "log_path" : "../../log/GAN/ntb_test_1"

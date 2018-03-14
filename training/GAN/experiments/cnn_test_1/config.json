@@ -11,7 +11,7 @@
     "beta" : 0.75,
     "n_generator" : 2,
     "n_discriminator" : 2,
-    "discriminator_n_epochs" : 1,
+    "discriminator_n_epochs" : 2,
     "num_monte_carlo_samples" : 1,
     "max_sample_length" : 70
   },
@@ -41,7 +41,8 @@
     "save_file_discriminator" : "cnn_discriminator_test_save.pth.tar"
   },
   "log" : {
-    "print_every" : 10
+    "print_every" : 10,
+    "filename": "experiments/cnn_test_1/output.log"
   },
   "tensorboard" : {
     "log_path" : "../../log/GAN/cnn_test_1"
