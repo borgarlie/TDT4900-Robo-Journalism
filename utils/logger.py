@@ -51,6 +51,21 @@ timings[timings_var_create_fake] = 0.0
 timings[timings_var_create_fake_inner] = 0.0
 timings[timings_var_discriminator_train] = 0.0
 
+decode_breaking_monte_carlo_sampling = 'MONTE_CARLO'
+decode_breaking_baseline = 'BASELINE'
+decode_breaking_policy = 'POLICY'
+decode_breaking_fake_sampling = 'FAKE_SAMPLING'
+
+monte_carlo_sampling_num = 'NUM_SAMPLES'
+monte_carlo_sampling = {}
+monte_carlo_sampling[decode_breaking_monte_carlo_sampling] = 0
+monte_carlo_sampling[monte_carlo_sampling_num] = 0
+
+decode_breakings = {}
+decode_breakings[decode_breaking_baseline] = 0
+decode_breakings[decode_breaking_policy] = 0
+decode_breakings[decode_breaking_fake_sampling] = 0
+
 
 def init_logger(filename):
     # create logger
@@ -83,6 +98,12 @@ def log_training_message(progress, itr, percentage, print_loss_avg, lowest_loss)
 
 
 def log_profiling(num_iterations):
+    log_timings()
+    log_decode_breakings(num_iterations)
+    log_monte_carlo_sampling()
+
+
+def log_timings():
     # calculate minutes for each timing
     for var in timings:
         temp_minutes = as_minutes(timings[var])
@@ -92,3 +113,21 @@ def log_profiling(num_iterations):
     # Reset the timings
     for var in timings:
         timings[var] = 0.0
+
+
+def log_decode_breakings(num_iterations):
+    for var in decode_breakings:
+        avg = decode_breakings[var] / num_iterations
+        decode_breakings[var] = avg
+
+    logger.info(json.dumps(decode_breakings, indent=2))
+
+    for var in decode_breakings:
+        decode_breakings[var] = 0
+
+
+def log_monte_carlo_sampling():
+    avg = monte_carlo_sampling[decode_breaking_monte_carlo_sampling] / monte_carlo_sampling[monte_carlo_sampling_num]
+    logger.info("Monte carlo sampling average breaking: %.1f" % avg)
+    monte_carlo_sampling[decode_breaking_monte_carlo_sampling] = 0
+    monte_carlo_sampling[monte_carlo_sampling_num] = 0

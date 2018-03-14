@@ -55,6 +55,7 @@ class Generator:
         full_policy_values = []
 
         baseline_time_start = time.time()
+        baseline_break_early = False
 
         # calculate baseline value
         for di in range(max_target_length):
@@ -76,6 +77,14 @@ class Generator:
             else:
                 accumulated_sequence_argmax = torch.cat((accumulated_sequence_argmax, decoder_input), 1)
 
+            if is_whole_batch_pad_or_eos(ni):
+                decode_breakings[decode_breaking_baseline] += di
+                baseline_break_early = True
+                break
+
+        if not baseline_break_early:
+            decode_breakings[decode_breaking_baseline] += max_target_length - 1
+
         baseline = discriminator.evaluate(accumulated_sequence_argmax)
 
         timings[timings_var_baseline] += (time.time() - baseline_time_start)
@@ -88,8 +97,8 @@ class Generator:
         decoder_input = decoder_input.cuda() if self.use_cuda else decoder_input
         decoder_hidden = encoder_hidden
 
-
         policy_iteration_time_start = time.time()
+        policy_iteration_break_early = False
         # Do policy iteration
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_target_length):
@@ -136,6 +145,15 @@ class Generator:
             reward = accumulated_reward / self.num_monte_carlo_samples
             full_sequence_rewards.append(reward)
             total_reward += reward  # used for printing only
+
+            # Break the policy iteration loop if all the variables in the batch is at EOS or PAD
+            if is_whole_batch_pad_or_eos(next_input):
+                decode_breakings[decode_breaking_policy] += di
+                policy_iteration_break_early = True
+                break
+
+        if not policy_iteration_break_early:
+            decode_breakings[decode_breaking_policy] += max_target_length - 1
 
         for i in range(0, len(full_sequence_rewards)):
             # Not allowing negative rewards
@@ -189,6 +207,7 @@ class Generator:
         decoder_hidden = encoder_hidden
 
         decoder_outputs = [[] for _ in range(0, self.batch_size)]
+        create_fake_sample_break_early = False
 
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_sample_length):
@@ -209,6 +228,14 @@ class Generator:
             decoder_output_data = ni.cpu().numpy()
             for batch_index in range(0, len(decoder_output_data)):
                 decoder_outputs[batch_index].append(decoder_output_data[batch_index].item())
+
+            if is_whole_batch_pad_or_eos(ni):
+                decode_breakings[decode_breaking_fake_sampling] += di
+                create_fake_sample_break_early = True
+                break
+
+        if not create_fake_sample_break_early:
+            decode_breakings[decode_breaking_fake_sampling] += max_sample_length-1
 
         decoder_outputs_padded = [pad_seq(s, pad_length) for s in decoder_outputs]
         decoder_output_variables = Variable(torch.LongTensor(decoder_outputs_padded))

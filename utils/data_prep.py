@@ -90,3 +90,13 @@ def get_word_from_token_unked(token, vocabulary):
     if token >= vocabulary.n_words:
         return "<UNK>"
     return vocabulary.index2word[token]
+
+
+def is_whole_batch_pad_or_eos(batched_input):
+    is_only_pad_or_eos = True
+    for token_index in range(0, len(batched_input)):
+        # token_index = this batch element
+        if batched_input[token_index][0] != PAD_token and batched_input[token_index][0] != EOS_token:
+            is_only_pad_or_eos = False
+            break
+    return is_only_pad_or_eos

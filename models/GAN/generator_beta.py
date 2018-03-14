@@ -26,6 +26,7 @@ class GeneratorBeta:
         timings[timings_var_monte_carlo_encoder] += (time.time() - monte_carlo_encoder_time_start)
 
         updated = False
+        monte_carlo_sampling_break_early = False
         for di in range(len(initial_sequence), max_sample_length):
             monte_carlo_inner_time_start = time.time()
             decoder_output, decoder_hidden, _ \
@@ -54,6 +55,16 @@ class GeneratorBeta:
             if not updated:
                 self.forced_decoder_hidden = decoder_hidden
                 updated = True
+
+            if is_whole_batch_pad_or_eos(ni):
+                monte_carlo_sampling[decode_breaking_monte_carlo_sampling] += di
+                monte_carlo_sampling[monte_carlo_sampling_num] += 1
+                monte_carlo_sampling_break_early = True
+                break
+
+        if not monte_carlo_sampling_break_early:
+            monte_carlo_sampling[decode_breaking_monte_carlo_sampling] += max_sample_length - 1
+            monte_carlo_sampling[monte_carlo_sampling_num] += 1
 
         return decoder_output_variables
 
