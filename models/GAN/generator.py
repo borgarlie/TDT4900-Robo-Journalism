@@ -20,7 +20,7 @@ class Generator:
     # discriminator is used to calculate reward
     # target batch is used for MLE
     def train_on_batch(self, input_variable_batch, full_input_variable_batch, input_lengths, full_target_variable_batch,
-                       target_lengths, discriminator):
+                       target_lengths, discriminator, max_monte_carlo_length):
 
         self.encoder_optimizer.zero_grad()
         self.decoder_optimizer.zero_grad()
@@ -34,6 +34,9 @@ class Generator:
         decoder_input = Variable(torch.LongTensor([SOS_token] * self.batch_size))
         decoder_input = decoder_input.cuda() if self.use_cuda else decoder_input
         decoder_hidden = encoder_hidden
+
+        # Testing with setting a lower upper limit to monte carlo sequence length
+        monte_carlo_length = min(max_target_length, max_monte_carlo_length)
 
         mle_loss = 0
         policy_loss = 0
@@ -103,7 +106,7 @@ class Generator:
 
             for _ in range(self.num_monte_carlo_samples):
                 sample = self.generator_beta.generate_sequence(input_variable_batch, full_input_variable_batch,
-                                                               input_lengths, max_target_length, accumulated_sequence)
+                                                               input_lengths, monte_carlo_length, accumulated_sequence)
                 sample = sample.transpose(1, 0)
                 accumulated_reward += discriminator.evaluate(sample)
 
@@ -135,7 +138,8 @@ class Generator:
 
     # Used to create fake data samples to train the discriminator
     # Returned values as batched sentences as variables
-    def create_samples(self, input_variable_batch, full_input_variable_batch, input_lengths, max_sample_length):
+    def create_samples(self, input_variable_batch, full_input_variable_batch, input_lengths, max_sample_length,
+                       pad_length):
 
         self.encoder.eval()
         self.decoder.eval()
@@ -166,7 +170,8 @@ class Generator:
             for batch_index in range(0, len(decoder_output_data)):
                 decoder_outputs[batch_index].append(decoder_output_data[batch_index].item())
 
-        decoder_output_variables = Variable(torch.LongTensor(decoder_outputs))
+        decoder_outputs_padded = [pad_seq(s, pad_length) for s in decoder_outputs]
+        decoder_output_variables = Variable(torch.LongTensor(decoder_outputs_padded))
         if self.use_cuda:
             decoder_output_variables = decoder_output_variables.cuda()
 

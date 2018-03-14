@@ -15,8 +15,6 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
     n_discriminator = config['train']['n_discriminator']  # This is a scaling factor of n_generator
     discriminator_n_epochs = config['train']['discriminator_n_epochs']
     max_sample_length = config['train']['max_sample_length']
-    if max_abstract_length > max_sample_length:
-        max_sample_length = max_abstract_length
     n_epochs = config['train']['n_epochs']
     batch_size = config['train']['batch_size']
     print_every = config['log']['print_every']
@@ -61,7 +59,8 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     = prepare_batch(batch_size, training_batches[batch], max_article_length, max_abstract_length)
 
                 loss, mle_loss, policy_loss, reward, adjusted_reward = generator.train_on_batch(
-                    input_variable, full_input_variable, input_lengths, full_target_var, target_lengths, discriminator)
+                    input_variable, full_input_variable, input_lengths, full_target_var, target_lengths, discriminator,
+                    max_sample_length)
                 print_loss_generator += loss
                 print_loss_mle += mle_loss
                 print_loss_policy += policy_loss
@@ -102,15 +101,18 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                 discriminator_training_data = []
                 for m in range(n_discriminator):
                     # generate fake data
-                    pad_abstract_length = max_sample_length
+                    # pad_abstract_length = max_sample_length
+                    pad_abstract_length = max_abstract_length
+                    # TODO: Check if we need to set it to 101(?) or if we can set it lower (i.e. max_sample_length)
 
                     real_data_article_variable, full_real_data_article_variable, real_data_article_lengths, \
                     real_data_variable, _, _ = prepare_batch(batch_size, training_batches[count_disc],
                                                              max_article_length, pad_abstract_length)
 
                     real_data_variable = real_data_variable.transpose(1, 0)
-                    fake_data_variable = generator.create_samples(real_data_article_variable,
-                                         full_real_data_article_variable, real_data_article_lengths, max_sample_length)
+                    fake_data_variable = generator.create_samples(
+                        real_data_article_variable, full_real_data_article_variable, real_data_article_lengths,
+                        max_sample_length, pad_abstract_length)
 
                     d_titles_real_and_fake = torch.cat((real_data_variable, fake_data_variable), 0)
                     discriminator_training_data.append(d_titles_real_and_fake)
