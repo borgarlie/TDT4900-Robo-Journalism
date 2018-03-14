@@ -97,9 +97,9 @@ def log_training_message(progress, itr, percentage, print_loss_avg, lowest_loss)
     return lowest_loss
 
 
-def log_profiling(num_iterations):
+def log_profiling(num_iterations, n_discriminator):
     log_timings()
-    log_decode_breakings(num_iterations)
+    log_decode_breakings(num_iterations, n_discriminator)
     log_monte_carlo_sampling()
 
 
@@ -115,10 +115,14 @@ def log_timings():
         timings[var] = 0.0
 
 
-def log_decode_breakings(num_iterations):
+def log_decode_breakings(num_iterations, n_discriminator):
     for var in decode_breakings:
-        avg = decode_breakings[var] / num_iterations
-        decode_breakings[var] = avg
+        if var == decode_breaking_fake_sampling:
+            avg = decode_breakings[var] / (num_iterations * n_discriminator)
+            decode_breakings[var] = avg
+        else:
+            avg = decode_breakings[var] / num_iterations
+            decode_breakings[var] = avg
 
     logger.info(json.dumps(decode_breakings, indent=2))
 

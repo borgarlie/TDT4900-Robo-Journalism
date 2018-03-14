@@ -102,10 +102,10 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     log_message('Generator loss (total, mle, policy, reward, adjusted_reward): %.4f, %.4f, %.4f, %.4f, '
                                 '%.4f' % (print_loss_avg, print_loss_avg_mle, print_loss_avg_policy,
                                           print_total_reward_avg, print_adjusted_reward_avg))
-                    log_profiling(print_every)
                     if print_loss_avg < lowest_loss_generator:
                         lowest_loss_generator = print_loss_avg
                         log_message(" ^ Lowest generator loss so far")
+                    log_profiling(print_every, n_discriminator)
                     # Generating a few arg max summaries to see if there are differences
                     generator.encoder.eval()
                     generator.decoder.eval()

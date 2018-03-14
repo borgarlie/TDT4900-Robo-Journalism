@@ -235,7 +235,7 @@ class Generator:
                 break
 
         if not create_fake_sample_break_early:
-            decode_breakings[decode_breaking_fake_sampling] += max_sample_length-1
+            decode_breakings[decode_breaking_fake_sampling] += max_sample_length - 1
 
         decoder_outputs_padded = [pad_seq(s, pad_length) for s in decoder_outputs]
         decoder_output_variables = Variable(torch.LongTensor(decoder_outputs_padded))
