@@ -121,18 +121,19 @@ def train_iters(config, training_pairs, eval_pairs, vocabulary, encoder, decoder
         # log to tensorboard
         writer.add_scalar('loss', batch_loss_avg / num_batches, epoch)
 
-        # save each epoch
-        log_message("Saving model")
-        itr = epoch * num_batches
-        _, total_runtime = time_since(start, itr / n_iters, total_runtime)
-        save_state({
-            'epoch': epoch,
-            'runtime': total_runtime,
-            'model_state_encoder': encoder.state_dict(),
-            'model_state_decoder': decoder.state_dict(),
-            'optimizer_state_encoder': encoder_optimizer.state_dict(),
-            'optimizer_state_decoder': decoder_optimizer.state_dict()
-        }, config['experiment_path'] + "/" + config['save']['save_file'])
+        # save each epoch after epoch 7 with different naming
+        if epoch > 7:
+            log_message("Saving model")
+            itr = epoch * num_batches
+            _, total_runtime = time_since(start, itr / n_iters, total_runtime)
+            save_state({
+                'epoch': epoch,
+                'runtime': total_runtime,
+                'model_state_encoder': encoder.state_dict(),
+                'model_state_decoder': decoder.state_dict(),
+                'optimizer_state_encoder': encoder_optimizer.state_dict(),
+                'optimizer_state_decoder': decoder_optimizer.state_dict()
+            }, config['experiment_path'] + "/epoch%d_" + config['save']['save_file'] % epoch)
 
         encoder.eval()
         decoder.eval()
