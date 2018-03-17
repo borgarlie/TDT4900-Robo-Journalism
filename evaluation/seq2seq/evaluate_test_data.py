@@ -20,7 +20,7 @@ def load_state(filename):
 if __name__ == '__main__':
     use_cuda = torch.cuda.is_available()
 
-    filename = "ntb_beam_output_2.log"
+    filename = "cnn_beam_output_1.log"
     init_logger(filename)
 
     if use_cuda:
@@ -30,13 +30,14 @@ if __name__ == '__main__':
         torch.cuda.set_device(int(sys.argv[1]))
         log_message("Using GPU: %s" % sys.argv[1])
 
-    # relative_path = "../../data/cnn_pickled/cnn_pointer_50k"
-    relative_path = "../../data/ntb_pickled/ntb_pointer_30k"
+    relative_path = "../../data/cnn_pickled/cnn_pointer_50k"
+    # relative_path = "../../data/ntb_pickled/ntb_pointer_30k"
     hidden_size = 128
     embedding_size = 100
     n_layers = 1
     dropout_p = 0.0
-    load_file = "../../models/pretrained_models/after_gan/ntb_generator_test_save_2.tar"
+    load_file = "../../models/pretrained_models/cnn/cnn_generator_test_save.pth.tar"
+    # load_file = "../../models/pretrained_models/after_gan/ntb_generator_test_save_2.tar"
 
     summary_pairs, vocabulary = load_dataset(relative_path)
 
@@ -63,7 +64,7 @@ if __name__ == '__main__':
     encoder.eval()
     decoder.eval()
 
-    summary_pairs = summary_pairs[-6500:]
+    summary_pairs = summary_pairs[-13000:]
     log_message("Evaluating %d examples" % len(summary_pairs))
 
     config = {}

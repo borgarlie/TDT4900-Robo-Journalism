@@ -51,15 +51,17 @@ def clean_logger_output(text):
 
 if __name__ == '__main__':
     # path = '../output_for_eval/pointer_gen_ntb_baseline_2.txt'
-    # path = '../output_for_eval/cnn_pretrained_1.log'
-    path = '../output_for_eval/ntb_beam_output_2.log'
+    path = '../output_for_eval/cnn_pretrained_1.log'
+    # path = '../output_for_eval/cnn_beam_output_1.log'
     print("Started extracting titles...")
     reference, hypothesis = read_file(path)
+
+    print(len(hypothesis))
 
     print("Done extracting titles...")
     print("starting to evaluate %d examples..." % len(reference))
 
-    rouge = RougeCalculator(stopwords=False, lang="en")
+    rouge = RougeCalculator(stopwords=False, lang="en", stemming=False)
 
     rouge_1_points = 0.0
     for i in range(0, len(reference)):

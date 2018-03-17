@@ -41,7 +41,7 @@
     "save_file_discriminator" : "cnn_discriminator_test_save.pth.tar"
   },
   "log" : {
-    "print_every" : 10,
+    "print_every" : 400,
     "filename": "experiments/cnn_test_1/output.log"
   },
   "tensorboard" : {

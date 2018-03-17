@@ -131,6 +131,11 @@ class Generator:
 
             monte_carlo_time_start = time.time()
 
+            # TODO: If di > max_sample_length: We can skip generate_sequence() since
+            # it will only return accumulated_sequence
+            # It will save a lot of time if num_monte_carlo_samples > 0 since we only need to transpose and
+            # evaluate once.
+
             for _ in range(self.num_monte_carlo_samples):
                 sample = self.generator_beta.generate_sequence(input_variable_batch, full_input_variable_batch,
                                                                input_lengths, monte_carlo_length, accumulated_sequence)
