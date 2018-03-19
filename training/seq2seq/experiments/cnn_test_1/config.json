@@ -7,8 +7,8 @@
     "with_categories": false,
     "num_epochs" : 13,
     "batch_size" : 16,
-    "learning_rate" : 0.001,
-    "teacher_forcing_ratio" : 0.5,
+    "learning_rate" : 0.015,
+    "teacher_forcing_ratio" : 1.0,
     "load" : false,
     "load_file" : "test1.pth.tar"
   },

@@ -58,9 +58,9 @@ def train(config, vocabulary, input_variable, full_input_variable, input_lengths
 
     loss.backward()
 
-    # clip = 2
-    # torch.nn.utils.clip_grad_norm(encoder.parameters(), clip)
-    # torch.nn.utils.clip_grad_norm(decoder.parameters(), clip)
+    clip = 2
+    torch.nn.utils.clip_grad_norm(encoder.parameters(), clip)
+    torch.nn.utils.clip_grad_norm(decoder.parameters(), clip)
 
     encoder_optimizer.step()
     decoder_optimizer.step()
@@ -133,7 +133,7 @@ def train_iters(config, training_pairs, eval_pairs, vocabulary, encoder, decoder
                 'model_state_decoder': decoder.state_dict(),
                 'optimizer_state_encoder': encoder_optimizer.state_dict(),
                 'optimizer_state_decoder': decoder_optimizer.state_dict()
-            }, config['experiment_path'] + "/epoch%d_" + config['save']['save_file'] % epoch)
+            }, config['experiment_path'] + "/epoch%d_" % epoch + config['save']['save_file'])
 
         encoder.eval()
         decoder.eval()
