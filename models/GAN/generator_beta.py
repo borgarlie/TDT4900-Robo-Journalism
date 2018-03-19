@@ -14,29 +14,36 @@ class GeneratorBeta:
         self.forced_decoder_hidden = None
         self.forced_encoder_outputs = None
 
-    def generate_sequence(self, input_variable_batch, full_input_variable_batch, input_lengths, max_sample_length,
+    def generate_sequence(self, full_input_variable_batch, max_sample_length, previous_token, sampled_token,
                           initial_sequence):
 
         monte_carlo_encoder_time_start = time.time()
 
-        decoder_input, decoder_hidden, encoder_outputs \
-            = self.get_decoder_hidden_state(input_variable_batch, input_lengths, initial_sequence)
+        # run previous state
+        _, decoder_hidden, _ = self.decoder(previous_token, self.forced_decoder_hidden, self.forced_encoder_outputs,
+                                            full_input_variable_batch, self.batch_size)
+        self.forced_decoder_hidden = decoder_hidden
 
         decoder_output_variables = initial_sequence
+        start = 0
+        if initial_sequence is not None:
+            start = len(initial_sequence)
         timings[timings_var_monte_carlo_encoder] += (time.time() - monte_carlo_encoder_time_start)
 
-        updated = False
+        decoder_input = sampled_token
+
         monte_carlo_sampling_break_early = False
-        for di in range(len(initial_sequence), max_sample_length):
+        for di in range(start, max_sample_length):
             monte_carlo_inner_time_start = time.time()
             decoder_output, decoder_hidden, _ \
-                = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
+                = self.decoder(decoder_input, decoder_hidden, self.forced_encoder_outputs, full_input_variable_batch,
                                self.batch_size)
             timings[timings_var_monte_carlo_inner] += (time.time() - monte_carlo_inner_time_start)
 
             monte_carlo_inner_transpose_time_start = time.time()
 
-            ni = decoder_output.data.multinomial(1)
+            topv, topi = decoder_output.data.topk(1)
+            ni = topi  # next input, batch of top softmax
             for token_index in range(0, len(ni)):
                 if ni[token_index][0] >= self.vocabulary.n_words:
                     ni[token_index][0] = UNK_token
@@ -48,13 +55,13 @@ class GeneratorBeta:
 
             monte_carlo_cat_time_start = time.time()
 
-            decoder_output_variables = torch.cat((decoder_output_variables, decoder_input_batch), 0)
+            # TODO: transpose stuff
+            if decoder_output_variables is None:
+                decoder_output_variables = decoder_input_batch
+            else:
+                decoder_output_variables = torch.cat((decoder_output_variables, decoder_input_batch), 0)
 
             timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
-
-            if not updated:
-                self.forced_decoder_hidden = decoder_hidden
-                updated = True
 
             if is_whole_batch_pad_or_eos(ni):
                 monte_carlo_sampling[decode_breaking_monte_carlo_sampling] += di
@@ -68,18 +75,10 @@ class GeneratorBeta:
 
         return decoder_output_variables
 
-    def get_decoder_hidden_state(self, input_variable_batch, input_lengths, initial_sequence):
-        if len(initial_sequence) == 1:
-            self.calculate_initial_encoder_decoder_states(input_variable_batch, input_lengths)
-        last_generated_batch = initial_sequence[-1]
-        last_generated_batch = last_generated_batch.unsqueeze(1)
-        return last_generated_batch, self.forced_decoder_hidden, self.forced_encoder_outputs
-
     # resets and calculate new values for encoder outputs and decoder hidden state
     def calculate_initial_encoder_decoder_states(self, input_variable_batch, input_lengths):
         encoder_outputs, encoder_hidden = self.encoder(input_variable_batch, input_lengths, None)
         encoder_hidden = concat_encoder_hidden_directions(encoder_hidden)
-        # Multiple layers are currently removed for simplicity
         self.forced_encoder_outputs = encoder_outputs
         self.forced_decoder_hidden = encoder_hidden
 

@@ -35,6 +35,9 @@ class Generator:
 
         encoder_outputs, encoder_hidden = self.encoder(input_variable_batch, input_lengths, None)
 
+        # initialise generator_beta with encoder states
+        self.generator_beta.calculate_initial_encoder_decoder_states(input_variable_batch, input_lengths)
+
         timings[timings_var_init_encoder] += (time.time() - init_encoder_time_start)
 
         encoder_hidden = concat_encoder_hidden_directions(encoder_hidden)
@@ -51,9 +54,16 @@ class Generator:
         policy_loss = 0
         total_reward = 0
         adjusted_reward = 0
-        accumulated_sequence = None
         full_sequence_rewards = []
         full_policy_values = []
+
+        previous_token = Variable(torch.cuda.LongTensor([SOS_token] * self.batch_size))
+        # TODO: Try to remove the transposing. We are transposing before using the accumulated
+        # sequence and when evaluating it. which does not make sense.
+        accumulated_sequence = None
+
+        # Used for printing rewards
+        policy_break_iter = max_target_length
 
         policy_iteration_time_start = time.time()
         policy_iteration_break_early = False
@@ -67,21 +77,22 @@ class Generator:
             log_output = torch.log(decoder_output.clamp(min=1e-8))
             mle_loss += self.mle_criterion(log_output, full_target_variable_batch[di])
 
-            next_input = decoder_output.data.multinomial(1)
-            for token_index in range(0, len(next_input)):
-                if next_input[token_index][0] >= self.vocabulary.n_words:
-                    next_input[token_index][0] = UNK_token
+            topv, topi = decoder_output.data.topk(1)
+            ni = topi  # next input, batch of top softmax
+            for token_index in range(0, len(ni)):
+                if ni[token_index][0] >= self.vocabulary.n_words:
+                    ni[token_index][0] = UNK_token
 
-            decoder_input = Variable(next_input)
-            decoder_input_transposed = decoder_input.transpose(1, 0)
-            if di == 0:
-                # TODO: Do we need to transpose this? dunno
-                accumulated_sequence = decoder_input_transposed
-            else:
-                accumulated_sequence = torch.cat((accumulated_sequence, decoder_input_transposed), 0)
+            sampled_token = decoder_output.data.multinomial(1)
+            for token_index in range(0, len(sampled_token)):
+                if sampled_token[token_index][0] >= self.vocabulary.n_words:
+                    sampled_token[token_index][0] = UNK_token
+
+            decoder_input = Variable(ni)
+            monte_carlo_input = Variable(sampled_token)
 
             # calculate policy value
-            policy_target = Variable(next_input.squeeze(1))
+            policy_target = Variable(sampled_token.squeeze(1))
             current_policy_value = self.policy_criterion(log_output, policy_target)
             full_policy_values.append(current_policy_value)
             # calculate policy loss using monte carlo search
@@ -95,10 +106,10 @@ class Generator:
             # evaluate once.
 
             for _ in range(self.num_monte_carlo_samples):
-                sample = self.generator_beta.generate_sequence(input_variable_batch, full_input_variable_batch,
-                                                               input_lengths, monte_carlo_length, accumulated_sequence)
-
+                sample = self.generator_beta.generate_sequence(full_input_variable_batch, monte_carlo_length,
+                                                               previous_token, monte_carlo_input, accumulated_sequence)
                 monte_carlo_outer_time_start = time.time()
+                # TODO: Try to remove transpose
                 sample = sample.transpose(1, 0)
                 current_reward = discriminator.evaluate(sample)
                 accumulated_reward += current_reward
@@ -113,10 +124,19 @@ class Generator:
             full_sequence_rewards.append(reward)
             total_reward += reward  # used for printing only
 
+            # Update accumulated sequence
+            # TODO: Transpose thingy
+            previous_token = Variable(ni)
+            if accumulated_sequence is None:
+                accumulated_sequence = previous_token.transpose(1, 0)
+            else:
+                accumulated_sequence = torch.cat((accumulated_sequence, decoder_input.transpose(1, 0)), 0)
+
             # Break the policy iteration loop if all the variables in the batch is at EOS or PAD
-            if is_whole_batch_pad_or_eos(next_input):
+            if is_whole_batch_pad_or_eos(ni):
                 decode_breakings[decode_breaking_policy] += di
                 policy_iteration_break_early = True
+                policy_break_iter = di
                 break
 
         if not policy_iteration_break_early:
@@ -127,14 +147,14 @@ class Generator:
         baseline = Variable(torch.cuda.FloatTensor([avg]))
 
         # Print baseline value for testing purposes
-        print("Baseline value: %.6f" % baseline.data[0], flush=True)
+        log_message("Baseline value: %.6f" % baseline.data[0])
 
         for i in range(0, len(full_sequence_rewards)):
-            # Not allowing negative rewards
             temp_adjusted_reward = full_sequence_rewards[i] - baseline
-            for j in range(0, len(temp_adjusted_reward.data)):
-                if temp_adjusted_reward.data[j] < 0.0:
-                    temp_adjusted_reward.data[j] = 0.0
+            # Currently allowing negative rewards
+            # for j in range(0, len(temp_adjusted_reward.data)):
+            #     if temp_adjusted_reward.data[j] < 0.0:
+            #         temp_adjusted_reward.data[j] = 0.0
             adjusted_reward += temp_adjusted_reward
             current_policy_loss = temp_adjusted_reward * full_policy_values[i]
             reduced_policy_loss = current_policy_loss.mean()
@@ -160,8 +180,8 @@ class Generator:
 
         timings[timings_var_backprop] += (time.time() - backprop_time_start)
 
-        total_reward = (total_reward / max_target_length).mean()
-        adjusted_reward = (adjusted_reward / max_target_length).mean()
+        total_reward = (total_reward / policy_break_iter).mean()
+        adjusted_reward = (adjusted_reward / policy_break_iter).mean()
 
         return total_loss.data[0], mle_loss.data[0], policy_loss.data[0], total_reward, adjusted_reward
 
