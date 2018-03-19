@@ -5,6 +5,10 @@ sys.path.append('../')  # ugly dirtyfix for imports to work
 from utils.data_prep import split_category_and_article
 
 
+class Errors:
+    no_eos_added = 0
+
+
 class Vocabulary:
     def __init__(self):
         self.word2index = {"<PAD>": 0, "<SOS>": 1, "<EOS>": 2, "<UNK>": 3}
@@ -71,10 +75,10 @@ class SummaryPair:
         self.add_article_and_abstract(article, abstract, vocabulary)
 
     def add_article_and_abstract(self, article, abstract, vocabulary):
-        self.article_tokens, self.unked_article_tokens = self.create_tokens(article, vocabulary)
-        self.abstract_tokens, self.unked_abstract_tokens = self.create_tokens(abstract, vocabulary)
+        self.article_tokens, self.unked_article_tokens = self.create_tokens(article, vocabulary, False)
+        self.abstract_tokens, self.unked_abstract_tokens = self.create_tokens(abstract, vocabulary, True)
 
-    def create_tokens(self, sentence, vocabulary):
+    def create_tokens(self, sentence, vocabulary, abstract):
         tokens = []
         unked_tokens = []
         for w in sentence.split(" "):
@@ -86,8 +90,11 @@ class SummaryPair:
                     self.unknown_tokens[w] = len(vocabulary.index2word) + len(self.unknown_tokens)
                 tokens.append(self.unknown_tokens[w])
                 unked_tokens.append(3)  # <UNK>
-        tokens.append(2)  # <EOS>
-        unked_tokens.append(2)  # <EOS>
+        if not abstract or len(tokens) < 100:
+            tokens.append(2)  # <EOS>
+            unked_tokens.append(2)  # <EOS>
+        else:
+            Errors.no_eos_added += 1
         return tokens, unked_tokens
 
 
@@ -160,6 +167,8 @@ if __name__ == '__main__':
     # save_path_dataset = '../data/ntb_pickled/ntb_pointer_numbers_30k'
     save_path_dataset = '../data/cnn_pickled/cnn_pointer_50k'
     save_dataset(dataset, save_path_dataset)
+
+    print("No eos added for %d sentences" % Errors.no_eos_added)
 
     # load_path = '../data/cnn_pickled/cnn_pointer_50k'
     # summary_pairs, vocabulary = load_dataset(load_path)
