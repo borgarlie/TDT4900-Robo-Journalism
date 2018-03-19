@@ -58,8 +58,6 @@ class Generator:
         full_policy_values = []
 
         previous_token = Variable(torch.cuda.LongTensor([SOS_token] * self.batch_size))
-        # TODO: Try to remove the transposing. We are transposing before using the accumulated
-        # sequence and when evaluating it. which does not make sense.
         accumulated_sequence = None
 
         # Used for printing rewards
@@ -100,17 +98,10 @@ class Generator:
 
             monte_carlo_time_start = time.time()
 
-            # TODO: If di > max_sample_length: We can skip generate_sequence() since
-            # it will only return accumulated_sequence
-            # It will save a lot of time if num_monte_carlo_samples > 0 since we only need to transpose and
-            # evaluate once.
-
             for _ in range(self.num_monte_carlo_samples):
                 sample = self.generator_beta.generate_sequence(full_input_variable_batch, monte_carlo_length,
                                                                previous_token, monte_carlo_input, accumulated_sequence)
                 monte_carlo_outer_time_start = time.time()
-                # TODO: Try to remove transpose
-                sample = sample.transpose(1, 0)
                 current_reward = discriminator.evaluate(sample)
                 accumulated_reward += current_reward
                 # add cumulative reward to calculate running average baseline
@@ -125,12 +116,11 @@ class Generator:
             total_reward += reward  # used for printing only
 
             # Update accumulated sequence
-            # TODO: Transpose thingy
             previous_token = Variable(ni)
             if accumulated_sequence is None:
-                accumulated_sequence = previous_token.transpose(1, 0)
+                accumulated_sequence = previous_token
             else:
-                accumulated_sequence = torch.cat((accumulated_sequence, decoder_input.transpose(1, 0)), 0)
+                accumulated_sequence = torch.cat((accumulated_sequence, decoder_input), 1)
 
             # Break the policy iteration loop if all the variables in the batch is at EOS or PAD
             if is_whole_batch_pad_or_eos(ni):
@@ -147,7 +137,7 @@ class Generator:
         baseline = Variable(torch.cuda.FloatTensor([avg]))
 
         # Print baseline value for testing purposes
-        log_message("Baseline value: %.6f" % baseline.data[0])
+        # log_message("Baseline value: %.6f" % baseline.data[0])
 
         for i in range(0, len(full_sequence_rewards)):
             temp_adjusted_reward = full_sequence_rewards[i] - baseline
@@ -163,7 +153,7 @@ class Generator:
         # Test to look at difference between argmax and multinomial samples
         # argmax_1 = accumulated_sequence_argmax[0].data
         # print(get_sentence_from_tokens_unked(argmax_1, self.vocabulary), flush=True)
-        # multinomial_1 = accumulated_sequence.transpose(1, 0)[0].data
+        # multinomial_1 = accumulated_sequence[0].data
         # print(get_sentence_from_tokens_unked(multinomial_1, self.vocabulary), flush=True)
         # exit()
 
