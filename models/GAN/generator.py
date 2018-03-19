@@ -18,6 +18,8 @@ class Generator:
         self.beta = beta
         self.generator_beta = generator_beta
         self.num_monte_carlo_samples = num_monte_carlo_samples
+        self.updates = 0
+        self.cumulative_reward = 0.0
 
     # discriminator is used to calculate reward
     # target batch is used for MLE
@@ -50,52 +52,8 @@ class Generator:
         total_reward = 0
         adjusted_reward = 0
         accumulated_sequence = None
-        accumulated_sequence_argmax = None
         full_sequence_rewards = []
         full_policy_values = []
-
-        baseline_time_start = time.time()
-        baseline_break_early = False
-
-        # calculate baseline value
-        for di in range(max_target_length):
-            baseline_inner_time_start = time.time()
-            decoder_output, decoder_hidden, decoder_attention \
-                = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
-                               self.batch_size)
-            timings[timings_var_baseline_inner] += (time.time() - baseline_inner_time_start)
-
-            topv, topi = decoder_output.data.topk(1)
-            ni = topi  # next input, batch of top softmax
-            for token_index in range(0, len(ni)):
-                if ni[token_index][0] >= self.vocabulary.n_words:
-                    ni[token_index][0] = UNK_token
-
-            decoder_input = Variable(ni)
-            if di == 0:
-                accumulated_sequence_argmax = decoder_input
-            else:
-                accumulated_sequence_argmax = torch.cat((accumulated_sequence_argmax, decoder_input), 1)
-
-            if is_whole_batch_pad_or_eos(ni):
-                decode_breakings[decode_breaking_baseline] += di
-                baseline_break_early = True
-                break
-
-        if not baseline_break_early:
-            decode_breakings[decode_breaking_baseline] += max_target_length - 1
-
-        baseline = discriminator.evaluate(accumulated_sequence_argmax)
-
-        timings[timings_var_baseline] += (time.time() - baseline_time_start)
-
-        # Printing mean baseline value
-        # print(baseline.mean().data[0], flush=True)
-
-        # reset values
-        decoder_input = Variable(torch.LongTensor([SOS_token] * self.batch_size))
-        decoder_input = decoder_input.cuda() if self.use_cuda else decoder_input
-        decoder_hidden = encoder_hidden
 
         policy_iteration_time_start = time.time()
         policy_iteration_break_early = False
@@ -142,7 +100,11 @@ class Generator:
 
                 monte_carlo_outer_time_start = time.time()
                 sample = sample.transpose(1, 0)
-                accumulated_reward += discriminator.evaluate(sample)
+                current_reward = discriminator.evaluate(sample)
+                accumulated_reward += current_reward
+                # add cumulative reward to calculate running average baseline
+                self.cumulative_reward += current_reward.mean().data[0]
+                self.updates += 1
                 timings[timings_var_monte_carlo_outer] += (time.time() - monte_carlo_outer_time_start)
 
             timings[timings_var_monte_carlo] += (time.time() - monte_carlo_time_start)
@@ -159,6 +121,13 @@ class Generator:
 
         if not policy_iteration_break_early:
             decode_breakings[decode_breaking_policy] += max_target_length - 1
+
+        # Calculate running average baseline
+        avg = self.cumulative_reward / self.updates
+        baseline = Variable(torch.cuda.FloatTensor([avg]))
+
+        # Print baseline value for testing purposes
+        print("Baseline value: %.6f" % baseline.data[0], flush=True)
 
         for i in range(0, len(full_sequence_rewards)):
             # Not allowing negative rewards
