@@ -24,10 +24,13 @@ class GeneratorBeta:
                                             full_input_variable_batch, self.batch_size)
         self.forced_decoder_hidden = decoder_hidden
 
-        decoder_output_variables = initial_sequence
-        start = 0
         if initial_sequence is not None:
-            start = len(initial_sequence)
+            start = len(initial_sequence.data[0]) + 1
+            decoder_output_variables = torch.cat((initial_sequence, sampled_token), 1)
+        else:
+            start = 1
+            decoder_output_variables = sampled_token
+
         timings[timings_var_monte_carlo_encoder] += (time.time() - monte_carlo_encoder_time_start)
 
         decoder_input = sampled_token
@@ -40,18 +43,17 @@ class GeneratorBeta:
                                self.batch_size)
             timings[timings_var_monte_carlo_inner] += (time.time() - monte_carlo_inner_time_start)
 
+            before_topk_monte = time.time()
             topv, topi = decoder_output.data.topk(1)
             ni = topi  # next input, batch of top softmax
             for token_index in range(0, len(ni)):
                 if ni[token_index][0] >= self.vocabulary.n_words:
                     ni[token_index][0] = UNK_token
             decoder_input = Variable(ni)
+            timings[timings_var_monte_carlo_top1] += (time.time() - before_topk_monte)
 
             monte_carlo_cat_time_start = time.time()
-            if decoder_output_variables is None:
-                decoder_output_variables = Variable(ni)
-            else:
-                decoder_output_variables = torch.cat((decoder_output_variables, decoder_input), 1)
+            decoder_output_variables = torch.cat((decoder_output_variables, decoder_input), 1)
             timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
 
             if is_whole_batch_pad_or_eos(ni):

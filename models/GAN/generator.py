@@ -120,7 +120,7 @@ class Generator:
             if accumulated_sequence is None:
                 accumulated_sequence = previous_token
             else:
-                accumulated_sequence = torch.cat((accumulated_sequence, decoder_input), 1)
+                accumulated_sequence = torch.cat((accumulated_sequence, previous_token), 1)
 
             # Break the policy iteration loop if all the variables in the batch is at EOS or PAD
             if is_whole_batch_pad_or_eos(ni):
@@ -150,11 +150,10 @@ class Generator:
             reduced_policy_loss = current_policy_loss.mean()
             policy_loss += reduced_policy_loss
 
-        # Test to look at difference between argmax and multinomial samples
-        # argmax_1 = accumulated_sequence_argmax[0].data
-        # print(get_sentence_from_tokens_unked(argmax_1, self.vocabulary), flush=True)
+        # Test to look at the accumulated sequence
         # multinomial_1 = accumulated_sequence[0].data
-        # print(get_sentence_from_tokens_unked(multinomial_1, self.vocabulary), flush=True)
+        # log_message("Last one")
+        # log_message(get_sentence_from_tokens_unked(multinomial_1, self.vocabulary))
         # exit()
 
         total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
