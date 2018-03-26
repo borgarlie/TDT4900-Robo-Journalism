@@ -109,7 +109,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     # Generating a few arg max summaries to see if there are differences
                     generator.encoder.eval()
                     generator.decoder.eval()
-                    samples = eval_pairs[0:5]
+                    samples = eval_pairs[0:2]
                     evaluate_argmax(generator.vocabulary, samples, generator.encoder, generator.decoder,
                                     max_abstract_length)
                     generator.encoder.train()

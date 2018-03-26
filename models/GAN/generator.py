@@ -65,6 +65,7 @@ class Generator:
 
         policy_iteration_time_start = time.time()
         policy_iteration_break_early = False
+
         # Do policy iteration
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_target_length):

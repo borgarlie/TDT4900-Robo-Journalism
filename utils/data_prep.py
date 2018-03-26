@@ -1,5 +1,7 @@
+import time
 import torch
 from torch.autograd import Variable
+from utils.logger import *
 
 #
 # Functions used to prepare data
@@ -93,10 +95,12 @@ def get_word_from_token_unked(token, vocabulary):
 
 
 def is_whole_batch_pad_or_eos(batched_input):
+    before = time.time()
     is_only_pad_or_eos = True
     for token_index in range(0, len(batched_input)):
         # token_index = this batch element
         if batched_input[token_index][0] != PAD_token and batched_input[token_index][0] != EOS_token:
             is_only_pad_or_eos = False
             break
+    timings[timings_var_check_eos_pad] += (time.time() - before)
     return is_only_pad_or_eos

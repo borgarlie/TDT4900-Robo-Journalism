@@ -14,10 +14,17 @@ class GeneratorBeta:
         self.forced_decoder_hidden = None
         self.forced_encoder_outputs = None
 
+        for param in self.encoder.parameters():
+            param.requires_grad = False
+
+        for param in self.decoder.parameters():
+            param.requires_grad = False
+
     def generate_sequence(self, full_input_variable_batch, max_sample_length, previous_token, sampled_token,
                           initial_sequence):
 
         monte_carlo_encoder_time_start = time.time()
+        start_check_for_pad_and_eos = int(max_sample_length / 3) * 2
 
         # run previous state
         _, decoder_hidden, _ = self.decoder(previous_token, self.forced_decoder_hidden, self.forced_encoder_outputs,
@@ -56,11 +63,12 @@ class GeneratorBeta:
             decoder_output_variables = torch.cat((decoder_output_variables, decoder_input), 1)
             timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
 
-            if is_whole_batch_pad_or_eos(ni):
-                monte_carlo_sampling[decode_breaking_monte_carlo_sampling] += di
-                monte_carlo_sampling[monte_carlo_sampling_num] += 1
-                monte_carlo_sampling_break_early = True
-                break
+            if di > start_check_for_pad_and_eos:
+                if is_whole_batch_pad_or_eos(ni):
+                    monte_carlo_sampling[decode_breaking_monte_carlo_sampling] += di
+                    monte_carlo_sampling[monte_carlo_sampling_num] += 1
+                    monte_carlo_sampling_break_early = True
+                    break
 
         if not monte_carlo_sampling_break_early:
             monte_carlo_sampling[decode_breaking_monte_carlo_sampling] += max_sample_length - 1
