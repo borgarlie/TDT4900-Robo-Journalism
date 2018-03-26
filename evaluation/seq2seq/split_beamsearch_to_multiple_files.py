@@ -18,18 +18,27 @@ def read_file(path):
             output.append(line[1:])
             not_truth = False
 
-    output = clean_text(output)
-    titles = clean_text(titles)
+    output = clean_modelsummary(output)
+    titles = clean_reference(titles)
     return titles, output
 
 
-# TODO: Removing "-" seems to be an issue where we remove some tokens from the samples
-def clean_text(input_txt):
+def clean_modelsummary(input_txt):
     output_txt = []
     for line in input_txt:
-        line = re.sub(r'\d+', ' ', line)
-        line = re.sub(r'[-.]', ' ', line)
-        line = re.sub(r'<EOS>', ' ', line)
+        line = line[16:]
+        line = re.sub(r'<EOS>', '', line)
+        line = re.sub(r'<PAD>', '', line)
+        line = line.strip()
+        output_txt.append(line)
+    return output_txt
+
+
+def clean_reference(input_txt):
+    output_txt = []
+    for line in input_txt:
+        line = re.sub(r'<EOS>', '', line)
+        line = re.sub(r'<PAD>', '', line)
         line = line.strip()
         output_txt.append(line)
     return output_txt
@@ -46,12 +55,15 @@ def clean_logger_output(text):
 
 
 if __name__ == '__main__':
-    path = '../output_for_eval/cnn_pretrained_1.log'
+    path = '../output_for_eval/cnn_beam_output_2_12epoch_5_30.log'
     print("Started extracting titles...")
     reference, hypothesis = read_file(path)
 
-    path_to_reference = "../for_rouge/pretrained1/reference/"
-    path_to_modelsummary = "../for_rouge/pretrained1/modelsummary/"
+    reference = reference[:13000]
+    hypothesis = hypothesis[:13000]
+
+    path_to_reference = "../for_rouge/pretrained1/reference_test/"
+    path_to_modelsummary = "../for_rouge/pretrained1/modelsummary_test/"
 
     for i in range(0, len(reference)):
         with open(path_to_reference + "%d_reference.txt" % i, 'w') as file:

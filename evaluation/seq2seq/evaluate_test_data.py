@@ -20,7 +20,7 @@ def load_state(filename):
 if __name__ == '__main__':
     use_cuda = torch.cuda.is_available()
 
-    filename = "cnn_beam_output_1.log"
+    filename = "cnn_beam_output_2_12epoch_5_30.log"
     init_logger(filename)
 
     if use_cuda:
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     embedding_size = 100
     n_layers = 1
     dropout_p = 0.0
-    load_file = "../../models/pretrained_models/cnn/cnn_generator_test_save.pth.tar"
+    load_file = "../../models/pretrained_models/cnn/epoch12_cnn_test1.pth.tar"
     # load_file = "../../models/pretrained_models/after_gan/ntb_generator_test_save_2.tar"
 
     summary_pairs, vocabulary = load_dataset(relative_path)
@@ -49,10 +49,6 @@ if __name__ == '__main__':
     decoder = PointerGeneratorDecoder(hidden_size, embedding_size, vocabulary.n_words, max_length=max_article_length,
                                       n_layers=n_layers, dropout_p=dropout_p)
 
-    if use_cuda:
-        encoder = encoder.cuda()
-        decoder = decoder.cuda()
-
     try:
         model_state_encoder, model_state_decoder = load_state(load_file)
         encoder.load_state_dict(model_state_encoder)
@@ -64,13 +60,17 @@ if __name__ == '__main__':
     encoder.eval()
     decoder.eval()
 
+    if use_cuda:
+        encoder = encoder.cuda()
+        decoder = decoder.cuda()
+
     summary_pairs = summary_pairs[-13000:]
     log_message("Evaluating %d examples" % len(summary_pairs))
 
     config = {}
     config['evaluate'] = {}
-    config['evaluate']['expansions'] = 3
-    config['evaluate']['keep_beams'] = 20
+    config['evaluate']['expansions'] = 5
+    config['evaluate']['keep_beams'] = 30
     config['evaluate']['return_beams'] = 3
 
     evaluate(config, summary_pairs, vocabulary, encoder, decoder, max_article_length, print_status=True)
