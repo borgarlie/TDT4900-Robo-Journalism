@@ -54,16 +54,41 @@ def clean_logger_output(text):
     return output
 
 
+def add_back_delimiter(sentence_list, delimiter):
+    for i in range(0, len(sentence_list)-1):
+        sentence_list[i] += " " + delimiter
+    return sentence_list
+
+
+def split_sentence(sentence):
+    sentences = []
+    temp = add_back_delimiter(sentence.split(" . "), ".")
+    for k in temp:
+        temp2 = add_back_delimiter(k.split(" ? "), "?")
+        for j in temp2:
+            temp3 = add_back_delimiter(j.split(" ! "), "!")
+            for t in temp3:
+                sentences.append(t)
+    return "\n".join(sentences).strip()
+
+
 if __name__ == '__main__':
-    path = '../output_for_eval/cnn_beam_output_2_12epoch_5_30.log'
+
+    path = '../output_for_eval/cnn_beam_output_2_11epoch.log'
     print("Started extracting titles...")
     reference, hypothesis = read_file(path)
 
-    reference = reference[:13000]
-    hypothesis = hypothesis[:13000]
+    reference = reference[:1000]
+    hypothesis = hypothesis[:1000]
 
     path_to_reference = "../for_rouge/pretrained1/reference_test/"
     path_to_modelsummary = "../for_rouge/pretrained1/modelsummary_test/"
+
+    for i in range(0, len(reference)):
+        reference[i] = split_sentence(reference[i])
+
+    for i in range(0, len(hypothesis)):
+        hypothesis[i] = split_sentence(hypothesis[i])
 
     for i in range(0, len(reference)):
         with open(path_to_reference + "%d_reference.txt" % i, 'w') as file:
