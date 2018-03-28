@@ -20,7 +20,7 @@ def load_state(filename):
 if __name__ == '__main__':
     use_cuda = torch.cuda.is_available()
 
-    filename = "cnn_beam_output_2_12epoch_5_30.log"
+    filename = "cnn_beam_output_2_13epoch_3_20_1000.log"
     init_logger(filename)
 
     if use_cuda:
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     embedding_size = 100
     n_layers = 1
     dropout_p = 0.0
-    load_file = "../../models/pretrained_models/cnn/epoch12_cnn_test1.pth.tar"
+    load_file = "../../models/pretrained_models/cnn/epoch13_cnn_test1.pth.tar"
     # load_file = "../../models/pretrained_models/after_gan/ntb_generator_test_save_2.tar"
 
     summary_pairs, vocabulary = load_dataset(relative_path)
@@ -64,13 +64,13 @@ if __name__ == '__main__':
         encoder = encoder.cuda()
         decoder = decoder.cuda()
 
-    summary_pairs = summary_pairs[-13000:]
+    summary_pairs = summary_pairs[-13000:-11990]
     log_message("Evaluating %d examples" % len(summary_pairs))
 
     config = {}
     config['evaluate'] = {}
-    config['evaluate']['expansions'] = 5
-    config['evaluate']['keep_beams'] = 30
+    config['evaluate']['expansions'] = 3
+    config['evaluate']['keep_beams'] = 20
     config['evaluate']['return_beams'] = 3
 
     evaluate(config, summary_pairs, vocabulary, encoder, decoder, max_article_length, print_status=True)

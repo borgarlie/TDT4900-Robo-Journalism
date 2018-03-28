@@ -1,7 +1,7 @@
 {
   "train" : {
     "dataset" : "../../data/cnn_real_data/cnn_real_1",
-    "fake_dataset" : "../../data/cnn_fake_data/cnn_fake_1",
+    "fake_dataset" : "../../data/cnn_fake_data/cnn_13epoch",
     "vocabulary_path" : "../../data/cnn_pickled/cnn_pointer_50k",
     "num_articles" : -1,
     "num_evaluate" : 13000,
@@ -13,10 +13,10 @@
     "hidden_size" : 128,
     "dropout_p" : 0.5,
     "num_kernels" : 100,
-    "kernel_sizes" : [2, 3, 4]
+    "kernel_sizes" : [3, 4, 5]
   },
   "save" : {
-    "save_file" : "cnn_pretrained_1.tar"
+    "save_file" : "cnn_classifier_13epoch.tar"
   },
   "log" : {
     "print_every" : 1000

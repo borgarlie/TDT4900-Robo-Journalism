@@ -26,7 +26,11 @@ def read_file(path):
 def clean_modelsummary(input_txt):
     output_txt = []
     for line in input_txt:
-        line = line[16:]
+        line = line.split(" ")
+        line = " ".join(line[2:])
+        # line = line[16:]
+        # line = re.sub(r'\d+', '', line)
+        # line = line[3:]
         line = re.sub(r'<EOS>', '', line)
         line = re.sub(r'<PAD>', '', line)
         line = line.strip()
@@ -74,7 +78,9 @@ def split_sentence(sentence):
 
 if __name__ == '__main__':
 
-    path = '../output_for_eval/cnn_beam_output_2_11epoch.log'
+    path = '../output_for_eval/cnn_beam_output_2_13epoch_3_20_1000.log'
+    # path = '../output_for_eval/cnn_pretrained_1.log'
+
     print("Started extracting titles...")
     reference, hypothesis = read_file(path)
 
@@ -82,7 +88,7 @@ if __name__ == '__main__':
     hypothesis = hypothesis[:1000]
 
     path_to_reference = "../for_rouge/pretrained1/reference_test/"
-    path_to_modelsummary = "../for_rouge/pretrained1/modelsummary_test/"
+    path_to_modelsummary = "../for_rouge/pretrained1/cnn_pretrain_epoch13/"
 
     for i in range(0, len(reference)):
         reference[i] = split_sentence(reference[i])

@@ -164,10 +164,10 @@ if __name__ == '__main__':
 
     # generator_encoder_optimizer = optim.SGD(generator_encoder.parameters(), lr=generator_learning_rate)
     # generator_decoder_optimizer = optim.SGD(generator_decoder.parameters(), lr=generator_learning_rate)
-    generator_encoder_optimizer = optim.Adam(generator_encoder.parameters(), lr=generator_learning_rate,
-                                             weight_decay=1e-05)
-    generator_decoder_optimizer = optim.Adam(generator_decoder.parameters(), lr=generator_learning_rate,
-                                             weight_decay=1e-05)
+    generator_encoder_optimizer = optim.Adagrad(generator_encoder.parameters(), lr=generator_learning_rate,
+                                                weight_decay=1e-05)
+    generator_decoder_optimizer = optim.Adagrad(generator_decoder.parameters(), lr=generator_learning_rate,
+                                                weight_decay=1e-05)
     generator_mle_criterion = torch.nn.NLLLoss()
     policy_criterion = torch.nn.NLLLoss(reduce=False)
 

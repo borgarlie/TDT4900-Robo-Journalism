@@ -29,6 +29,7 @@ class Beam:
 
     def get_avg_score(self):
         if len(self.scores) == 0:
+            # TODO: Could this become a bug? Should it be -9999999 ?
             return 0.0
         return sum(self.scores) / len(self.scores)
 

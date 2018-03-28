@@ -32,6 +32,15 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
     lowest_loss_generator = 999
     lowest_loss_discriminator = 999
 
+    # Print first 3 argmax before training to compare
+    generator.encoder.eval()
+    generator.decoder.eval()
+    samples = eval_pairs[0:3]
+    evaluate_argmax(generator.vocabulary, samples, generator.encoder, generator.decoder,
+                    max_abstract_length)
+    generator.encoder.train()
+    generator.decoder.train()
+
     itr_discriminator = 0
     itr_generator = 0
 
@@ -109,7 +118,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     # Generating a few arg max summaries to see if there are differences
                     generator.encoder.eval()
                     generator.decoder.eval()
-                    samples = eval_pairs[0:2]
+                    samples = eval_pairs[0:3]
                     evaluate_argmax(generator.vocabulary, samples, generator.encoder, generator.decoder,
                                     max_abstract_length)
                     generator.encoder.train()

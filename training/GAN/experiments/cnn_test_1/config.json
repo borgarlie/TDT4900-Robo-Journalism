@@ -8,7 +8,7 @@
     "batch_size" : 32,
     "generator_learning_rate" : 0.001,
     "discriminator_learning_rate" : 0.001,
-    "beta" : 0.75,
+    "beta" : 0.9,
     "n_generator" : 2,
     "n_discriminator" : 2,
     "discriminator_n_epochs" : 2,
@@ -26,22 +26,22 @@
     "hidden_size" : 128,
     "dropout_p" : 0.0,
     "load" : true,
-    "load_file" : "../../models/pretrained_models/cnn/pretrained_1.tar"
+    "load_file" : "../../models/pretrained_models/cnn/epoch13_cnn_test1.pth.tar"
   },
   "discriminator_model" : {
     "hidden_size" : 128,
     "dropout_p" : 0.5,
     "num_kernels" : 100,
-    "kernel_sizes" : [2, 3, 4],
+    "kernel_sizes" : [3, 4, 5],
     "load" : true,
-    "load_file" : "../../models/pretrained_models/classifier/cnn/cnn_pretrained_1.tar"
+    "load_file" : "../../models/pretrained_models/classifier/cnn/cnn_classifier_13epoch.tar"
   },
   "save" : {
     "save_file_generator" : "cnn_generator_test_save.pth.tar",
     "save_file_discriminator" : "cnn_discriminator_test_save.pth.tar"
   },
   "log" : {
-    "print_every" : 400,
+    "print_every" : 250,
     "filename": "experiments/cnn_test_1/output.log"
   },
   "tensorboard" : {
