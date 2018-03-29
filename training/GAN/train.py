@@ -74,7 +74,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
             for n in range(n_generator):
                 init_generator_time_start = time.time()
 
-                input_variable, full_input_variable, input_lengths, _, full_target_var, target_lengths \
+                input_variable, full_input_variable, input_lengths, target_var, full_target_var, target_lengths \
                     = prepare_batch(batch_size, training_batches[batch], max_article_length, max_abstract_length)
 
                 timings[timings_var_init_generator] += (time.time() - init_generator_time_start)
@@ -83,7 +83,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
 
                 loss, mle_loss, policy_loss, reward, adjusted_reward = generator.train_on_batch(
                     input_variable, full_input_variable, input_lengths, full_target_var, target_lengths, discriminator,
-                    max_sample_length)
+                    max_sample_length, target_var)
 
                 timings[timings_var_generator_train] += (time.time() - generator_train_time_start)
 
@@ -178,13 +178,6 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                                 log_message(" ^ Lowest discriminator loss so far")
 
                 timings[timings_var_discriminator_train] += (time.time() - discriminator_train_time_start)
-
-            # update generator beta - the parameters of the sampling model is now freezed until next round
-            copy_params_time_start = time.time()
-
-            generator.update_generator_beta_params()
-
-            timings[timings_var_copy_params] += (time.time() - copy_params_time_start)
 
         # save each epoch
         log_message("Saving model")

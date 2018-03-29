@@ -9,7 +9,6 @@ sys.path.append('../..')  # ugly dirtyfix for imports to work
 
 from models.GAN.discriminator import Discriminator
 from models.GAN.generator import Generator
-from models.GAN.generator_beta import GeneratorBeta
 from models.classifier.cnn_classifier import CNNDiscriminator
 from models.seq2seq.decoder import PointerGeneratorDecoder
 from models.seq2seq.encoder import EncoderRNN
@@ -119,8 +118,6 @@ if __name__ == '__main__':
 
     generator_encoder = EncoderRNN(vocabulary.n_words, generator_embedding_size, generator_hidden_size,
                                    n_layers=generator_n_layers)
-    generator_beta_encoder = EncoderRNN(vocabulary.n_words, generator_embedding_size, generator_hidden_size,
-                                        n_layers=generator_n_layers)
 
     max_article_length = max(len(pair.article_tokens) for pair in summary_pairs) + 1
 
@@ -129,9 +126,6 @@ if __name__ == '__main__':
     generator_decoder = PointerGeneratorDecoder(generator_hidden_size, generator_embedding_size, vocabulary.n_words,
                                                 max_length=max_article_length, n_layers=generator_n_layers,
                                                 dropout_p=generator_dropout_p)
-    generator_beta_decoder = PointerGeneratorDecoder(generator_hidden_size, generator_embedding_size, vocabulary.n_words
-                                                     , max_length=max_article_length, n_layers=generator_n_layers,
-                                                     dropout_p=generator_dropout_p)
 
     if generator_load_model:
         try:
@@ -159,8 +153,6 @@ if __name__ == '__main__':
         generator_encoder = generator_encoder.cuda()
         generator_decoder = generator_decoder.cuda()
         discriminator_model = discriminator_model.cuda()
-        generator_beta_encoder = generator_beta_encoder.cuda()
-        generator_beta_decoder = generator_beta_decoder.cuda()
 
     # generator_encoder_optimizer = optim.SGD(generator_encoder.parameters(), lr=generator_learning_rate)
     # generator_decoder_optimizer = optim.SGD(generator_decoder.parameters(), lr=generator_learning_rate)
@@ -176,12 +168,9 @@ if __name__ == '__main__':
                                                weight_decay=1e-05)
     discriminator_criterion = torch.nn.BCEWithLogitsLoss()
 
-    generator_beta = GeneratorBeta(vocabulary, generator_beta_encoder, generator_beta_decoder, batch_size, use_cuda)
-    generator_beta.update_params(generator_encoder, generator_decoder)
-
     generator = Generator(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
                           generator_decoder_optimizer, generator_mle_criterion, policy_criterion, batch_size, use_cuda,
-                          beta, generator_beta, num_monte_carlo_samples)
+                          beta, num_monte_carlo_samples)
 
     discriminator = Discriminator(discriminator_model, discriminator_optimizer, discriminator_criterion)
 
