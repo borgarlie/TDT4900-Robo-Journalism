@@ -3,9 +3,13 @@ from pyrouge import Rouge155
 
 if __name__ == '__main__':
 
-    path_to_reference = "../for_rouge/pretrained1/reference_test/"
+    # path_to_reference = "../for_rouge/pretrained1/reference_test2/"
     # path_to_modelsummary = "../for_rouge/pretrained1/modelsummary_test/"
-    path_to_modelsummary = "../for_rouge/pretrained1/cnn_pretrain_epoch13/"
+    # path_to_modelsummary = "../for_rouge/pretrained1/cnn_aftergan_test2/"
+
+    path_to_reference = "../for_rouge/pretrained1/reference_new/"
+    path_to_modelsummary = "../for_rouge/pretrained1/cnn_pretrain_new/"
+
 
     # LEAD 3
     # path_to_reference = "../for_rouge/lead3/reference/"

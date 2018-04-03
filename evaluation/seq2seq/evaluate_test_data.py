@@ -20,7 +20,7 @@ def load_state(filename):
 if __name__ == '__main__':
     use_cuda = torch.cuda.is_available()
 
-    filename = "cnn_beam_output_2_13epoch_3_20_1000.log"
+    filename = "cnn_pretrain_extra_epoch1_lr0001.log"
     init_logger(filename)
 
     if use_cuda:
@@ -36,7 +36,8 @@ if __name__ == '__main__':
     embedding_size = 100
     n_layers = 1
     dropout_p = 0.0
-    load_file = "../../models/pretrained_models/cnn/epoch13_cnn_test1.pth.tar"
+    load_file = "../../models/pretrained_models/cnn/epoch1_cnn_test1.pth.tar"
+    # load_file = "../../models/pretrained_models/after_gan/cnn_generator_lr0001.pth.tar"
     # load_file = "../../models/pretrained_models/after_gan/ntb_generator_test_save_2.tar"
 
     summary_pairs, vocabulary = load_dataset(relative_path)

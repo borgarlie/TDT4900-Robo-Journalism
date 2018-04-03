@@ -72,13 +72,18 @@ def split_sentence(sentence):
         for j in temp2:
             temp3 = add_back_delimiter(j.split(" ! "), "!")
             for t in temp3:
+                if t.startswith("<"):
+                    t = t[1:]
                 sentences.append(t)
     return "\n".join(sentences).strip()
 
 
 if __name__ == '__main__':
 
-    path = '../output_for_eval/cnn_beam_output_2_13epoch_3_20_1000.log'
+    # path = '../output_for_eval/cnn_beam_output_2_13epoch_3_20_1000.log'
+
+    path = '../output_for_eval/cnn_beam_output_epoch16_extratrain_2.log'
+    # path = '../output_for_eval/cnn_beam_gan_long_lr0001.log'
     # path = '../output_for_eval/cnn_pretrained_1.log'
 
     print("Started extracting titles...")
@@ -87,8 +92,8 @@ if __name__ == '__main__':
     reference = reference[:1000]
     hypothesis = hypothesis[:1000]
 
-    path_to_reference = "../for_rouge/pretrained1/reference_test/"
-    path_to_modelsummary = "../for_rouge/pretrained1/cnn_pretrain_epoch13/"
+    path_to_reference = "../for_rouge/pretrained1/reference_new/"
+    path_to_modelsummary = "../for_rouge/pretrained1/cnn_pretrain_new/"
 
     for i in range(0, len(reference)):
         reference[i] = split_sentence(reference[i])
@@ -97,11 +102,11 @@ if __name__ == '__main__':
         hypothesis[i] = split_sentence(hypothesis[i])
 
     for i in range(0, len(reference)):
-        with open(path_to_reference + "%d_reference.txt" % i, 'w') as file:
+        with open(path_to_reference + "%d_reference.txt" % i, 'w', encoding='utf-8') as file:
             file.write(reference[i])
 
     for i in range(0, len(hypothesis)):
-        with open(path_to_modelsummary + "%d_modelsummary.txt" % i, 'w') as file:
+        with open(path_to_modelsummary + "%d_modelsummary.txt" % i, 'w', encoding='utf-8') as file:
             file.write(hypothesis[i])
 
     print("Done")

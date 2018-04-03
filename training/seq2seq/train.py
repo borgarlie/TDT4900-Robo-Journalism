@@ -140,8 +140,8 @@ def train_iters(config, training_pairs, eval_pairs, vocabulary, encoder, decoder
         calculate_loss_on_eval_set(config, vocabulary, encoder, decoder, criterion, writer, epoch, max_article_length,
                                    eval_pairs)
         # run beam search evaluation for a smaller subset
-        if len(eval_pairs) > 20:
-            eval_pairs_subset = eval_pairs[0:20]
+        if len(eval_pairs) > 3:
+            eval_pairs_subset = eval_pairs[0:3]
             evaluate(config, eval_pairs_subset, vocabulary, encoder, decoder, max_length=max_article_length)
         encoder.train()
         decoder.train()

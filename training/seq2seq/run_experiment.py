@@ -103,16 +103,8 @@ if __name__ == '__main__':
     decoder = PointerGeneratorDecoder(hidden_size, embedding_size, vocabulary.n_words, max_length=max_article_length,
                                       n_layers=n_layers, dropout_p=dropout_p)
 
-    if use_cuda:
-        encoder = encoder.cuda()
-        decoder = decoder.cuda()
-
-    # encoder_optimizer = optim.Adam(encoder.parameters(), lr=learning_rate, weight_decay=1e-05)
-    # decoder_optimizer = optim.Adam(decoder.parameters(), lr=learning_rate, weight_decay=1e-05)
-
-    encoder_optimizer = optim.Adagrad(encoder.parameters(), lr=learning_rate, weight_decay=1e-05)
-    decoder_optimizer = optim.Adagrad(decoder.parameters(), lr=learning_rate, weight_decay=1e-05)
-
+    optimizer_state_encoder = None
+    optimizer_state_decoder = None
     total_runtime = 0
     start_epoch = 1
     if load_model:
@@ -121,14 +113,22 @@ if __name__ == '__main__':
              optimizer_state_encoder, optimizer_state_decoder) = load_state(load_file)
             encoder.load_state_dict(model_state_encoder)
             decoder.load_state_dict(model_state_decoder)
-            encoder_optimizer.load_state_dict(optimizer_state_encoder)
-            decoder_optimizer.load_state_dict(optimizer_state_decoder)
             log_message("Resuming training from epoch: %d" % start_epoch)
         except FileNotFoundError as e:
             log_error_message("No file found: exiting")
             exit()
 
-    # articles = summary. TODO: Fix naming conventions when stuff works
+    if use_cuda:
+        encoder = encoder.cuda()
+        decoder = decoder.cuda()
+
+    encoder_optimizer = optim.Adagrad(encoder.parameters(), lr=learning_rate, weight_decay=1e-05)
+    decoder_optimizer = optim.Adagrad(decoder.parameters(), lr=learning_rate, weight_decay=1e-05)
+
+    if load_model:
+        encoder_optimizer.load_state_dict(optimizer_state_encoder)
+        decoder_optimizer.load_state_dict(optimizer_state_decoder)
+
     train_iters(config, train_articles, test_articles, vocabulary,
                 encoder, decoder, max_article_length, max_abstract_length, encoder_optimizer, decoder_optimizer,
                 writer, start_epoch=start_epoch, total_runtime=total_runtime)
@@ -136,6 +136,6 @@ if __name__ == '__main__':
     encoder.eval()
     decoder.eval()
 
-    evaluate(config, test_articles, vocabulary, encoder, decoder, max_length=max_article_length)
+    # evaluate(config, test_articles, vocabulary, encoder, decoder, max_length=max_article_length)
 
     log_message("Done")
