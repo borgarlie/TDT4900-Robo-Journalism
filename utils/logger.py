@@ -4,6 +4,8 @@ import logging
 
 logger = logging.getLogger()
 
+# Flag for printing
+use_printing = True
 
 # Random things
 timings_var_chunkings = 'CHUNKING'
@@ -83,18 +85,30 @@ def init_logger(filename):
 
 
 def log_message(message):
-    logger.info(message)
+    if use_printing:
+        print(message, flush=True)
+    else:
+        logger.info(message)
 
 
 def log_error_message(message):
-    logger.error(message)
+    if use_printing:
+        print(message, flush=True)
+    else:
+        logger.error(message)
 
 
 def log_training_message(progress, itr, percentage, print_loss_avg, lowest_loss):
-    logger.info('%s (%d %d%%) %.4f' % (progress, itr, percentage, print_loss_avg))
+    if use_printing:
+        print('%s (%d %d%%) %.4f' % (progress, itr, percentage, print_loss_avg), flush=True)
+    else:
+        logger.info('%s (%d %d%%) %.4f' % (progress, itr, percentage, print_loss_avg))
     if print_loss_avg < lowest_loss:
         lowest_loss = print_loss_avg
-        logger.info(" ^ Lowest loss so far")
+        if use_printing:
+            print(" ^ Lowest loss so far", flush=True)
+        else:
+            logger.info(" ^ Lowest loss so far")
     return lowest_loss
 
 
@@ -110,7 +124,10 @@ def log_timings():
         temp_minutes = as_minutes(timings[var])
         timings[var] = temp_minutes
 
-    logger.info(json.dumps(timings, indent=2))
+    if use_printing:
+        print(json.dumps(timings, indent=2), flush=True)
+    else:
+        logger.info(json.dumps(timings, indent=2))
     # Reset the timings
     for var in timings:
         timings[var] = 0.0
@@ -124,8 +141,10 @@ def log_decode_breakings(num_iterations, n_discriminator):
         else:
             avg = decode_breakings[var] / num_iterations
             decode_breakings[var] = avg
-
-    logger.info(json.dumps(decode_breakings, indent=2))
+    if use_printing:
+        print(json.dumps(decode_breakings, indent=2), flush=True)
+    else:
+        logger.info(json.dumps(decode_breakings, indent=2))
 
     for var in decode_breakings:
         decode_breakings[var] = 0
@@ -133,6 +152,10 @@ def log_decode_breakings(num_iterations, n_discriminator):
 
 def log_monte_carlo_sampling():
     avg = monte_carlo_sampling[decode_breaking_monte_carlo_sampling] / monte_carlo_sampling[monte_carlo_sampling_num]
-    logger.info("Monte carlo sampling average breaking: %.1f" % avg)
+
+    if use_printing:
+        print("Monte carlo sampling average breaking: %.1f" % avg, flush=True)
+    else:
+        logger.info("Monte carlo sampling average breaking: %.1f" % avg)
     monte_carlo_sampling[decode_breaking_monte_carlo_sampling] = 0
     monte_carlo_sampling[monte_carlo_sampling_num] = 0
