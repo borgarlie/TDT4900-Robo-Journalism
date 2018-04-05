@@ -1,0 +1,16 @@
+#PBS -N eval_running
+#PBS -l walltime=30:00:00
+#PBS -l select=1:ncpus=36
+#PBS -q epic
+#PBS -j oe
+
+module load icc/2017.1.132-GCC-6.3.0-2.27  impi/2017.1.132
+module load Python/3.6.1
+
+source $HOME/master/virtualenv/bin/activate
+export LD_LIBRARY_PATH=$HOME/local/cuda/lib64:$LD_LIBRARY_PATH
+
+cd $PBS_O_WORKDIR
+cd ../TDT4900-Robo-Journalism/evaluation/seq2seq
+
+python3 evaluate_test_data.py -1 > output.txt
