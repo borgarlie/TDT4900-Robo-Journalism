@@ -7,7 +7,7 @@ import time
 
 class Generator:
     def __init__(self, vocabulary, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion,
-                 policy_criterion, batch_size, use_cuda, beta, num_monte_carlo_samples):
+                 policy_criterion, batch_size, use_cuda, beta, num_monte_carlo_samples, sample_rate, negative_reward):
         self.vocabulary = vocabulary
         self.encoder = encoder
         self.decoder = decoder
@@ -21,7 +21,8 @@ class Generator:
         self.num_monte_carlo_samples = num_monte_carlo_samples
         self.updates = 0
         self.cumulative_reward = 0.0
-        self.allow_negative_rewards = False
+        self.sample_rate = sample_rate
+        self.allow_negative_rewards = negative_reward
 
     # discriminator is used to calculate reward
     # target batch is used for MLE
@@ -60,7 +61,6 @@ class Generator:
         policy_iteration_time_start = time.time()
         policy_iteration_break_early = False
 
-        sample_rate = 0.33
         num_samples = 0
 
         # Do policy iteration
@@ -84,7 +84,7 @@ class Generator:
 
             # Sample things
             # Currently always sampling the first token (to make sure there is at least 1 sampling per batch)
-            sampling = True if random.random() < sample_rate else False
+            sampling = True if random.random() <= self.sample_rate else False
             if sampling or di == 0:
                 num_samples += 1
                 sampled_token = decoder_output.data.multinomial(1)

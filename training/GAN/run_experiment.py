@@ -50,8 +50,12 @@ if __name__ == '__main__':
         if len(sys.argv) < 3:
             log_error_message("Expected 2 arguments: [0] = experiment path (e.g. test_experiment1), [1] = GPU (0 or 1)")
             exit()
-        torch.cuda.set_device(int(sys.argv[2]))
-        log_message("Using GPU: %s" % sys.argv[2])
+        device_number = int(sys.argv[2])
+        if device_number > -1:
+            torch.cuda.set_device(device_number)
+            log_message("Using GPU: %s" % sys.argv[2])
+        else:
+            log_message("Not setting specific GPU")
     else:
         if len(sys.argv) < 2:
             log_error_message("Expected 1 argument: [0] = experiment path (e.g. test_experiment1)")
@@ -68,6 +72,8 @@ if __name__ == '__main__':
     batch_size = config['train']['batch_size']
     beta = config['train']['beta']
     num_monte_carlo_samples = config['train']['num_monte_carlo_samples']
+    sample_rate = config['train']['sample_rate']
+    allow_negative_reward = config['train']['allow_negative_reward']
 
     # load generator parameters
     generator_embedding_size = config['generator_model']['embedding_size']
@@ -170,7 +176,7 @@ if __name__ == '__main__':
 
     generator = Generator(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
                           generator_decoder_optimizer, generator_mle_criterion, policy_criterion, batch_size, use_cuda,
-                          beta, num_monte_carlo_samples)
+                          beta, num_monte_carlo_samples, sample_rate, allow_negative_reward)
 
     discriminator = Discriminator(discriminator_model, discriminator_optimizer, discriminator_criterion)
 
