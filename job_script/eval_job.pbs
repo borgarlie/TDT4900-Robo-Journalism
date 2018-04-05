@@ -11,6 +11,6 @@ source $HOME/master/virtualenv/bin/activate
 export LD_LIBRARY_PATH=$HOME/local/cuda/lib64:$LD_LIBRARY_PATH
 
 cd $PBS_O_WORKDIR
-cd ../TDT4900-Robo-Journalism/evaluation/seq2seq
+cd ../evaluation/seq2seq
 
 python3 evaluate_test_data.py -1 > output.txt
