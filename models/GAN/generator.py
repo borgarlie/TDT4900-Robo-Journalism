@@ -27,7 +27,7 @@ class Generator:
     # discriminator is used to calculate reward
     # target batch is used for MLE
     def train_on_batch(self, input_variable_batch, full_input_variable_batch, input_lengths, full_target_variable_batch,
-                       target_lengths, discriminator, max_monte_carlo_length, target_variable):
+                       target_lengths, discriminator, max_monte_carlo_length, target_variable, extended_vocabs, full_target_variable_batch_2):
 
         self.encoder_optimizer.zero_grad()
         self.decoder_optimizer.zero_grad()
@@ -62,19 +62,13 @@ class Generator:
         policy_iteration_break_early = False
 
         num_samples = 0
-
         # Do policy iteration
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_target_length):
             decoder_output, decoder_hidden, decoder_attention \
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
                                self.batch_size)
-
             log_output = torch.log(decoder_output.clamp(min=1e-8))
-
-            # TODO: Remove this when we use teacher forcing
-            # mle_loss += self.mle_criterion(log_output, full_target_variable_batch[di])
-
             topv, topi = decoder_output.data.topk(1)
             ni = topi  # next input, batch of top softmax
             for token_index in range(0, len(ni)):
@@ -104,7 +98,12 @@ class Generator:
                 sample = self.monte_carlo_expansion(monte_carlo_input, decoder_hidden, encoder_outputs,
                                                     full_input_variable_batch, accumulated_sequence, monte_carlo_length)
                 monte_carlo_outer_time_start = time.time()
-                current_reward = discriminator.evaluate(sample)
+                current_reward = discriminator.evaluate(sample, full_target_variable_batch_2, extended_vocabs)
+
+                # log_message("Reward: ")
+                # log_message(current_reward)
+                # exit()
+
                 accumulated_reward += current_reward
                 # add cumulative reward to calculate running average baseline
                 self.cumulative_reward += current_reward.mean().data[0]
@@ -154,6 +153,10 @@ class Generator:
         # log_message("Last one")
         # log_message(get_sentence_from_tokens_unked(multinomial_1, self.vocabulary))
         # exit()
+
+        # Testing to divide by length
+        # policy_loss = policy_loss / num_samples
+        # mle_loss = mle_loss / max_target_length
 
         total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
 

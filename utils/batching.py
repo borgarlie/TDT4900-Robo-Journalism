@@ -12,12 +12,16 @@ def prepare_batch(batch_size, summary_pairs, max_article_length, max_abstract_le
     full_input_seqs = []
     target_seqs = []
     full_target_seqs = []
+    extended_vocabs = []
+    full_target_seqs_2 = []
 
     for i in range(batch_size):
         input_seqs.append(summary_pairs[i].unked_article_tokens)
         full_input_seqs.append(summary_pairs[i].article_tokens)
         target_seqs.append(summary_pairs[i].unked_abstract_tokens)
         full_target_seqs.append(summary_pairs[i].abstract_tokens)
+        extended_vocabs.append(summary_pairs[i].unknown_tokens)
+        full_target_seqs_2.append(summary_pairs[i].abstract_tokens)
 
     # Zip into pairs, sort by length (descending), unzip
     seq_pairs = sorted(zip(input_seqs, full_input_seqs, target_seqs, full_target_seqs), key=lambda p: len(p[0]),
@@ -44,4 +48,4 @@ def prepare_batch(batch_size, summary_pairs, max_article_length, max_abstract_le
         target_var = target_var.cuda()
         full_target_var = full_target_var.cuda()
 
-    return input_var, full_input_var, input_lengths, target_var, full_target_var, target_lengths
+    return input_var, full_input_var, input_lengths, target_var, full_target_var, target_lengths, extended_vocabs, full_target_seqs_2

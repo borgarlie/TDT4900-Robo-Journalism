@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger()
 
 # Flag for printing
-use_printing = True
+use_printing = False
 
 # Random things
 timings_var_chunkings = 'CHUNKING'
@@ -114,7 +114,7 @@ def log_training_message(progress, itr, percentage, print_loss_avg, lowest_loss)
 
 def log_profiling(num_iterations, n_discriminator):
     log_timings()
-    log_decode_breakings(num_iterations, n_discriminator)
+    # log_decode_breakings(num_iterations, n_discriminator)
     log_monte_carlo_sampling()
 
 

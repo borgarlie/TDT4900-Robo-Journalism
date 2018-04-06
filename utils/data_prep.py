@@ -1,3 +1,4 @@
+import re
 import time
 import torch
 from torch.autograd import Variable
@@ -67,6 +68,22 @@ def get_sentence_from_tokens(tokens, vocabulary, extended_vocabulary):
     for token in tokens:
         words.append(get_word_from_token(token, vocabulary, extended_vocabulary))
     return ' '.join(words)
+
+
+def get_sentence_from_tokens_and_clean(tokens, vocabulary, extended_vocabulary):
+    words = []
+    for token in tokens:
+        words.append(get_word_from_token(token, vocabulary, extended_vocabulary))
+    sequence = ' '.join(words)
+    sequence = clean_sequence(sequence)
+    return sequence
+
+
+def clean_sequence(line):
+    line = re.sub(r'<EOS>', '', line)
+    line = re.sub(r'<PAD>', '', line)
+    line = line.strip()
+    return line
 
 
 # used in the pointer-generator models
