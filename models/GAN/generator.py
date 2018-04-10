@@ -27,7 +27,8 @@ class Generator:
     # discriminator is used to calculate reward
     # target batch is used for MLE
     def train_on_batch(self, input_variable_batch, full_input_variable_batch, input_lengths, full_target_variable_batch,
-                       target_lengths, discriminator, max_monte_carlo_length, target_variable, extended_vocabs, full_target_variable_batch_2):
+                       target_lengths, discriminator, max_monte_carlo_length, target_variable, extended_vocabs,
+                       full_target_variable_batch_2):
 
         self.encoder_optimizer.zero_grad()
         self.decoder_optimizer.zero_grad()
@@ -38,82 +39,44 @@ class Generator:
         encoder_hidden = concat_encoder_hidden_directions(encoder_hidden)
         timings[timings_var_init_encoder] += (time.time() - init_encoder_time_start)
 
-        # TEACHER FORCING MLE START
-        mle_loss = self.get_teacher_forcing_mle(encoder_hidden, encoder_outputs, max_target_length,
-                                                full_input_variable_batch, full_target_variable_batch, target_variable)
+        # Argmax baseline
+        baseline = self.get_argmax_baseline(encoder_hidden, encoder_outputs, max_target_length,
+                                            full_input_variable_batch, discriminator, full_target_variable_batch_2,
+                                            extended_vocabs)
 
         # POLICY ITERATION START
         decoder_input = Variable(torch.LongTensor([SOS_token] * self.batch_size))
         decoder_input = decoder_input.cuda() if self.use_cuda else decoder_input
         decoder_hidden = encoder_hidden
 
-        # Testing with setting a lower upper limit to monte carlo sequence length
-        monte_carlo_length = min(max_target_length, max_monte_carlo_length)
-
-        policy_loss = 0
-        total_reward = 0
-        adjusted_reward = 0
-        full_sequence_rewards = []
         full_policy_values = []
-
         accumulated_sequence = None
 
         policy_iteration_time_start = time.time()
         policy_iteration_break_early = False
 
-        num_samples = 0
+        start_check_for_pad_and_eos = int(max_target_length / 3) * 2
+
         # Do policy iteration
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_target_length):
             decoder_output, decoder_hidden, decoder_attention \
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
                                self.batch_size)
-            log_output = torch.log(decoder_output.clamp(min=1e-8))
-            topv, topi = decoder_output.data.topk(1)
-            ni = topi  # next input, batch of top softmax
+            ni = decoder_output.data.multinomial(1)
             for token_index in range(0, len(ni)):
                 if ni[token_index][0] >= self.vocabulary.n_words:
                     ni[token_index][0] = UNK_token
             decoder_input = Variable(ni)
 
-            # Sample things
-            # Currently always sampling the first token (to make sure there is at least 1 sampling per batch)
-            sampling = True if random.random() <= self.sample_rate else False
-            if sampling or di == 0:
-                num_samples += 1
-                sampled_token = decoder_output.data.multinomial(1)
-                for token_index in range(0, len(sampled_token)):
-                    if sampled_token[token_index][0] >= self.vocabulary.n_words:
-                        sampled_token[token_index][0] = UNK_token
-                monte_carlo_input = Variable(sampled_token)
+            policy_target = Variable(ni.squeeze(1))
 
-                # calculate policy value
-                policy_target = Variable(sampled_token.squeeze(1))
-                current_policy_value = self.policy_criterion(log_output, policy_target)
-                full_policy_values.append(current_policy_value)
-                # calculate policy loss using monte carlo search
-                accumulated_reward = 0
-
-                monte_carlo_time_start = time.time()
-                sample = self.monte_carlo_expansion(monte_carlo_input, decoder_hidden, encoder_outputs,
-                                                    full_input_variable_batch, accumulated_sequence, monte_carlo_length)
-                monte_carlo_outer_time_start = time.time()
-                current_reward = discriminator.evaluate(sample, full_target_variable_batch_2, extended_vocabs)
-
-                # log_message("Reward: ")
-                # log_message(current_reward)
-                # exit()
-
-                accumulated_reward += current_reward
-                # add cumulative reward to calculate running average baseline
-                self.cumulative_reward += current_reward.mean().data[0]
-                self.updates += 1
-                timings[timings_var_monte_carlo_outer] += (time.time() - monte_carlo_outer_time_start)
-                timings[timings_var_monte_carlo] += (time.time() - monte_carlo_time_start)
-
-                reward = accumulated_reward / self.num_monte_carlo_samples
-                full_sequence_rewards.append(reward)
-                total_reward += reward  # used for printing only
+            policy_value = []
+            for i in range(0, self.batch_size):
+                value = torch.log(decoder_output[i][policy_target[i]].clamp(min=1e-8))
+                policy_value.append(value)
+            full_policy_values.append(policy_value)
+            # Test this ?
 
             # Update accumulated sequence
             if accumulated_sequence is None:
@@ -122,63 +85,47 @@ class Generator:
                 accumulated_sequence = torch.cat((accumulated_sequence, decoder_input), 1)
 
             # Break the policy iteration loop if all the variables in the batch is at EOS or PAD
-            if is_whole_batch_pad_or_eos(ni):
-                decode_breakings[decode_breaking_policy] += di
-                policy_iteration_break_early = True
-                break
+            if di > start_check_for_pad_and_eos:
+                if is_whole_batch_pad_or_eos(ni):
+                    decode_breakings[decode_breaking_policy] += di
+                    policy_iteration_break_early = True
+                    break
 
         if not policy_iteration_break_early:
             decode_breakings[decode_breaking_policy] += max_target_length - 1
 
-        # Calculate running average baseline
-        avg = self.cumulative_reward / self.updates
-        baseline = Variable(torch.cuda.FloatTensor([avg]))
+        policy_loss = 0
+        reward = discriminator.evaluate(accumulated_sequence, full_target_variable_batch_2, extended_vocabs)
+        adjusted_reward = reward - baseline
 
-        # Print baseline value for testing purposes
-        # log_message("Baseline value: %.6f" % baseline.data[0])
-
-        for i in range(0, len(full_sequence_rewards)):
-            temp_adjusted_reward = full_sequence_rewards[i] - baseline
-            if not self.allow_negative_rewards:
-                for j in range(0, len(temp_adjusted_reward.data)):
-                    if temp_adjusted_reward.data[j] < 0.0:
-                        temp_adjusted_reward.data[j] = 0.0
-            adjusted_reward += temp_adjusted_reward
-            current_policy_loss = temp_adjusted_reward * full_policy_values[i]
-            reduced_policy_loss = current_policy_loss.mean()
-            policy_loss += reduced_policy_loss
-
-        # Test to look at the accumulated sequence
-        # multinomial_1 = accumulated_sequence[0].data
-        # log_message("Last one")
-        # log_message(get_sentence_from_tokens_unked(multinomial_1, self.vocabulary))
-        # exit()
-
-        # Testing to divide by length
-        # policy_loss = policy_loss / num_samples
-        # mle_loss = mle_loss / max_target_length
-
-        total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
+        print_log_sum = 0
+        # iterating through sequence length
+        for i in range(0, len(full_policy_values)):
+            sum_log_policy = 0
+            for j in range(0, self.batch_size):
+                print_log_sum += full_policy_values[i][j]
+                adjusted_log_policy = full_policy_values[i][j] * adjusted_reward[j]
+                sum_log_policy += adjusted_log_policy
+            negative_sum_log_policy = -sum_log_policy
+            policy_loss += negative_sum_log_policy / self.batch_size
+        print_log_sum = print_log_sum / self.batch_size
 
         timings[timings_var_policy_iteration] += (time.time() - policy_iteration_time_start)
 
         backprop_time_start = time.time()
 
-        total_loss.backward()
+        policy_loss.backward()
 
-        clip = 2
-        torch.nn.utils.clip_grad_norm(self.encoder.parameters(), clip)
-        torch.nn.utils.clip_grad_norm(self.decoder.parameters(), clip)
+        # clip = 2
+        # torch.nn.utils.clip_grad_norm(self.encoder.parameters(), clip)
+        # torch.nn.utils.clip_grad_norm(self.decoder.parameters(), clip)
 
         self.encoder_optimizer.step()
         self.decoder_optimizer.step()
 
         timings[timings_var_backprop] += (time.time() - backprop_time_start)
 
-        total_reward = (total_reward / num_samples).mean()
-        adjusted_reward = (adjusted_reward / num_samples).mean()
-
-        return total_loss.data[0], mle_loss.data[0], policy_loss.data[0], total_reward, adjusted_reward
+        return print_log_sum.data[0], policy_loss.data[0], reward.mean(), baseline.mean(), adjusted_reward.mean()
 
     def get_teacher_forcing_mle(self, encoder_hidden, encoder_outputs, max_target_length, full_input_variable_batch,
                                 full_target_variable_batch, target_variable):
@@ -194,6 +141,32 @@ class Generator:
             mle_loss += self.mle_criterion(log_output, full_target_variable_batch[di])
             decoder_input = target_variable[di]
         return mle_loss
+
+    def get_argmax_baseline(self, encoder_hidden, encoder_outputs, max_target_length, full_input_variable_batch,
+                            discriminator, full_target_variable_batch_2, extended_vocabs):
+        decoder_input = Variable(torch.LongTensor([SOS_token] * self.batch_size))
+        decoder_input = decoder_input.cuda() if self.use_cuda else decoder_input
+        decoder_hidden = encoder_hidden
+        accumulated_sequence = None
+        for di in range(max_target_length):
+            decoder_output, decoder_hidden, decoder_attention \
+                = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
+                               self.batch_size)
+
+            topv, topi = decoder_output.data.topk(1)
+            ni = topi  # next input, batch of top softmax
+            for token_index in range(0, len(ni)):
+                if ni[token_index][0] >= self.vocabulary.n_words:
+                    ni[token_index][0] = UNK_token
+            decoder_input = Variable(ni)
+
+            if accumulated_sequence is None:
+                accumulated_sequence = decoder_input
+            else:
+                accumulated_sequence = torch.cat((accumulated_sequence, decoder_input), 1)
+
+        baseline = discriminator.evaluate(accumulated_sequence, full_target_variable_batch_2, extended_vocabs)
+        return baseline
 
     def monte_carlo_expansion(self, sampled_token, decoder_hidden, encoder_outputs, full_input_variable_batch,
                               initial_sequence, max_sample_length):

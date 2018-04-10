@@ -8,7 +8,6 @@ def read_file(path):
     titles = []
     output = []
     not_truth = False
-    # lines = 0
     for line in text.split('\n'):
         if line.startswith('>'):
             if not_truth:
@@ -19,21 +18,32 @@ def read_file(path):
         elif line.startswith('<') and not_truth:
             output.append(line[1:])
             not_truth = False
-            # lines += 1
-            # if lines == 1000:
-            #     break
 
-    output = clean_text(output)
-    titles = clean_text(titles)
+    output = clean_modelsummary(output)
+    titles = clean_reference(titles)
     return titles, output
 
 
-def clean_text(input_txt):
+def clean_modelsummary(input_txt):
     output_txt = []
     for line in input_txt:
-        line = re.sub(r'\d+', ' ', line)
-        line = re.sub(r'[-.]', ' ', line)
-        line = re.sub(r'<EOS>', ' ', line)
+        line = line.split(" ")
+        line = " ".join(line[2:])
+        # line = line[16:]
+        # line = re.sub(r'\d+', '', line)
+        # line = line[3:]
+        line = re.sub(r'<EOS>', '', line)
+        line = re.sub(r'<PAD>', '', line)
+        line = line.strip()
+        output_txt.append(line)
+    return output_txt
+
+
+def clean_reference(input_txt):
+    output_txt = []
+    for line in input_txt:
+        line = re.sub(r'<EOS>', '', line)
+        line = re.sub(r'<PAD>', '', line)
         line = line.strip()
         output_txt.append(line)
     return output_txt
@@ -49,14 +59,41 @@ def clean_logger_output(text):
     return output
 
 
+def add_back_delimiter(sentence_list, delimiter):
+    for i in range(0, len(sentence_list)-1):
+        sentence_list[i] += " " + delimiter
+    return sentence_list
+
+
+def split_sentence(sentence):
+    sentences = []
+    temp = add_back_delimiter(sentence.split(" . "), ".")
+    for k in temp:
+        temp2 = add_back_delimiter(k.split(" ? "), "?")
+        for j in temp2:
+            temp3 = add_back_delimiter(j.split(" ! "), "!")
+            for t in temp3:
+                if t.startswith("<"):
+                    t = t[1:]
+                sentences.append(t)
+    return "\n".join(sentences).strip()
+
+
 if __name__ == '__main__':
     # path = '../output_for_eval/pointer_gen_ntb_baseline_2.txt'
-    path = '../output_for_eval/cnn_pretrained_1.log'
+    # path = '../output_for_eval/cnn_beam_output_GAN_4.log'
+    path = '../output_for_eval/cnn_beam_output_rougetest_3.log'
+
     # path = '../output_for_eval/cnn_beam_output_1.log'
     print("Started extracting titles...")
     reference, hypothesis = read_file(path)
-
     print(len(hypothesis))
+
+    # for i in range(0, len(reference)):
+    #     reference[i] = split_sentence(reference[i])
+    #
+    # for i in range(0, len(hypothesis)):
+    #     hypothesis[i] = split_sentence(hypothesis[i])
 
     print("Done extracting titles...")
     print("starting to evaluate %d examples..." % len(reference))
