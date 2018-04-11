@@ -4,7 +4,7 @@ from sumeval.metrics.rouge import RougeCalculator
 
 def read_file(path):
     text = open(path, encoding='utf-8').read()
-    text = clean_logger_output(text)  # when using logger
+    # text = clean_logger_output(text)  # when using logger
     titles = []
     output = []
     not_truth = False
@@ -82,7 +82,8 @@ def split_sentence(sentence):
 if __name__ == '__main__':
     # path = '../output_for_eval/pointer_gen_ntb_baseline_2.txt'
     # path = '../output_for_eval/cnn_beam_output_GAN_4.log'
-    path = '../output_for_eval/cnn_beam_output_rougetest_3.log'
+    # path = '../output_for_eval/cnn_beam_output_rougetest_3.log'
+    path = '../output_for_eval/output_rougetest_eval.txt'
 
     # path = '../output_for_eval/cnn_beam_output_1.log'
     print("Started extracting titles...")

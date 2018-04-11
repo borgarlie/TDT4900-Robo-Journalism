@@ -1,5 +1,7 @@
 import random
 
+from torch.distributions import Categorical
+
 from utils.data_prep import *
 from utils.logger import *
 import time
@@ -63,20 +65,17 @@ class Generator:
             decoder_output, decoder_hidden, decoder_attention \
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
                                self.batch_size)
-            ni = decoder_output.data.multinomial(1)
+            m = Categorical(decoder_output)
+            action = m.sample()
+            log_prob = m.log_prob(action)
+            full_policy_values.append(log_prob)
+
+            # Assuming we can just do this now
+            ni = action
             for token_index in range(0, len(ni)):
-                if ni[token_index][0] >= self.vocabulary.n_words:
-                    ni[token_index][0] = UNK_token
-            decoder_input = Variable(ni)
-
-            policy_target = Variable(ni.squeeze(1))
-
-            policy_value = []
-            for i in range(0, self.batch_size):
-                value = torch.log(decoder_output[i][policy_target[i]].clamp(min=1e-8))
-                policy_value.append(value)
-            full_policy_values.append(policy_value)
-            # Test this ?
+                if ni[token_index].data[0] >= self.vocabulary.n_words:
+                    ni[token_index].data[0] = UNK_token
+            decoder_input = ni.unsqueeze(1)
 
             # Update accumulated sequence
             if accumulated_sequence is None:
@@ -86,7 +85,7 @@ class Generator:
 
             # Break the policy iteration loop if all the variables in the batch is at EOS or PAD
             if di > start_check_for_pad_and_eos:
-                if is_whole_batch_pad_or_eos(ni):
+                if is_whole_batch_pad_or_eos(decoder_input.data):
                     decode_breakings[decode_breaking_policy] += di
                     policy_iteration_break_early = True
                     break
@@ -99,15 +98,10 @@ class Generator:
         adjusted_reward = reward - baseline
 
         print_log_sum = 0
-        # iterating through sequence length
         for i in range(0, len(full_policy_values)):
-            sum_log_policy = 0
-            for j in range(0, self.batch_size):
-                print_log_sum += full_policy_values[i][j]
-                adjusted_log_policy = full_policy_values[i][j] * adjusted_reward[j]
-                sum_log_policy += adjusted_log_policy
-            negative_sum_log_policy = -sum_log_policy
-            policy_loss += negative_sum_log_policy / self.batch_size
+            print_log_sum += torch.sum(full_policy_values[i])
+            loss = -full_policy_values[i] * reward
+            policy_loss += torch.sum(loss) / self.batch_size
         print_log_sum = print_log_sum / self.batch_size
 
         timings[timings_var_policy_iteration] += (time.time() - policy_iteration_time_start)

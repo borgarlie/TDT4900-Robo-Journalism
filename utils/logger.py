@@ -115,7 +115,7 @@ def log_training_message(progress, itr, percentage, print_loss_avg, lowest_loss)
 def log_profiling(num_iterations, n_discriminator):
     log_timings()
     # log_decode_breakings(num_iterations, n_discriminator)
-    log_monte_carlo_sampling()
+    # log_monte_carlo_sampling()
 
 
 def log_timings():
