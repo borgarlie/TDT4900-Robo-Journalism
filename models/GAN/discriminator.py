@@ -65,18 +65,12 @@ class RougeDiscriminator:
 
     def evaluate(self, generated_batch, reference_batch, extended_vocabs):
         generated_batch, reference_batch = self.convert_batch(generated_batch, reference_batch, extended_vocabs)
-        # log_message(generated_batch[0])
-        # log_message(reference_batch[0])
-
         rouge_l_points = []
         for i in range(0, len(generated_batch)):
             rouge_l = self.rouge.rouge_l(
                 summary=generated_batch[i],
                 references=reference_batch[i])
             rouge_l_points.append(rouge_l)
-
-        # log_message(rouge_l_points)
-        # exit()
         return Variable(torch.cuda.FloatTensor(rouge_l_points))
 
 

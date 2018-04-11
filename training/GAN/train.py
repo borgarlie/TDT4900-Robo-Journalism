@@ -1,6 +1,6 @@
 import random
 
-from evaluation.seq2seq.evaluate import calculate_loss_on_eval_set, evaluate_argmax
+from evaluation.seq2seq.evaluate import calculate_loss_on_eval_set, evaluate_argmax, evaluate_rouge
 from training.seq2seq.train import save_state
 from utils.batching import *
 from utils.data_prep import *
@@ -38,6 +38,10 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
     samples = eval_pairs[0:3]
     evaluate_argmax(generator.vocabulary, samples, generator.encoder, generator.decoder,
                     max_abstract_length)
+    rouge_samples = eval_pairs[0:1000]
+    rouge_score = evaluate_rouge(rouge_samples, generator.encoder, generator.decoder, max_article_length,
+                                 max_abstract_length, discriminator)
+    log_message("Rouge score before training: %.6f" % rouge_score)
     generator.encoder.train()
     generator.decoder.train()
 
@@ -121,6 +125,11 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     samples = eval_pairs[0:3]
                     evaluate_argmax(generator.vocabulary, samples, generator.encoder, generator.decoder,
                                     max_abstract_length)
+                    rouge_samples = eval_pairs[0:1000]
+                    rouge_score = evaluate_rouge(rouge_samples, generator.encoder, generator.decoder,
+                                                 max_article_length,
+                                                 max_abstract_length, discriminator)
+                    log_message("Rouge score: %.6f" % rouge_score)
                     generator.encoder.train()
                     generator.decoder.train()
                 batch += 1

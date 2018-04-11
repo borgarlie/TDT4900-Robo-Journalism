@@ -1,4 +1,5 @@
 from evaluation.seq2seq.beam_search import *
+from utils.batching import chunks, prepare_batch
 from utils.data_prep import *
 from utils.logger import *
 
@@ -46,6 +47,49 @@ def evaluate_argmax(vocabulary, test_articles, encoder, decoder, max_length):
         full_generated_sentence_unpacked = get_sentence_from_tokens(decoder_outputs, vocabulary, extended_vocab)
         log_message("TARGET SENTENCE >>> " + full_target_sentence_unpacked)
         log_message("GENERATED SENTENCE >>> " + full_generated_sentence_unpacked)
+
+
+def evaluate_rouge(test_articles, encoder, decoder, max_article_length,
+                   max_abstract_length, discriminator):
+    batch_size = 50
+    assert len(test_articles) % batch_size == 0
+    batches = list(chunks(test_articles, batch_size))
+    total_reward = 0
+    for batch in range(0, len(batches)):
+        input_variable, full_input_variable, input_lengths, _, _, _, extended_vocabs, full_target_var_2 \
+            = prepare_batch(batch_size, batches[batch], max_article_length, max_abstract_length)
+        reward_batch = get_argmax_rouge_reward(encoder, decoder, max_abstract_length, input_variable,
+           input_lengths, full_input_variable, discriminator, extended_vocabs, full_target_var_2, batch_size)
+        mean_reward = reward_batch.mean()
+        total_reward += mean_reward
+    mean_total_reward = total_reward / len(batches)
+    return mean_total_reward.data[0]
+
+
+def get_argmax_rouge_reward(encoder, decoder, max_abstract_length, input_variable, input_lengths, full_input_var,
+                        discriminator, extended_vocabs, full_target_var_2, batch_size):
+    encoder_outputs, encoder_hidden = encoder(input_variable, input_lengths, None)
+    encoder_hidden = concat_encoder_hidden_directions(encoder_hidden)
+    decoder_input = Variable(torch.LongTensor([SOS_token] * batch_size)).cuda()
+    decoder_hidden = encoder_hidden
+    accumulated_sequence = None
+    for di in range(max_abstract_length):
+        decoder_output, decoder_hidden, _ \
+            = decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_var, batch_size)
+        topv, topi = decoder_output.data.topk(1)
+        ni = topi  # next input, batch of top softmax
+        for token_index in range(0, len(ni)):
+            if ni[token_index][0] >= discriminator.vocabulary.n_words:
+                ni[token_index][0] = UNK_token
+        decoder_input = Variable(ni)
+
+        if accumulated_sequence is None:
+            accumulated_sequence = decoder_input
+        else:
+            accumulated_sequence = torch.cat((accumulated_sequence, decoder_input), 1)
+
+    reward = discriminator.evaluate(accumulated_sequence, full_target_var_2, extended_vocabs)
+    return reward
 
 
 def evaluate_single_argmax(vocabulary, input_variable, full_input_variable, input_lengths, max_sample_length, encoder,
