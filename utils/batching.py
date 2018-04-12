@@ -24,9 +24,9 @@ def prepare_batch(batch_size, summary_pairs, max_article_length, max_abstract_le
         full_target_seqs_2.append(summary_pairs[i].abstract_tokens)
 
     # Zip into pairs, sort by length (descending), unzip
-    seq_pairs = sorted(zip(input_seqs, full_input_seqs, target_seqs, full_target_seqs), key=lambda p: len(p[0]),
-                       reverse=True)
-    input_seqs, full_input_seqs, target_seqs, full_target_seqs = zip(*seq_pairs)
+    seq_pairs = sorted(zip(input_seqs, full_input_seqs, target_seqs, full_target_seqs, extended_vocabs,
+                           full_target_seqs_2), key=lambda p: len(p[0]), reverse=True)
+    input_seqs, full_input_seqs, target_seqs, full_target_seqs, extended_vocabs, full_target_seqs_2 = zip(*seq_pairs)
 
     # For input and target sequences, get array of lengths and pad with 0s to max length
     input_lengths = [max_article_length for s in input_seqs]
