@@ -37,14 +37,17 @@ class Beam:
         return self.get_avg_score().__lt__(other.get_avg_score())
 
     def generate_expanded_beams(self, vocabulary, topv, topi, decoder_hidden, decoder_attention, expansions=5):
-        for i in range(expansions):
+        i = 0
+        while i < expansions:
             next_word = topi[0][i]
-            if len(self.scores) < 4 and (next_word == EOS_token or next_word == PAD_token):
-                expansions += 1
-                continue
             # TODO: Check that this is the correct way to do it. Should we just skip, or set score = 0?
             if self.has_trigram(self.decoded_outputs, next_word):
                 expansions += 1
+                i += 1
+                continue
+            if len(self.scores) < 4 and (next_word == EOS_token or next_word == PAD_token):
+                expansions += 1
+                i += 1
                 continue
             decoded_outputs = list(self.decoded_outputs) + [next_word]
             next_unpacked_word = get_word_from_token(next_word, vocabulary, self.extended_vocab)
@@ -53,12 +56,11 @@ class Beam:
             # so that we are able to take the average based on number of tokens in the sequence
             # also need to set a minimum value, since we can not take log of 0
             next_score = topv[0][i] if topv[0][i] > 1e-8 else 1e-8
-            # print(next_score, flush=True)
             log_score = np.log(next_score)
-            # print(log_score, flush=True)
             new_scores = list(self.scores) + [log_score]
             new_attention_weights = self.attention_weights.clone()
             new_attention_weights[len(self.decoded_word_sequence)] = decoder_attention.data
+            i += 1
             yield Beam(decoded_words, decoded_outputs, new_attention_weights, new_scores, next_word, decoder_hidden,
                        self.full_input_variable, self.extended_vocab)
 
@@ -91,7 +93,8 @@ class Beam:
         decoder_input = decoder_input.cuda() if use_cuda else decoder_input
         decoder_output, decoder_hidden, decoder_attention = decoder(decoder_input, self.input_hidden, encoder_outputs,
                                                                     self.full_input_variable, 1)
-        topv, topi = decoder_output.data.topk(expansions)
+        # Increasing expansions with *= 10 to compensate for possible trigram overlaps
+        topv, topi = decoder_output.data.topk(expansions * 10)
         return list(self.generate_expanded_beams(vocabulary, topv, topi, decoder_hidden, decoder_attention, expansions))
 
     def cut_attention_weights_at_sequence_length(self):
