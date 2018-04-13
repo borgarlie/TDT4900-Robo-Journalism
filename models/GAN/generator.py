@@ -25,6 +25,7 @@ class Generator:
         self.cumulative_reward = 0.0
         self.sample_rate = sample_rate
         self.allow_negative_rewards = negative_reward
+        self.use_trigram_check = True
 
     # discriminator is used to calculate reward
     # target batch is used for MLE
@@ -110,9 +111,9 @@ class Generator:
 
         policy_loss.backward()
 
-        # clip = 2
-        # torch.nn.utils.clip_grad_norm(self.encoder.parameters(), clip)
-        # torch.nn.utils.clip_grad_norm(self.decoder.parameters(), clip)
+        clip = 2
+        torch.nn.utils.clip_grad_norm(self.encoder.parameters(), clip)
+        torch.nn.utils.clip_grad_norm(self.decoder.parameters(), clip)
 
         self.encoder_optimizer.step()
         self.decoder_optimizer.step()
@@ -120,6 +121,25 @@ class Generator:
         timings[timings_var_backprop] += (time.time() - backprop_time_start)
 
         return print_log_sum.data[0], policy_loss.data[0], reward.mean(), baseline.mean(), adjusted_reward.mean()
+
+    # TODO: Move to data_thingy util or something
+    # using indexes
+    def has_trigram(self, current_sequence, next_word):
+        if len(current_sequence) < 3:
+            return False
+        word1 = current_sequence[-2]
+        word2 = current_sequence[-1]
+        word3 = next_word
+        for i in range(2, len(current_sequence)):
+            if current_sequence[i - 2] != word1:
+                continue
+            if current_sequence[i - 1] != word2:
+                continue
+            if current_sequence[i] != word3:
+                continue
+            # all equal = overlap
+            return True
+        return False
 
     def get_teacher_forcing_mle(self, encoder_hidden, encoder_outputs, max_target_length, full_input_variable_batch,
                                 full_target_variable_batch, target_variable):
@@ -147,8 +167,25 @@ class Generator:
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
                                self.batch_size)
 
-            topv, topi = decoder_output.data.topk(1)
-            ni = topi  # next input, batch of top softmax
+            if self.use_trigram_check:
+                # TODO: If topk > 5 the program should crash. Figure out if this is a case at all..
+                # Using topk > 1 to compensate for possible trigram overlaps
+                topv, topi = decoder_output.data.topk(10)
+                next_words = []
+                for batch in range(0, self.batch_size):
+                    topk = 0
+                    while 1:
+                        next_word = topi[batch][topk]
+                        if di > 2 and self.has_trigram(accumulated_sequence[batch].data, next_word):
+                            topk += 1
+                            continue
+                        break
+                    next_words.append(next_word)
+                ni = torch.cuda.LongTensor(next_words).unsqueeze(1)
+            else:
+                topv, topi = decoder_output.data.topk(1)
+                ni = topi  # next input, batch of top softmax
+
             for token_index in range(0, len(ni)):
                 if ni[token_index][0] >= self.vocabulary.n_words:
                     ni[token_index][0] = UNK_token
