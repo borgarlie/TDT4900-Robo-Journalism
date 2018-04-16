@@ -145,6 +145,10 @@ class GeneratorSuperStrat:
             print_log_sum += torch.sum(full_policy_values[i])
             total_print_reward += torch.sum(full_sequence_rewards[i])
             adjusted_full_sequence_reward = full_sequence_rewards[i] - baseline
+            if not self.allow_negative_rewards:
+                for j in range(0, len(adjusted_full_sequence_reward.data)):
+                    if adjusted_full_sequence_reward.data[j] < 0.0:
+                        adjusted_full_sequence_reward.data[j] = 0.0
             total_print_adjusted_reward += torch.sum(adjusted_full_sequence_reward)
             loss = -full_policy_values[i] * adjusted_full_sequence_reward
             policy_loss += torch.sum(loss) / self.batch_size

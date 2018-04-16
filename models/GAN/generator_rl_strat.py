@@ -23,7 +23,7 @@ class GeneratorRlStrat:
         self.cumulative_reward = 0.0
         self.sample_rate = sample_rate
         self.allow_negative_rewards = negative_reward
-        self.use_trigram_check = True
+        self.use_trigram_check = False
         self.use_running_avg_baseline = False
 
     # discriminator is used to calculate reward
@@ -65,9 +65,12 @@ class GeneratorRlStrat:
         policy_iteration_break_early = False
 
         start_check_for_pad_and_eos = int(max_target_length / 3) * 2
+        num_samples = 0
 
         # Policy iteration
         for di in range(max_target_length):
+            num_samples += 1
+
             decoder_output, decoder_hidden, decoder_attention \
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
                                self.batch_size)
@@ -110,6 +113,10 @@ class GeneratorRlStrat:
             print_baseline = baseline.data[0]
 
         adjusted_reward = reward - baseline
+        if not self.allow_negative_rewards:
+            for j in range(0, len(adjusted_reward.data)):
+                if adjusted_reward.data[j] < 0.0:
+                    adjusted_reward.data[j] = 0.0
 
         print_log_sum = 0
         for i in range(0, len(full_policy_values)):
@@ -121,6 +128,9 @@ class GeneratorRlStrat:
         timings[timings_var_policy_iteration] += (time.time() - policy_iteration_time_start)
 
         backprop_time_start = time.time()
+
+        # divide by sequence length
+        policy_loss = policy_loss / num_samples
 
         if self.beta < 1.00:
             total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
