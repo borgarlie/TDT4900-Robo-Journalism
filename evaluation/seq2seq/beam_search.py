@@ -40,8 +40,7 @@ class Beam:
         i = 0
         while i < expansions:
             next_word = topi[0][i]
-            # TODO: Check that this is the correct way to do it. Should we just skip, or set score = 0?
-            if self.has_trigram(self.decoded_outputs, next_word):
+            if has_trigram(self.decoded_outputs, next_word):
                 expansions += 1
                 i += 1
                 continue
@@ -63,24 +62,6 @@ class Beam:
             i += 1
             yield Beam(decoded_words, decoded_outputs, new_attention_weights, new_scores, next_word, decoder_hidden,
                        self.full_input_variable, self.extended_vocab)
-
-    # using indexes
-    def has_trigram(self, current_sequence, next_word):
-        if len(current_sequence) < 3:
-            return False
-        word1 = current_sequence[-2]
-        word2 = current_sequence[-1]
-        word3 = next_word
-        for i in range(2, len(current_sequence)):
-            if current_sequence[i-2] != word1:
-                continue
-            if current_sequence[i-1] != word2:
-                continue
-            if current_sequence[i] != word3:
-                continue
-            # all equal = overlap
-            return True
-        return False
 
     # return list of expanded beams. return self if current beam is at end of sentence
     def expand(self, vocabulary, encoder_outputs, decoder, expansions=5):

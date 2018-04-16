@@ -122,25 +122,6 @@ class Generator:
 
         return print_log_sum.data[0], policy_loss.data[0], reward.mean(), baseline.mean(), adjusted_reward.mean()
 
-    # TODO: Move to data_thingy util or something
-    # using indexes
-    def has_trigram(self, current_sequence, next_word):
-        if len(current_sequence) < 3:
-            return False
-        word1 = current_sequence[-2]
-        word2 = current_sequence[-1]
-        word3 = next_word
-        for i in range(2, len(current_sequence)):
-            if current_sequence[i - 2] != word1:
-                continue
-            if current_sequence[i - 1] != word2:
-                continue
-            if current_sequence[i] != word3:
-                continue
-            # all equal = overlap
-            return True
-        return False
-
     def get_teacher_forcing_mle(self, encoder_hidden, encoder_outputs, max_target_length, full_input_variable_batch,
                                 full_target_variable_batch, target_variable):
         mle_loss = 0
@@ -168,15 +149,14 @@ class Generator:
                                self.batch_size)
 
             if self.use_trigram_check:
-                # TODO: If topk > 5 the program should crash. Figure out if this is a case at all..
                 # Using topk > 1 to compensate for possible trigram overlaps
-                topv, topi = decoder_output.data.topk(10)
+                topv, topi = decoder_output.data.topk(100)
                 next_words = []
                 for batch in range(0, self.batch_size):
                     topk = 0
                     while 1:
                         next_word = topi[batch][topk]
-                        if di > 2 and self.has_trigram(accumulated_sequence[batch].data, next_word):
+                        if di > 2 and has_trigram(accumulated_sequence[batch].data, next_word):
                             topk += 1
                             continue
                         break

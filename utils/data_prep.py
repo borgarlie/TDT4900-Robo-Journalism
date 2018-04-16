@@ -121,3 +121,22 @@ def is_whole_batch_pad_or_eos(batched_input):
             break
     timings[timings_var_check_eos_pad] += (time.time() - before)
     return is_only_pad_or_eos
+
+
+# using indexes
+def has_trigram(current_sequence, next_word):
+    if len(current_sequence) < 3:
+        return False
+    word1 = current_sequence[-2]
+    word2 = current_sequence[-1]
+    word3 = next_word
+    for i in range(2, len(current_sequence)):
+        if current_sequence[i - 2] != word1:
+            continue
+        if current_sequence[i - 1] != word2:
+            continue
+        if current_sequence[i] != word3:
+            continue
+        # all equal = overlap
+        return True
+    return False
