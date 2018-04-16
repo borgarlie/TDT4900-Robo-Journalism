@@ -26,8 +26,10 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
     print_loss_generator = 0
     print_loss_mle = 0
     print_loss_policy = 0
+    print_loss_policy_log_sum = 0
     print_loss_discriminator = 0
     print_total_reward = 0
+    print_baseline = 0
     print_adjusted_reward = 0
     lowest_loss_generator = 999
     lowest_loss_discriminator = 999
@@ -85,16 +87,19 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
 
                 generator_train_time_start = time.time()
 
-                loss, mle_loss, policy_loss, reward, adjusted_reward = generator.train_on_batch(
-                    input_variable, full_input_variable, input_lengths, full_target_var, target_lengths, discriminator,
-                    max_sample_length, target_var, extended_vocabs, full_target_var_2)
+                loss, mle_loss, policy_loss, policy_log_sum, reward, baseline, adjusted_reward \
+                    = generator.train_on_batch(input_variable, full_input_variable, input_lengths, full_target_var,
+                                               target_lengths, discriminator, max_sample_length, target_var,
+                                               extended_vocabs, full_target_var_2)
 
                 timings[timings_var_generator_train] += (time.time() - generator_train_time_start)
 
                 print_loss_generator += loss
                 print_loss_mle += mle_loss
                 print_loss_policy += policy_loss
+                print_loss_policy_log_sum += policy_log_sum
                 print_total_reward += reward
+                print_baseline += baseline
                 print_adjusted_reward += adjusted_reward
                 # calculate number of batches processed
                 itr_generator += 1
@@ -102,19 +107,25 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     print_loss_avg = print_loss_generator / print_every
                     print_loss_avg_mle = print_loss_mle / print_every
                     print_loss_avg_policy = print_loss_policy / print_every
+                    print_loss_avg_policy_log_sum = print_loss_policy_log_sum / print_every
                     print_total_reward_avg = print_total_reward / print_every
+                    print_avg_baseline = print_baseline / print_every
                     print_adjusted_reward_avg = print_adjusted_reward / print_every
                     print_loss_generator = 0
                     print_loss_mle = 0
                     print_loss_policy = 0
+                    print_loss_policy_log_sum = 0
                     print_total_reward = 0
+                    print_baseline = 0
                     print_adjusted_reward = 0
                     progress, total_runtime = time_since(start, itr_generator / n_iters, total_runtime)
                     start = time.time()
                     log_message('%s (%d %d%%)' % (progress, itr_generator, itr_generator / n_iters * 100))
-                    log_message('Generator loss (total, mle, policy, reward, adjusted_reward): %.4f, %.4f, %.4f, %.4f, '
-                                '%.4f' % (print_loss_avg, print_loss_avg_mle, print_loss_avg_policy,
-                                          print_total_reward_avg, print_adjusted_reward_avg))
+                    log_message('Generator loss (total, mle, policy, policy_log_sum, reward, baseline, adjusted_reward)'
+                                ': %.4f, %.4f, %.4f, %.4f, %.4f, %.4f, %.4f'
+                                % (print_loss_avg, print_loss_avg_mle, print_loss_avg_policy,
+                                   print_loss_avg_policy_log_sum, print_total_reward_avg, print_avg_baseline,
+                                   print_adjusted_reward_avg))
                     if print_loss_avg < lowest_loss_generator:
                         lowest_loss_generator = print_loss_avg
                         log_message(" ^ Lowest generator loss so far")
