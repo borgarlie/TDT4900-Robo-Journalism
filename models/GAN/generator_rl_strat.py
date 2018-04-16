@@ -7,14 +7,13 @@ import time
 
 class GeneratorRlStrat:
     def __init__(self, vocabulary, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion,
-                 policy_criterion, batch_size, use_cuda, beta, num_monte_carlo_samples, sample_rate, negative_reward):
+                 batch_size, use_cuda, beta, num_monte_carlo_samples, sample_rate, negative_reward):
         self.vocabulary = vocabulary
         self.encoder = encoder
         self.decoder = decoder
         self.encoder_optimizer = encoder_optimizer
         self.decoder_optimizer = decoder_optimizer
         self.mle_criterion = mle_criterion
-        self.policy_criterion = policy_criterion
         self.batch_size = batch_size
         self.use_cuda = use_cuda
         self.beta = beta

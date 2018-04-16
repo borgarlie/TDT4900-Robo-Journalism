@@ -162,12 +162,11 @@ if __name__ == '__main__':
 
     # generator_encoder_optimizer = optim.SGD(generator_encoder.parameters(), lr=generator_learning_rate)
     # generator_decoder_optimizer = optim.SGD(generator_decoder.parameters(), lr=generator_learning_rate)
-    generator_encoder_optimizer = optim.Adam(generator_encoder.parameters(), lr=generator_learning_rate,
+    generator_encoder_optimizer = optim.Adagrad(generator_encoder.parameters(), lr=generator_learning_rate,
                                                 weight_decay=1e-05)
-    generator_decoder_optimizer = optim.Adam(generator_decoder.parameters(), lr=generator_learning_rate,
+    generator_decoder_optimizer = optim.Adagrad(generator_decoder.parameters(), lr=generator_learning_rate,
                                                 weight_decay=1e-05)
     generator_mle_criterion = torch.nn.NLLLoss()
-    policy_criterion = torch.nn.NLLLoss(reduce=False)
 
     # TODO: should this one be loaded?
     # discriminator_optimizer = torch.optim.Adam(discriminator_model.parameters(), lr=discriminator_learning_rate,
@@ -175,7 +174,7 @@ if __name__ == '__main__':
     # discriminator_criterion = torch.nn.BCEWithLogitsLoss()
 
     generator = GeneratorRlStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
-                                 generator_decoder_optimizer, generator_mle_criterion, policy_criterion, batch_size,
+                                 generator_decoder_optimizer, generator_mle_criterion, batch_size,
                                  use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward)
 
     # discriminator = Discriminator(discriminator_model, discriminator_optimizer, discriminator_criterion)
