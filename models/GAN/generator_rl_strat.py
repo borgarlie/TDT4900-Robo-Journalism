@@ -7,7 +7,7 @@ from utils.logger import *
 import time
 
 
-class Generator:
+class GeneratorRlStrat:
     def __init__(self, vocabulary, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion,
                  policy_criterion, batch_size, use_cuda, beta, num_monte_carlo_samples, sample_rate, negative_reward):
         self.vocabulary = vocabulary
@@ -26,6 +26,7 @@ class Generator:
         self.sample_rate = sample_rate
         self.allow_negative_rewards = negative_reward
         self.use_trigram_check = True
+        self.use_running_avg_baseline = False
 
     # discriminator is used to calculate reward
     # target batch is used for MLE
@@ -43,11 +44,18 @@ class Generator:
         timings[timings_var_init_encoder] += (time.time() - init_encoder_time_start)
 
         # Argmax baseline
-        baseline = self.get_argmax_baseline(encoder_hidden, encoder_outputs, max_target_length,
-                                            full_input_variable_batch, discriminator, full_target_variable_batch_2,
-                                            extended_vocabs)
+        if not self.use_running_avg_baseline:
+            baseline = self.get_argmax_baseline(encoder_hidden, encoder_outputs, max_target_length,
+                                                full_input_variable_batch, discriminator, full_target_variable_batch_2,
+                                                extended_vocabs)
+            print_baseline = baseline.mean()
 
-        # POLICY ITERATION START
+        # MLE loss
+        if self.beta < 1.00:
+            mle_loss = self.get_teacher_forcing_mle(encoder_hidden, encoder_outputs, max_target_length,
+                                                    full_input_variable_batch, full_target_variable_batch,
+                                                    target_variable)
+
         decoder_input = Variable(torch.LongTensor([SOS_token] * self.batch_size))
         decoder_input = decoder_input.cuda() if self.use_cuda else decoder_input
         decoder_hidden = encoder_hidden
@@ -60,8 +68,7 @@ class Generator:
 
         start_check_for_pad_and_eos = int(max_target_length / 3) * 2
 
-        # Do policy iteration
-        # Without teacher forcing: use its own predictions as the next input
+        # Policy iteration
         for di in range(max_target_length):
             decoder_output, decoder_hidden, decoder_attention \
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
@@ -71,7 +78,6 @@ class Generator:
             log_prob = m.log_prob(action)
             full_policy_values.append(log_prob)
 
-            # Assuming we can just do this now
             ni = action
             for token_index in range(0, len(ni)):
                 if ni[token_index].data[0] >= self.vocabulary.n_words:
@@ -96,6 +102,15 @@ class Generator:
 
         policy_loss = 0
         reward = discriminator.evaluate(accumulated_sequence, full_target_variable_batch_2, extended_vocabs)
+
+        if self.use_running_avg_baseline:
+            self.cumulative_reward += reward.mean().data[0]
+            self.updates += 1
+            # Calculate running average baseline
+            avg = self.cumulative_reward / self.updates
+            baseline = Variable(torch.cuda.FloatTensor([avg]))
+            print_baseline = baseline.data[0]
+
         adjusted_reward = reward - baseline
 
         print_log_sum = 0
@@ -109,7 +124,12 @@ class Generator:
 
         backprop_time_start = time.time()
 
-        policy_loss.backward()
+        if self.beta < 1.00:
+            total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
+        else:
+            total_loss = policy_loss
+
+        total_loss.backward()
 
         clip = 2
         torch.nn.utils.clip_grad_norm(self.encoder.parameters(), clip)
@@ -120,7 +140,10 @@ class Generator:
 
         timings[timings_var_backprop] += (time.time() - backprop_time_start)
 
-        return print_log_sum.data[0], policy_loss.data[0], reward.mean(), baseline.mean(), adjusted_reward.mean()
+        if self.beta < 1.00:
+            return total_loss.data[0], mle_loss.data[0], policy_loss.data[0], print_log_sum.data[0], reward.mean(), print_baseline, adjusted_reward.mean()
+        else:
+            return total_loss.data[0], total_loss.data[0], policy_loss.data[0], print_log_sum.data[0], reward.mean(), print_baseline, adjusted_reward.mean()
 
     def get_teacher_forcing_mle(self, encoder_hidden, encoder_outputs, max_target_length, full_input_variable_batch,
                                 full_target_variable_batch, target_variable):
