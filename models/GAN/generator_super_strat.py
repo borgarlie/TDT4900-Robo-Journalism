@@ -1,3 +1,5 @@
+import random
+
 from torch.distributions import Categorical
 
 from utils.data_prep import *
@@ -5,7 +7,7 @@ from utils.logger import *
 import time
 
 
-class GeneratorRlStrat:
+class GeneratorSuperStrat:
     def __init__(self, vocabulary, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion,
                  policy_criterion, batch_size, use_cuda, beta, num_monte_carlo_samples, sample_rate, negative_reward):
         self.vocabulary = vocabulary
@@ -59,6 +61,7 @@ class GeneratorRlStrat:
         decoder_hidden = encoder_hidden
 
         full_policy_values = []
+        full_sequence_rewards = []
         accumulated_sequence = None
 
         policy_iteration_time_start = time.time()
@@ -66,21 +69,50 @@ class GeneratorRlStrat:
 
         start_check_for_pad_and_eos = int(max_target_length / 3) * 2
 
+        monte_carlo_length = min(max_target_length, max_monte_carlo_length)
+        num_samples = 0
+
         # Policy iteration
         for di in range(max_target_length):
             decoder_output, decoder_hidden, decoder_attention \
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
                                self.batch_size)
-            m = Categorical(decoder_output)
-            action = m.sample()
-            log_prob = m.log_prob(action)
-            full_policy_values.append(log_prob)
 
-            ni = action
+            topv, topi = decoder_output.data.topk(1)
+            ni = topi
             for token_index in range(0, len(ni)):
                 if ni[token_index].data[0] >= self.vocabulary.n_words:
                     ni[token_index].data[0] = UNK_token
-            decoder_input = ni.unsqueeze(1)
+            decoder_input = ni  # TODO: Is it already a variable?
+
+            # Sample things
+            # Currently always sampling the first token (to make sure there is at least 1 sampling per batch)
+            sampling = True if random.random() <= self.sample_rate else False
+            if sampling or di == 0:
+                num_samples += 1
+                m = Categorical(decoder_output)
+                action = m.sample()
+                log_prob = m.log_prob(action)
+                full_policy_values.append(log_prob)
+
+                for token_index in range(0, len(action)):
+                    if action[token_index].data[0] >= self.vocabulary.n_words:
+                        action[token_index].data[0] = UNK_token
+                monte_carlo_input = action.unsqueeze(1)
+
+                monte_carlo_time_start = time.time()
+                sample = self.monte_carlo_expansion(monte_carlo_input, decoder_hidden, encoder_outputs,
+                                                    full_input_variable_batch, accumulated_sequence, monte_carlo_length)
+                monte_carlo_outer_time_start = time.time()
+                current_reward = discriminator.evaluate(sample, full_target_variable_batch_2, extended_vocabs)
+                full_sequence_rewards.append(current_reward)
+
+                # add cumulative reward to calculate running average baseline
+                if self.use_running_avg_baseline:
+                    self.cumulative_reward += current_reward.mean().data[0]
+                    self.updates += 1
+                timings[timings_var_monte_carlo_outer] += (time.time() - monte_carlo_outer_time_start)
+                timings[timings_var_monte_carlo] += (time.time() - monte_carlo_time_start)
 
             # Update accumulated sequence
             if accumulated_sequence is None:
@@ -98,25 +130,29 @@ class GeneratorRlStrat:
         if not policy_iteration_break_early:
             decode_breakings[decode_breaking_policy] += max_target_length - 1
 
-        policy_loss = 0
-        reward = discriminator.evaluate(accumulated_sequence, full_target_variable_batch_2, extended_vocabs)
-
         if self.use_running_avg_baseline:
-            self.cumulative_reward += reward.mean().data[0]
-            self.updates += 1
             # Calculate running average baseline
             avg = self.cumulative_reward / self.updates
             baseline = Variable(torch.cuda.FloatTensor([avg]))
             print_baseline = baseline.data[0]
 
-        adjusted_reward = reward - baseline
+        policy_loss = 0
+        total_print_reward = 0
+        total_print_adjusted_reward = 0
 
         print_log_sum = 0
         for i in range(0, len(full_policy_values)):
             print_log_sum += torch.sum(full_policy_values[i])
-            loss = -full_policy_values[i] * adjusted_reward
+            total_print_reward += torch.sum(full_sequence_rewards[i])
+            adjusted_full_sequence_reward = full_sequence_rewards[i] - baseline
+            total_print_adjusted_reward += torch.sum(adjusted_full_sequence_reward)
+            loss = -full_policy_values[i] * adjusted_full_sequence_reward
             policy_loss += torch.sum(loss) / self.batch_size
         print_log_sum = print_log_sum / self.batch_size
+        total_print_reward = total_print_reward / self.batch_size
+        total_print_reward = total_print_reward / num_samples
+        total_print_adjusted_reward = total_print_adjusted_reward / self.batch_size
+        total_print_adjusted_reward = total_print_adjusted_reward / num_samples
 
         timings[timings_var_policy_iteration] += (time.time() - policy_iteration_time_start)
 
@@ -139,9 +175,11 @@ class GeneratorRlStrat:
         timings[timings_var_backprop] += (time.time() - backprop_time_start)
 
         if self.beta < 1.00:
-            return total_loss.data[0], mle_loss.data[0], policy_loss.data[0], print_log_sum.data[0], reward.mean(), print_baseline, adjusted_reward.mean()
+            return total_loss.data[0], mle_loss.data[0], policy_loss.data[0], print_log_sum.data[0], \
+                   total_print_reward, print_baseline, total_print_adjusted_reward
         else:
-            return total_loss.data[0], total_loss.data[0], policy_loss.data[0], print_log_sum.data[0], reward.mean(), print_baseline, adjusted_reward.mean()
+            return total_loss.data[0], total_loss.data[0], policy_loss.data[0], print_log_sum.data[0], \
+                   total_print_reward, print_baseline, total_print_adjusted_reward
 
     def get_teacher_forcing_mle(self, encoder_hidden, encoder_outputs, max_target_length, full_input_variable_batch,
                                 full_target_variable_batch, target_variable):
@@ -199,6 +237,59 @@ class GeneratorRlStrat:
 
         baseline = discriminator.evaluate(accumulated_sequence, full_target_variable_batch_2, extended_vocabs)
         return baseline
+
+    def monte_carlo_expansion(self, sampled_token, decoder_hidden, encoder_outputs, full_input_variable_batch,
+                              initial_sequence, max_sample_length):
+
+        # TODO: Do we need to set eval mode here? Guess not?
+        # Should we set require_grad = False? (Seems not)
+        # for param in self.decoder.parameters():
+        #     param.require_grad = False
+
+        start_check_for_pad_and_eos = int(max_sample_length / 3) * 2
+
+        if initial_sequence is not None:
+            start = len(initial_sequence.data[0]) + 1
+            decoder_output_variables = torch.cat((initial_sequence, sampled_token), 1)
+        else:
+            start = 1
+            decoder_output_variables = sampled_token
+
+        decoder_input = sampled_token
+
+        monte_carlo_sampling_break_early = False
+        for di in range(start, max_sample_length):
+            monte_carlo_inner_time_start = time.time()
+            decoder_output, decoder_hidden, _ \
+                = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
+                               self.batch_size)
+            timings[timings_var_monte_carlo_inner] += (time.time() - monte_carlo_inner_time_start)
+
+            before_topk_monte = time.time()
+            topv, topi = decoder_output.data.topk(1)
+            ni = topi  # next input, batch of top softmax
+            for token_index in range(0, len(ni)):
+                if ni[token_index][0] >= self.vocabulary.n_words:
+                    ni[token_index][0] = UNK_token
+            decoder_input = Variable(ni)
+            timings[timings_var_monte_carlo_top1] += (time.time() - before_topk_monte)
+
+            monte_carlo_cat_time_start = time.time()
+            decoder_output_variables = torch.cat((decoder_output_variables, decoder_input), 1)
+            timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
+
+            if di > start_check_for_pad_and_eos:
+                if is_whole_batch_pad_or_eos(ni):
+                    monte_carlo_sampling[decode_breaking_monte_carlo_sampling] += di
+                    monte_carlo_sampling[monte_carlo_sampling_num] += 1
+                    monte_carlo_sampling_break_early = True
+                    break
+
+        if not monte_carlo_sampling_break_early:
+            monte_carlo_sampling[decode_breaking_monte_carlo_sampling] += max_sample_length - 1
+            monte_carlo_sampling[monte_carlo_sampling_num] += 1
+
+        return decoder_output_variables
 
     # Used to create fake data samples to train the discriminator
     # Returned values as batched sentences as variables
