@@ -117,6 +117,9 @@ class GeneratorRlStrat:
                 if adjusted_reward.data[j] < 0.0:
                     adjusted_reward.data[j] = 0.0
 
+        # TODO: Alternative: Test with instead of setting negative values to 0,
+        # instead just scale them by divinding by 100 or something?
+
         print_log_sum = 0
         for i in range(0, len(full_policy_values)):
             print_log_sum += torch.sum(full_policy_values[i])
@@ -128,6 +131,7 @@ class GeneratorRlStrat:
 
         backprop_time_start = time.time()
 
+        # TODO: MLE should probably be divided too ?
         # divide by sequence length
         policy_loss = policy_loss / num_samples
 

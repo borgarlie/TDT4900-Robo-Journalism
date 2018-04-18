@@ -24,7 +24,7 @@ class GeneratorSuperStrat:
         self.cumulative_reward = 0.0
         self.sample_rate = sample_rate
         self.allow_negative_rewards = negative_reward
-        self.use_trigram_check = True
+        self.use_trigram_check = False
         self.use_running_avg_baseline = False
 
     # discriminator is used to calculate reward
@@ -80,9 +80,9 @@ class GeneratorSuperStrat:
             topv, topi = decoder_output.data.topk(1)
             ni = topi
             for token_index in range(0, len(ni)):
-                if ni[token_index].data[0] >= self.vocabulary.n_words:
-                    ni[token_index].data[0] = UNK_token
-            decoder_input = ni  # TODO: Is it already a variable?
+                if ni[token_index][0] >= self.vocabulary.n_words:
+                    ni[token_index][0] = UNK_token
+            decoder_input = Variable(ni).cuda()
 
             # Sample things
             # Currently always sampling the first token (to make sure there is at least 1 sampling per batch)
@@ -160,6 +160,10 @@ class GeneratorSuperStrat:
         timings[timings_var_policy_iteration] += (time.time() - policy_iteration_time_start)
 
         backprop_time_start = time.time()
+
+        # TODO: MLE should probably be divided too ?
+        # divide by sequence length
+        policy_loss = policy_loss / num_samples
 
         if self.beta < 1.00:
             total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
