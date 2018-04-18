@@ -3,7 +3,8 @@ import re
 
 def read_file(path):
     text = open(path, encoding='utf-8').read()
-    text = clean_logger_output(text)  # when using logger
+    if path.endswith(".log"):
+        text = clean_logger_output(text)  # when using logger
     titles = []
     output = []
     not_truth = False
@@ -82,7 +83,8 @@ if __name__ == '__main__':
 
     # path = '../output_for_eval/cnn_beam_output_2_13epoch_3_20_1000.log'
 
-    path = '../output_for_eval/cnn_beam_output_epoch16_extratrain_2.log'
+    # path = '../output_for_eval/cnn_beam_output_epoch16_extratrain_2.log'
+    path = '../output_for_eval/cnn_beam_output_2_8epoch.log'
     # path = '../output_for_eval/cnn_beam_gan_long_lr0001.log'
     # path = '../output_for_eval/cnn_pretrained_1.log'
 

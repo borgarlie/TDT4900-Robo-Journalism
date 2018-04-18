@@ -1,3 +1,4 @@
+import re
 import time
 import torch
 from torch.autograd import Variable
@@ -69,6 +70,22 @@ def get_sentence_from_tokens(tokens, vocabulary, extended_vocabulary):
     return ' '.join(words)
 
 
+def get_sentence_from_tokens_and_clean(tokens, vocabulary, extended_vocabulary):
+    words = []
+    for token in tokens:
+        words.append(get_word_from_token(token, vocabulary, extended_vocabulary))
+    sequence = ' '.join(words)
+    sequence = clean_sequence(sequence)
+    return sequence
+
+
+def clean_sequence(line):
+    line = re.sub(r'<EOS>', '', line)
+    line = re.sub(r'<PAD>', '', line)
+    line = line.strip()
+    return line
+
+
 # used in the pointer-generator models
 def get_word_from_token(token, vocabulary, extended_vocabulary):
     if token >= vocabulary.n_words:
@@ -104,3 +121,22 @@ def is_whole_batch_pad_or_eos(batched_input):
             break
     timings[timings_var_check_eos_pad] += (time.time() - before)
     return is_only_pad_or_eos
+
+
+# using indexes
+def has_trigram(current_sequence, next_word):
+    if len(current_sequence) < 3:
+        return False
+    word1 = current_sequence[-2]
+    word2 = current_sequence[-1]
+    word3 = next_word
+    for i in range(2, len(current_sequence)):
+        if current_sequence[i - 2] != word1:
+            continue
+        if current_sequence[i - 1] != word2:
+            continue
+        if current_sequence[i] != word3:
+            continue
+        # all equal = overlap
+        return True
+    return False

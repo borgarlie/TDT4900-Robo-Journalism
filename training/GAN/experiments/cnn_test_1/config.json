@@ -5,16 +5,16 @@
     "num_evaluate" : 13000,
     "throw" : 0,
     "n_epochs" : 1,
-    "batch_size" : 32,
+    "batch_size" : 50,
     "generator_learning_rate" : 0.0001,
     "discriminator_learning_rate" : 0.001,
-    "beta" : 0.99,
-    "n_generator" : 2,
-    "n_discriminator" : 2,
-    "discriminator_n_epochs" : 2,
+    "beta" : 1.00,
+    "n_generator" : 1,
+    "n_discriminator" : 0,
+    "discriminator_n_epochs" : 0,
     "num_monte_carlo_samples" : 1,
     "max_sample_length" : 70,
-    "sample_rate" : 0.5,
+    "sample_rate" : 1.00,
     "allow_negative_reward" : true
   },
   "evaluate" : {
@@ -39,14 +39,14 @@
     "load_file" : "../../models/pretrained_models/classifier/cnn/cnn_classifier_13epoch.tar"
   },
   "save" : {
-    "save_file_generator" : "cnn_generator_2.pth.tar",
-    "save_file_discriminator" : "cnn_discriminator_2.pth.tar"
+    "save_file_generator" : "cnn_generator_rougetest_3.pth.tar",
+    "save_file_discriminator" : "cnn_discriminator_rougetest_3.pth.tar"
   },
   "log" : {
     "print_every" : 250,
-    "filename": "experiments/cnn_test_1/output2.log"
+    "filename": "experiments/cnn_test_1/output_rougetest_3.log"
   },
   "tensorboard" : {
-    "log_path" : "../../log/GAN/cnn_test_1"
+    "log_path" : "../../log/GAN/cnn_test_rougetest_3"
   }
 }
