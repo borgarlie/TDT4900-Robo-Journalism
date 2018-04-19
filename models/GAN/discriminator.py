@@ -67,7 +67,7 @@ class RougeDiscriminator:
         generated_batch, reference_batch = self.convert_batch(generated_batch, reference_batch, extended_vocabs)
         rouge_l_points = []
         for i in range(0, len(generated_batch)):
-            rouge_l = self.rouge.rouge_l(
+            rouge_l = self.rouge.rouge_2(
                 summary=generated_batch[i],
                 references=reference_batch[i])
             rouge_l_points.append(rouge_l)

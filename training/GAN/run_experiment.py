@@ -10,6 +10,7 @@ sys.path.append('../..')  # ugly dirtyfix for imports to work
 from models.GAN.discriminator import RougeDiscriminator
 from models.GAN.generator_rl_strat import GeneratorRlStrat
 from models.GAN.generator_super_strat import GeneratorSuperStrat
+from models.GAN.generator_seqgan_strat import GeneratorSeqGanStrat
 from models.classifier.cnn_classifier import CNNDiscriminator
 from models.seq2seq.decoder import PointerGeneratorDecoder
 from models.seq2seq.encoder import EncoderRNN
@@ -178,9 +179,13 @@ if __name__ == '__main__':
     #                                 generator_decoder_optimizer, generator_mle_criterion, batch_size,
     #                                 use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward)
 
-    generator = GeneratorSuperStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
-                                 generator_decoder_optimizer, generator_mle_criterion, batch_size,
-                                 use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward)
+    # generator = GeneratorSuperStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
+    #                              generator_decoder_optimizer, generator_mle_criterion, batch_size,
+    #                              use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward)
+
+    generator = GeneratorSeqGanStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
+                                    generator_decoder_optimizer, generator_mle_criterion, batch_size,
+                                    use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward)
 
     # discriminator = Discriminator(discriminator_model, discriminator_optimizer, discriminator_criterion)
 

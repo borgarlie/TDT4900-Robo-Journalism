@@ -7,7 +7,7 @@ from utils.logger import *
 import time
 
 
-class GeneratorSuperStrat:
+class GeneratorSeqGanStrat:
     def __init__(self, vocabulary, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion,
                  batch_size, use_cuda, beta, num_monte_carlo_samples, sample_rate, negative_reward):
         self.vocabulary = vocabulary
@@ -100,17 +100,25 @@ class GeneratorSuperStrat:
                 monte_carlo_input = action.unsqueeze(1)
 
                 monte_carlo_time_start = time.time()
-                sample = self.monte_carlo_expansion(monte_carlo_input, decoder_hidden, encoder_outputs,
-                                                    full_input_variable_batch, accumulated_sequence, monte_carlo_length)
-                monte_carlo_outer_time_start = time.time()
-                current_reward = discriminator.evaluate(sample, full_target_variable_batch_2, extended_vocabs)
-                full_sequence_rewards.append(current_reward)
+
+                temp_reward = 0
+                # run n monte carlo samples
+                for n in range(0, self.num_monte_carlo_samples):
+                    sample = self.monte_carlo_expansion(monte_carlo_input, decoder_hidden, encoder_outputs,
+                                                        full_input_variable_batch, accumulated_sequence, monte_carlo_length)
+                    monte_carlo_outer_time_start = time.time()
+                    current_reward = discriminator.evaluate(sample, full_target_variable_batch_2, extended_vocabs)
+                    temp_reward += current_reward
+                    timings[timings_var_monte_carlo_outer] += (time.time() - monte_carlo_outer_time_start)
+
+                # calculate average reward
+                avg_reward = temp_reward / self.num_monte_carlo_samples
+                full_sequence_rewards.append(avg_reward)
 
                 # add cumulative reward to calculate running average baseline
                 if self.use_running_avg_baseline:
-                    self.cumulative_reward += current_reward.mean().data[0]
+                    self.cumulative_reward += avg_reward.mean().data[0]
                     self.updates += 1
-                timings[timings_var_monte_carlo_outer] += (time.time() - monte_carlo_outer_time_start)
                 timings[timings_var_monte_carlo] += (time.time() - monte_carlo_time_start)
 
             # Update accumulated sequence
@@ -245,14 +253,8 @@ class GeneratorSuperStrat:
         baseline = discriminator.evaluate(accumulated_sequence, full_target_variable_batch_2, extended_vocabs)
         return baseline
 
-    # TODO: Test with sampling here too? So that everthing is equal except that there is individual rewards.
     def monte_carlo_expansion(self, sampled_token, decoder_hidden, encoder_outputs, full_input_variable_batch,
                               initial_sequence, max_sample_length):
-
-        # TODO: Do we need to set eval mode here? Guess not?
-        # Should we set require_grad = False? (Seems not)
-        # for param in self.decoder.parameters():
-        #     param.require_grad = False
 
         start_check_for_pad_and_eos = int(max_sample_length / 3) * 2
 
@@ -274,12 +276,12 @@ class GeneratorSuperStrat:
             timings[timings_var_monte_carlo_inner] += (time.time() - monte_carlo_inner_time_start)
 
             before_topk_monte = time.time()
-            topv, topi = decoder_output.data.topk(1)
-            ni = topi  # next input, batch of top softmax
-            for token_index in range(0, len(ni)):
-                if ni[token_index][0] >= self.vocabulary.n_words:
-                    ni[token_index][0] = UNK_token
-            decoder_input = Variable(ni)
+            m = Categorical(decoder_output)
+            action = m.sample()
+            for token_index in range(0, len(action)):
+                if action[token_index].data[0] >= self.vocabulary.n_words:
+                    action[token_index].data[0] = UNK_token
+            decoder_input = action.unsqueeze(1)
             timings[timings_var_monte_carlo_top1] += (time.time() - before_topk_monte)
 
             monte_carlo_cat_time_start = time.time()
@@ -287,7 +289,7 @@ class GeneratorSuperStrat:
             timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
 
             if di > start_check_for_pad_and_eos:
-                if is_whole_batch_pad_or_eos(ni):
+                if is_whole_batch_pad_or_eos(decoder_input.data):
                     monte_carlo_sampling[decode_breaking_monte_carlo_sampling] += di
                     monte_carlo_sampling[monte_carlo_sampling_num] += 1
                     monte_carlo_sampling_break_early = True
@@ -296,9 +298,6 @@ class GeneratorSuperStrat:
         if not monte_carlo_sampling_break_early:
             monte_carlo_sampling[decode_breaking_monte_carlo_sampling] += max_sample_length - 1
             monte_carlo_sampling[monte_carlo_sampling_num] += 1
-
-        # for param in self.decoder.parameters():
-        #     param.require_grad = True
 
         return decoder_output_variables
 
