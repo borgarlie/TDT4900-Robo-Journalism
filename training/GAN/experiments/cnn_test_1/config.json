@@ -12,10 +12,12 @@
     "n_generator" : 1,
     "n_discriminator" : 0,
     "discriminator_n_epochs" : 0,
-    "num_monte_carlo_samples" : 1,
+    "num_monte_carlo_samples" : 4,
     "max_sample_length" : 70,
-    "sample_rate" : 1.00,
-    "allow_negative_reward" : true
+    "sample_rate" : 0.20,
+    "allow_negative_reward" : false,
+    "use_trigram_check" : false,
+    "use_running_avg_baseline": true
   },
   "evaluate" : {
     "expansions" : 3,
@@ -43,7 +45,7 @@
     "save_file_discriminator" : "cnn_discriminator_rougetest_3.pth.tar"
   },
   "log" : {
-    "print_every" : 250,
+    "print_every" : 200,
     "filename": "experiments/cnn_test_1/output_rougetest_3.log"
   },
   "tensorboard" : {
