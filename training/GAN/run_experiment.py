@@ -7,7 +7,7 @@ from tensorboardX import SummaryWriter
 
 sys.path.append('../..')  # ugly dirtyfix for imports to work
 
-from models.GAN.discriminator import RougeDiscriminator
+from models.GAN.discriminator import RougeDiscriminator, GANDiscriminator
 from models.GAN.generator_rl_strat import GeneratorRlStrat
 from models.GAN.generator_super_strat import GeneratorSuperStrat
 from models.GAN.generator_seqgan_strat import GeneratorSeqGanStrat
@@ -173,9 +173,9 @@ if __name__ == '__main__':
     generator_mle_criterion = torch.nn.NLLLoss()
 
     # TODO: should this one be loaded?
-    # discriminator_optimizer = torch.optim.Adam(discriminator_model.parameters(), lr=discriminator_learning_rate,
-    #                                            weight_decay=1e-05)
-    # discriminator_criterion = torch.nn.BCEWithLogitsLoss()
+    discriminator_optimizer = torch.optim.Adam(discriminator_model.parameters(), lr=discriminator_learning_rate,
+                                               weight_decay=1e-05)
+    discriminator_criterion = torch.nn.BCEWithLogitsLoss()
 
     generator = GeneratorRlStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
                                  generator_decoder_optimizer, generator_mle_criterion, batch_size,
@@ -192,10 +192,11 @@ if __name__ == '__main__':
     #                                  use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
     #                                  use_trigram_check, use_running_avg_baseline)
 
-    # discriminator = Discriminator(discriminator_model, discriminator_optimizer, discriminator_criterion)
+    # GAN discriminator
+    discriminator = GANDiscriminator(vocabulary, discriminator_model, discriminator_optimizer, discriminator_criterion)
 
-    # TEST
-    discriminator = RougeDiscriminator(vocabulary)
+    # ROUGE discriminator
+    # discriminator = RougeDiscriminator(vocabulary)
 
     # Train the generator and discriminator alternately in a standard GAN setup
     train_GAN(config, generator, discriminator, train_articles, test_articles, max_article_length, max_abstract_length,

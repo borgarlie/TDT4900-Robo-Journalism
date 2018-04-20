@@ -66,6 +66,7 @@ def evaluate_rouge(test_articles, encoder, decoder, max_article_length,
     return mean_total_reward.data[0]
 
 
+# Change name to something more general? Since it uses discriminator
 def get_argmax_rouge_reward(encoder, decoder, max_abstract_length, input_variable, input_lengths, full_input_var,
                         discriminator, extended_vocabs, full_target_var_2, batch_size):
     encoder_outputs, encoder_hidden = encoder(input_variable, input_lengths, None)

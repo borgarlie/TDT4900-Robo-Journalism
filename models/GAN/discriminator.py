@@ -3,15 +3,16 @@ from torch import nn
 from sumeval.metrics.rouge import RougeCalculator
 from torch.autograd import Variable
 
-from utils.data_prep import get_sentence_from_tokens_and_clean
+from utils.data_prep import get_sentence_from_tokens_and_clean, UNK_token
 from utils.logger import log_message
 
 
-class Discriminator:
-    def __init__(self, model, optimizer, criterion):
+class GANDiscriminator:
+    def __init__(self, vocabulary, model, optimizer, criterion):
         self.model = model
         self.optimizer = optimizer
         self.criterion = criterion
+        self.vocabulary = vocabulary
 
     def train(self, ground_truth, sequences):
         self.optimizer.zero_grad()
@@ -21,10 +22,15 @@ class Discriminator:
         self.optimizer.step()
         return loss.data[0]
 
-    def evaluate(self, sequences):
+    # reference_batch and extended_vocabs are not used here, but included to make
+    # the eval function general across discriminators
+    def evaluate(self, sequences, reference_batch, extended_vocabs):
 
-        # TODO: After fixing so that sequences do not have UNK, we need to remove UNK at this point since this
-        # classifier can not have out of vocabulary words.
+        # Insert UNK instead of using out of vocabulary words
+        for batch_index in range(0, len(sequences)):
+            for token_index in range(0, len(sequences[batch_index])):
+                if sequences[batch_index][token_index].data[0] >= self.vocabulary.n_words:
+                    sequences[batch_index][token_index].data[0] = UNK_token
 
         self.model.eval()
         scores = self.model(sequences)

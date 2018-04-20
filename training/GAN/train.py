@@ -156,7 +156,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     # TODO: Check if we need to set it to 101(?) or if we can set it lower (i.e. max_sample_length)
 
                     real_data_article_variable, full_real_data_article_variable, real_data_article_lengths, \
-                    real_data_variable, _, _ = prepare_batch(batch_size, training_batches[count_disc],
+                    real_data_variable, _, _, _, _ = prepare_batch(batch_size, training_batches[count_disc],
                                                              max_article_length, pad_abstract_length)
 
                     real_data_variable = real_data_variable.transpose(1, 0)
