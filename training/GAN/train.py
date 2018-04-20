@@ -186,13 +186,12 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                         loss = discriminator.train(ground_truth_batched, discriminator_training_data[m])
                         print_loss_discriminator += loss
                         # calculate number of batches processed
-                        # itr_discriminator = (epoch - 1) * num_batches + batch + (k) * n_discriminator + m
                         itr_discriminator += 1
                         if itr_discriminator % print_every == 0:
                             print_loss_avg = print_loss_discriminator / print_every
                             print_loss_discriminator = 0
                             log_message('Discriminator loss at %d - %d - %d - %d - : %.4f'
-                                  % (itr_discriminator, batch, k, m, print_loss_avg))
+                                        % (itr_discriminator, batch, k, m, print_loss_avg))
                             if print_loss_avg < lowest_loss_discriminator:
                                 lowest_loss_discriminator = print_loss_avg
                                 log_message(" ^ Lowest discriminator loss so far")

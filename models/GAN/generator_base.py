@@ -68,15 +68,15 @@ class GeneratorBase:
                 topv, topi = decoder_output.data.topk(1)
                 ni = topi  # next input, batch of top softmax
 
+            if accumulated_sequence is None:
+                accumulated_sequence = Variable(ni).clone()
+            else:
+                accumulated_sequence = torch.cat((accumulated_sequence, Variable(ni)), 1)
+
             for token_index in range(0, len(ni)):
                 if ni[token_index][0] >= self.vocabulary.n_words:
                     ni[token_index][0] = UNK_token
             decoder_input = Variable(ni)
-
-            if accumulated_sequence is None:
-                accumulated_sequence = decoder_input
-            else:
-                accumulated_sequence = torch.cat((accumulated_sequence, decoder_input), 1)
 
         baseline = discriminator.evaluate(accumulated_sequence, full_target_variable_batch_2, extended_vocabs)
         return baseline

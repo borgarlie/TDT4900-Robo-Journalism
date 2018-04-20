@@ -78,15 +78,16 @@ def get_argmax_rouge_reward(encoder, decoder, max_abstract_length, input_variabl
             = decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_var, batch_size)
         topv, topi = decoder_output.data.topk(1)
         ni = topi  # next input, batch of top softmax
+
+        if accumulated_sequence is None:
+            accumulated_sequence = Variable(ni).clone()
+        else:
+            accumulated_sequence = torch.cat((accumulated_sequence, Variable(ni)), 1)
+
         for token_index in range(0, len(ni)):
             if ni[token_index][0] >= discriminator.vocabulary.n_words:
                 ni[token_index][0] = UNK_token
         decoder_input = Variable(ni)
-
-        if accumulated_sequence is None:
-            accumulated_sequence = decoder_input
-        else:
-            accumulated_sequence = torch.cat((accumulated_sequence, decoder_input), 1)
 
     reward = discriminator.evaluate(accumulated_sequence, full_target_var_2, extended_vocabs)
     return reward

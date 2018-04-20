@@ -66,13 +66,6 @@ class GeneratorSuperStrat(GeneratorBase):
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
                                self.batch_size)
 
-            topv, topi = decoder_output.data.topk(1)
-            ni = topi
-            for token_index in range(0, len(ni)):
-                if ni[token_index][0] >= self.vocabulary.n_words:
-                    ni[token_index][0] = UNK_token
-            decoder_input = Variable(ni)
-
             # Sample things
             # Currently always sampling the first token (to make sure there is at least 1 sampling per batch)
             sampling = True if random.random() <= self.sample_rate else False
@@ -83,13 +76,8 @@ class GeneratorSuperStrat(GeneratorBase):
                 log_prob = m.log_prob(action)
                 full_policy_values.append(log_prob)
 
-                for token_index in range(0, len(action)):
-                    if action[token_index].data[0] >= self.vocabulary.n_words:
-                        action[token_index].data[0] = UNK_token
-                monte_carlo_input = action.unsqueeze(1)
-
                 monte_carlo_time_start = time.time()
-                sample = self.monte_carlo_expansion(monte_carlo_input, decoder_hidden, encoder_outputs,
+                sample = self.monte_carlo_expansion(action, decoder_hidden, encoder_outputs,
                                                     full_input_variable_batch, accumulated_sequence, monte_carlo_length)
                 monte_carlo_outer_time_start = time.time()
                 current_reward = discriminator.evaluate(sample, full_target_variable_batch_2, extended_vocabs)
@@ -102,11 +90,21 @@ class GeneratorSuperStrat(GeneratorBase):
                 timings[timings_var_monte_carlo_outer] += (time.time() - monte_carlo_outer_time_start)
                 timings[timings_var_monte_carlo] += (time.time() - monte_carlo_time_start)
 
+            # Get top1 for the next input to the decoder
+            topv, topi = decoder_output.data.topk(1)
+            ni = topi
+
             # Update accumulated sequence
             if accumulated_sequence is None:
-                accumulated_sequence = decoder_input
+                accumulated_sequence = Variable(ni).clone()
             else:
-                accumulated_sequence = torch.cat((accumulated_sequence, decoder_input), 1)
+                accumulated_sequence = torch.cat((accumulated_sequence, Variable(ni)), 1)
+
+            # Remove UNK before setting next input to decoder
+            for token_index in range(0, len(ni)):
+                if ni[token_index][0] >= self.vocabulary.n_words:
+                    ni[token_index][0] = UNK_token
+            decoder_input = Variable(ni)
 
             # Break the policy iteration loop if all the variables in the batch is at EOS or PAD
             if di > start_check_for_pad_and_eos:
@@ -178,7 +176,7 @@ class GeneratorSuperStrat(GeneratorBase):
                    total_print_reward, print_baseline, total_print_adjusted_reward
 
     # TODO: Test with sampling here too? So that everything is equal except that there is individual rewards.
-    def monte_carlo_expansion(self, sampled_token, decoder_hidden, encoder_outputs, full_input_variable_batch,
+    def monte_carlo_expansion(self, action, decoder_hidden, encoder_outputs, full_input_variable_batch,
                               initial_sequence, max_sample_length):
 
         # TODO: Do we need to set eval mode here? Guess not?
@@ -188,14 +186,19 @@ class GeneratorSuperStrat(GeneratorBase):
 
         start_check_for_pad_and_eos = int(max_sample_length / 3) * 2
 
+        current_action = action.unsqueeze(1).clone()
         if initial_sequence is not None:
             start = len(initial_sequence.data[0]) + 1
-            decoder_output_variables = torch.cat((initial_sequence, sampled_token), 1)
+            decoder_output_variables = torch.cat((initial_sequence, current_action), 1)
         else:
             start = 1
-            decoder_output_variables = sampled_token
+            decoder_output_variables = current_action
 
-        decoder_input = sampled_token
+        # Prepare next decoder input with UNK
+        for token_index in range(0, len(action)):
+            if action[token_index].data[0] >= self.vocabulary.n_words:
+                action[token_index].data[0] = UNK_token
+        decoder_input = action.unsqueeze(1)
 
         monte_carlo_sampling_break_early = False
         for di in range(start, max_sample_length):
@@ -208,15 +211,16 @@ class GeneratorSuperStrat(GeneratorBase):
             before_topk_monte = time.time()
             topv, topi = decoder_output.data.topk(1)
             ni = topi  # next input, batch of top softmax
+            timings[timings_var_monte_carlo_top1] += (time.time() - before_topk_monte)
+
+            monte_carlo_cat_time_start = time.time()
+            decoder_output_variables = torch.cat((decoder_output_variables, Variable(ni)), 1)
+            timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
+
             for token_index in range(0, len(ni)):
                 if ni[token_index][0] >= self.vocabulary.n_words:
                     ni[token_index][0] = UNK_token
             decoder_input = Variable(ni)
-            timings[timings_var_monte_carlo_top1] += (time.time() - before_topk_monte)
-
-            monte_carlo_cat_time_start = time.time()
-            decoder_output_variables = torch.cat((decoder_output_variables, decoder_input), 1)
-            timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
 
             if di > start_check_for_pad_and_eos:
                 if is_whole_batch_pad_or_eos(ni):

@@ -22,6 +22,10 @@ class Discriminator:
         return loss.data[0]
 
     def evaluate(self, sequences):
+
+        # TODO: After fixing so that sequences do not have UNK, we need to remove UNK at this point since this
+        # classifier can not have out of vocabulary words.
+
         self.model.eval()
         scores = self.model(sequences)
         self.model.train()

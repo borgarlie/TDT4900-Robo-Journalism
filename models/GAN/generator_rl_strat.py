@@ -67,17 +67,18 @@ class GeneratorRlStrat(GeneratorBase):
             log_prob = m.log_prob(action)
             full_policy_values.append(log_prob)
 
+            cloned_action = action.unsqueeze(1).clone()
+            # Update accumulated sequence
+            if accumulated_sequence is None:
+                accumulated_sequence = cloned_action
+            else:
+                accumulated_sequence = torch.cat((accumulated_sequence, cloned_action), 1)
+
             ni = action
             for token_index in range(0, len(ni)):
                 if ni[token_index].data[0] >= self.vocabulary.n_words:
                     ni[token_index].data[0] = UNK_token
             decoder_input = ni.unsqueeze(1)
-
-            # Update accumulated sequence
-            if accumulated_sequence is None:
-                accumulated_sequence = decoder_input
-            else:
-                accumulated_sequence = torch.cat((accumulated_sequence, decoder_input), 1)
 
             # Break the policy iteration loop if all the variables in the batch is at EOS or PAD
             if di > start_check_for_pad_and_eos:
