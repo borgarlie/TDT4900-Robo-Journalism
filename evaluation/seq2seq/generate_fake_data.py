@@ -1,6 +1,8 @@
 import sys
 import os
 
+from torch.distributions import Categorical
+
 sys.path.append('../..')  # ugly dirtyfix for imports to work
 
 from models.seq2seq.decoder import PointerGeneratorDecoder
@@ -28,8 +30,12 @@ def generate_argmax_summaries(vocabulary, encoder, decoder, summary_pairs, max_a
         full_input_variable = Variable(torch.LongTensor(full_input_variable)).unsqueeze(0)
         full_input_variable = full_input_variable.cuda() if use_cuda else full_input_variable
 
-        fake_sample = generate_single_argmax_summary(vocabulary, encoder, decoder, input_variable, full_input_variable,
+        # fake_sample = generate_single_argmax_summary(vocabulary, encoder, decoder, input_variable, full_input_variable,
+        #                                              input_length, max_abstract_length)
+
+        fake_sample = generate_single_sampled_summary(vocabulary, encoder, decoder, input_variable, full_input_variable,
                                                      input_length, max_abstract_length)
+
         fake_data.append(' '.join(fake_sample))
         if (i+1) % print_every == 0:
             print("Done creating : %d / %d samples" % ((i+1), len(summary_pairs)), flush=True)
@@ -71,6 +77,42 @@ def generate_single_argmax_summary(vocabulary, encoder, decoder, input_variable,
     return decoded_word_sequence
 
 
+def generate_single_sampled_summary(vocabulary, encoder, decoder, input_variable, full_input_variable, input_length,
+                                   max_abstract_length):
+    encoder_outputs, encoder_hidden = encoder(input_variable, [input_length], None)
+    encoder_hidden = concat_encoder_hidden_directions(encoder_hidden)
+    decoder_input = Variable(torch.LongTensor([SOS_token]))
+    decoder_input = decoder_input.cuda() if use_cuda else decoder_input
+    decoder_hidden = encoder_hidden
+    decoded_word_sequence = []
+    for di in range(max_abstract_length):
+        decoder_output, decoder_hidden, decoder_attention \
+            = decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable, 1)
+
+        m = Categorical(decoder_output)
+        action = m.sample()
+        next_word = action.data[0]
+
+        # need special logic to ensure minimum words
+        if next_word == EOS_token or next_word == PAD_token:
+            if di >= minimum_abstract_length:
+                break
+            while next_word == EOS_token or next_word == PAD_token:
+                action = m.sample()
+                next_word = action.data[0]
+
+        # replace OOV words with UNK
+        if next_word >= vocabulary.n_words:
+            next_word = UNK_token
+
+        decoded_word = vocabulary.index2word[next_word]
+        decoded_word_sequence.append(decoded_word)
+        # next input to decoder
+        ni = [next_word]  # next input, batch of top softmax scores
+        decoder_input = Variable(torch.cuda.LongTensor(ni)) if use_cuda else Variable(torch.LongTensor(ni))
+    return decoded_word_sequence
+
+
 def load_state(filename):
     if os.path.isfile(filename):
         state = torch.load(filename)
@@ -95,7 +137,7 @@ if __name__ == '__main__':
     embedding_size = 100
     n_layers = 1
     dropout_p = 0.0
-    load_file = "../../models/pretrained_models/cnn/epoch10_cnn_test1.pth.tar"
+    load_file = "../../models/pretrained_models/cnn/epoch13_cnn_test1.pth.tar"
     # load_file = "../../models/pretrained_models/ntb/ntb_pretrain_2epochs.tar"
 
     summary_pairs, vocabulary = load_dataset(relative_path)
@@ -123,7 +165,7 @@ if __name__ == '__main__':
         encoder = encoder.cuda()
         decoder = decoder.cuda()
 
-    summary_pairs = summary_pairs[0:100]
+    # summary_pairs = summary_pairs[0:1000]
 
     # generate data
     fake_data = generate_argmax_summaries(vocabulary, encoder, decoder, summary_pairs, max_article_length,
@@ -134,7 +176,7 @@ if __name__ == '__main__':
 
     print("Writing to file", flush=True)
 
-    fake_data_save_file = "../../data/cnn_fake_data/cnn_10epoch_test1.abstract.txt"
+    fake_data_save_file = "../../data/cnn_fake_data/cnn_13epoch_sampled.abstract.txt"
     with open(fake_data_save_file, 'w') as file:
         for sample in fake_data:
             file.write(sample)

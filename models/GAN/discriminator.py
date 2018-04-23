@@ -36,7 +36,9 @@ class GANDiscriminator:
         scores = self.model(sequences)
         self.model.train()
         scores = scores.squeeze()
-        return nn.functional.sigmoid(scores)
+
+        sigm = nn.functional.sigmoid(scores).data
+        return Variable(torch.cuda.FloatTensor(sigm))
 
 
 class RepetitionAvoidanceDiscriminator:
