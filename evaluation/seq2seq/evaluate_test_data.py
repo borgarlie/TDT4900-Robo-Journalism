@@ -20,15 +20,19 @@ def load_state(filename):
 if __name__ == '__main__':
     use_cuda = torch.cuda.is_available()
 
-    filename = "cnn_pretrain_extra_epoch1_lr0001.log"
+    filename = "cnn_beam_output_rougetest_3.log"
     init_logger(filename)
 
     if use_cuda:
         if len(sys.argv) < 2:
             log_message("Expected 1 argument: [0] = GPU (0 or 1)")
             exit()
-        torch.cuda.set_device(int(sys.argv[1]))
-        log_message("Using GPU: %s" % sys.argv[1])
+        device_number = int(sys.argv[1])
+        if device_number > -1:
+            torch.cuda.set_device(device_number)
+            log_message("Using GPU: %s" % sys.argv[1])
+        else:
+            log_message("Not setting specific GPU")
 
     relative_path = "../../data/cnn_pickled/cnn_pointer_50k"
     # relative_path = "../../data/ntb_pickled/ntb_pointer_30k"
@@ -36,8 +40,9 @@ if __name__ == '__main__':
     embedding_size = 100
     n_layers = 1
     dropout_p = 0.0
-    load_file = "../../models/pretrained_models/cnn/epoch1_cnn_test1.pth.tar"
-    # load_file = "../../models/pretrained_models/after_gan/cnn_generator_lr0001.pth.tar"
+    # load_file = "../../models/GAN_trained_models/epoch3_cnn_generator_rougetest_1.pth.tar"
+    # load_file = "../../models/pretrained_models/after_gan/epoch1_cnn_generator_unk_fix_rl_metricl.pth.tar"
+    load_file = "../../models/pretrained_models/after_gan/epoch1_cnn_generator_GAN_test.pth.tar"
     # load_file = "../../models/pretrained_models/after_gan/ntb_generator_test_save_2.tar"
 
     summary_pairs, vocabulary = load_dataset(relative_path)
@@ -57,6 +62,8 @@ if __name__ == '__main__':
     except FileNotFoundError as e:
         log_error_message("No file found: exiting")
         exit()
+
+    log_message("Done loading the model")
 
     encoder.eval()
     decoder.eval()

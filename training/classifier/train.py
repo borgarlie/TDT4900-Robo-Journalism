@@ -84,6 +84,13 @@ def train_iters(config, ground_truth, titles, vocabulary, model, optimizer, grou
         model.eval()
         evaluate(ground_truth_eval, eval_titles, vocabulary, model, writer, batch_loss_avg, epoch)
         model.train()
+        # save each epoch after epoch 7 with different naming
+        if epoch > 20:
+            print("Saving model", flush=True)
+            save_state({
+                'model': model.state_dict()
+            }, "epoch%d_" % epoch + config['save']['save_file'])
+            print("Model saved", flush=True)
 
     print("Done with training")
 
@@ -106,3 +113,7 @@ def batch_sequences(vocabulary, titles, ground_truth):
         ground_truth_batched = ground_truth_batched.cuda()
 
     return ground_truth_batched, sequences
+
+
+def save_state(state, filename):
+    torch.save(state, filename)

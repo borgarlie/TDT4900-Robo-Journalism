@@ -117,6 +117,7 @@ class GeneratorBase:
                     if ni[token_index].data[0] >= self.vocabulary.n_words:
                         ni[token_index].data[0] = UNK_token
                 decoder_input = ni.unsqueeze(1)
+                ni = ni.unsqueeze(1).data
             else:
                 topv, topi = decoder_output.data.topk(1)
                 ni = topi  # next input, batch of top softmax scores

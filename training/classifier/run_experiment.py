@@ -12,10 +12,6 @@ from training.classifier.train import train_iters
 from preprocess.preprocess_pointer import *
 
 
-def save_state(state, filename):
-    torch.save(state, filename)
-
-
 def load_classifier(filename):
     if os.path.isfile(filename):
         state = torch.load(filename)
@@ -32,8 +28,12 @@ if __name__ == '__main__':
         if len(sys.argv) < 3:
             print("Expected 2 arguments: [0] = experiment path (e.g. test_experiment1), [1] = GPU (0 or 1)", flush=True)
             exit()
-        torch.cuda.set_device(int(sys.argv[2]))
-        print("Using GPU: %s" % sys.argv[2], flush=True)
+        device_number = int(sys.argv[2])
+        if device_number > -1:
+            torch.cuda.set_device(device_number)
+            print("Using GPU: %s" % sys.argv[2], flush=True)
+        else:
+            print("Not setting specific GPU", flush=True)
     else:
         if len(sys.argv) < 2:
             print("Expected 1 argument: [0] = experiment path (e.g. test_experiment1)", flush=True)
@@ -80,8 +80,8 @@ if __name__ == '__main__':
             titles = titles[:num_articles]
             fake_titles = fake_titles[:num_articles]
             sampled_titles = sampled_titles[:num_articles]
-        all_titles = titles + fake_titles + sampled_titles
-        ground_truth = [1 for i in titles] + [0 for i in fake_titles] + [0 for i in sampled_titles]
+        all_titles = titles + titles + fake_titles + sampled_titles
+        ground_truth = [1 for i in titles] + [1 for i in titles] + [0 for i in fake_titles] + [0 for i in sampled_titles]
     else:
         if num_articles != -1:
             titles = titles[:num_articles]
@@ -126,11 +126,4 @@ if __name__ == '__main__':
 
     writer.close()
 
-    print("Saving model", flush=True)
-
-    save_state({
-        'model': model.state_dict()
-    }, config['save']['save_file'])
-
-    print("Model saved", flush=True)
     print("Done", flush=True)
