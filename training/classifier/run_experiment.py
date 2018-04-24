@@ -51,6 +51,7 @@ if __name__ == '__main__':
 
     relative_path = config['train']['dataset']
     relative_path_fake_data = config['train']['fake_dataset']
+    relative_path_sampled_data = config['train']['sampled_dataset']
     num_articles = config['train']['num_articles']
     num_evaluate = config['train']['num_evaluate']
 
@@ -67,15 +68,26 @@ if __name__ == '__main__':
     vocabulary_path = config['train']['vocabulary_path']
     _, vocabulary = load_dataset(vocabulary_path)
 
+    sampled_data = True if os.path.isfile(relative_path_sampled_data + '.abstract.txt') else False
+
     titles = open(relative_path + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
     fake_titles = open(relative_path_fake_data + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
 
-    if num_articles != -1:
-        titles = titles[:num_articles]
-        fake_titles = fake_titles[:num_articles]
-
-    all_titles = titles + fake_titles
-    ground_truth = [1 for i in titles] + [0 for i in fake_titles]
+    # Dirty fix to allow two fake datasets
+    if sampled_data:
+        sampled_titles = open(relative_path_sampled_data + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
+        if num_articles != -1:
+            titles = titles[:num_articles]
+            fake_titles = fake_titles[:num_articles]
+            sampled_titles = sampled_titles[:num_articles]
+        all_titles = titles + fake_titles + sampled_titles
+        ground_truth = [1 for i in titles] + [0 for i in fake_titles] + [0 for i in sampled_titles]
+    else:
+        if num_articles != -1:
+            titles = titles[:num_articles]
+            fake_titles = fake_titles[:num_articles]
+        all_titles = titles + fake_titles
+        ground_truth = [1 for i in titles] + [0 for i in fake_titles]
 
     # shuffle titles and ground truth equally
     c = list(zip(all_titles, ground_truth))

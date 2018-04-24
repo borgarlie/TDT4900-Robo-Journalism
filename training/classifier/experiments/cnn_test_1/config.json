@@ -2,6 +2,7 @@
   "train" : {
     "dataset" : "../../data/cnn_real_data/cnn_real_1",
     "fake_dataset" : "../../data/cnn_fake_data/cnn_13epoch",
+    "sampled_dataset" : "../../data/cnn_fake_data/cnn_13epoch_sampled",
     "vocabulary_path" : "../../data/cnn_pickled/cnn_pointer_50k",
     "num_articles" : -1,
     "num_evaluate" : 13000,
@@ -16,7 +17,7 @@
     "kernel_sizes" : [3, 4, 5]
   },
   "save" : {
-    "save_file" : "cnn_classifier_13epoch.tar"
+    "save_file" : "cnn_classifier_13epoch_combined.tar"
   },
   "log" : {
     "print_every" : 1000

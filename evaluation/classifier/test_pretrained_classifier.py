@@ -17,14 +17,13 @@ def load_model(filename):
         raise FileNotFoundError
 
 
-def load_pretrained_classifier(vocabulary):
+def load_pretrained_classifier(vocabulary, discriminator_load_file):
     discriminator_hidden_size = 128
     discriminator_dropout_p = 0.5
     discriminator_num_kernels = 100
     discriminator_kernel_sizes = [3, 4, 5]
     discriminator_model = CNNDiscriminator(vocabulary.n_words, discriminator_hidden_size, discriminator_num_kernels,
                                            discriminator_kernel_sizes, discriminator_dropout_p)
-    discriminator_load_file = '../../models/pretrained_models/classifier/cnn/cnn_classifier_13epoch.tar'
     try:
         model_parameters = load_model(discriminator_load_file)
         discriminator_model.load_state_dict(model_parameters)
@@ -72,17 +71,21 @@ if __name__ == '__main__':
     cuda_device = 1
     torch.cuda.set_device(cuda_device)
 
-    max_abstracts = 100000
+    max_abstracts = 1000
     batch_size = 32
     vocabulary_path = '../../data/cnn_pickled/cnn_pointer_50k'
 
-    dataset_path = '../../data/cnn_fake_data/cnn_13epoch'
+    # dataset_path = '../../data/cnn_fake_data/cnn_13epoch'
     # dataset_path = '../../data/cnn_real_data/cnn_real_1'
+    dataset_path = '../../data/cnn_fake_data/cnn_13epoch_sampled'
 
     print("Loading datasets", flush=True)
     _, vocabulary = load_dataset(vocabulary_path)
 
-    model = load_pretrained_classifier(vocabulary)
+    # discriminator_load_file = '../../models/pretrained_models/classifier/cnn/cnn_classifier_13epoch.tar'
+    discriminator_load_file = '../../models/pretrained_models/classifier/cnn/cnn_classifier_13epoch_sampled.tar'
+
+    model = load_pretrained_classifier(vocabulary, discriminator_load_file)
     model.eval()
     model.cuda()
 

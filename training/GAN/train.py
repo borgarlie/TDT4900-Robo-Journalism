@@ -150,6 +150,12 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     # generate fake data
                     # pad_abstract_length = max_sample_length
 
+                    # Alternate between sampling and argmax for fake data
+                    # n_discriminator needs to be a multiple of 2 for this to be balanced
+                    sample = True if m % 2 == 0 else False
+                    # To only use argmax use:
+                    # sample = False
+
                     init_descriminator_time_start = time.time()
 
                     pad_abstract_length = max_abstract_length
@@ -165,7 +171,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
 
                     fake_data_variable = generator.create_samples(
                         real_data_article_variable, full_real_data_article_variable, real_data_article_lengths,
-                        max_sample_length, pad_abstract_length)
+                        max_sample_length, pad_abstract_length, sample=sample)
 
                     timings[timings_var_create_fake] += (time.time() - create_fake_time_start)
 

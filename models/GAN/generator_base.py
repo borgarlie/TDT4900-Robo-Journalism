@@ -1,3 +1,5 @@
+from torch.distributions import Categorical
+
 from utils.data_prep import *
 from utils.logger import *
 import time
@@ -84,7 +86,7 @@ class GeneratorBase:
     # Used to create fake data samples to train the discriminator
     # Returned values as batched sentences as variables
     def create_samples(self, input_variable_batch, full_input_variable_batch, input_lengths, max_sample_length,
-                       pad_length):
+                       pad_length, sample=False):
 
         self.encoder.eval()
         self.decoder.eval()
@@ -108,12 +110,20 @@ class GeneratorBase:
                                self.batch_size)
             timings[timings_var_create_fake_inner] += (time.time() - create_fake_inner_time_start)
 
-            topv, topi = decoder_output.data.topk(1)
-            ni = topi  # next input, batch of top softmax scores
-            for token_index in range(0, len(ni)):
-                if ni[token_index][0] >= self.vocabulary.n_words:
-                    ni[token_index][0] = UNK_token
-            decoder_input = Variable(ni)
+            if sample:
+                m = Categorical(decoder_output)
+                ni = m.sample()
+                for token_index in range(0, len(ni)):
+                    if ni[token_index].data[0] >= self.vocabulary.n_words:
+                        ni[token_index].data[0] = UNK_token
+                decoder_input = ni.unsqueeze(1)
+            else:
+                topv, topi = decoder_output.data.topk(1)
+                ni = topi  # next input, batch of top softmax scores
+                for token_index in range(0, len(ni)):
+                    if ni[token_index][0] >= self.vocabulary.n_words:
+                        ni[token_index][0] = UNK_token
+                decoder_input = Variable(ni)
 
             decoder_output_data = ni.cpu().numpy()
             for batch_index in range(0, len(decoder_output_data)):
