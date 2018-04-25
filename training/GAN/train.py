@@ -20,6 +20,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
         max_sample_length = max_abstract_length
     n_epochs = config['train']['n_epochs']
     batch_size = config['train']['batch_size']
+    discriminator_batch_size = config['train']['discriminator_batch_size']
     print_every = config['log']['print_every']
 
     start = time.time()
@@ -55,7 +56,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
     total_runtime = 0
 
     # generate ground truth to use for discriminator (always the same number of positive and negative samples)
-    ground_truth = [1 for _ in range(batch_size)] + [0 for _ in range(batch_size)]
+    ground_truth = [1 for _ in range(discriminator_batch_size)] + [0 for _ in range(discriminator_batch_size)]
     ground_truth_batched = Variable(torch.FloatTensor(ground_truth)).unsqueeze(1)
     if use_cuda:
         ground_truth_batched = ground_truth_batched.cuda()
@@ -70,6 +71,13 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
 
         # split into batches
         training_batches = list(chunks(training_pairs, batch_size))
+
+        # TODO: Could it be useful to re-shuffle for these batches?
+        # a seperate list for discriminator batches because of different batch size
+        if batch_size == discriminator_batch_size:
+            discriminator_training_data = training_batches
+        else:
+            discriminator_training_batches = list(chunks(training_pairs, discriminator_batch_size))
 
         timings[timings_var_chunkings] += (time.time() - chunking_time_start)
 
@@ -162,8 +170,9 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     # TODO: Check if we need to set it to 101(?) or if we can set it lower (i.e. max_sample_length)
 
                     real_data_article_variable, full_real_data_article_variable, real_data_article_lengths, \
-                    real_data_variable, _, _, _, _ = prepare_batch(batch_size, training_batches[count_disc],
-                                                             max_article_length, pad_abstract_length)
+                    real_data_variable, _, _, _, _ \
+                        = prepare_batch(discriminator_batch_size, discriminator_training_batches[count_disc],
+                                        max_article_length, pad_abstract_length)
 
                     real_data_variable = real_data_variable.transpose(1, 0)
 
@@ -171,14 +180,14 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
 
                     fake_data_variable = generator.create_samples(
                         real_data_article_variable, full_real_data_article_variable, real_data_article_lengths,
-                        max_sample_length, pad_abstract_length, sample=sample)
+                        max_sample_length, pad_abstract_length, discriminator_batch_size, sample=sample)
 
                     timings[timings_var_create_fake] += (time.time() - create_fake_time_start)
 
                     d_titles_real_and_fake = torch.cat((real_data_variable, fake_data_variable), 0)
                     discriminator_training_data.append(d_titles_real_and_fake)
                     count_disc += 1
-                    count_disc = count_disc % len(training_batches)
+                    count_disc = count_disc % len(discriminator_training_batches)
 
                     timings[timings_var_init_discriminator] += (time.time() - init_descriminator_time_start)
 

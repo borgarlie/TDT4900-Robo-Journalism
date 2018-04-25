@@ -76,14 +76,16 @@ if __name__ == '__main__':
     vocabulary_path = '../../data/cnn_pickled/cnn_pointer_50k'
 
     # dataset_path = '../../data/cnn_fake_data/cnn_13epoch'
-    # dataset_path = '../../data/cnn_real_data/cnn_real_1'
-    dataset_path = '../../data/cnn_fake_data/cnn_13epoch_sampled'
+    dataset_path = '../../data/cnn_real_data/cnn_real_1'
+    # dataset_path = '../../data/cnn_fake_data/cnn_13epoch_sampled'
+    # dataset_path = '../../data/cnn_fake_data/sampled_test1'
 
     print("Loading datasets", flush=True)
     _, vocabulary = load_dataset(vocabulary_path)
 
     # discriminator_load_file = '../../models/pretrained_models/classifier/cnn/cnn_classifier_13epoch.tar'
-    discriminator_load_file = '../../models/pretrained_models/classifier/cnn/cnn_classifier_13epoch_sampled.tar'
+    # discriminator_load_file = '../../models/pretrained_models/classifier/cnn/cnn_classifier_13epoch_combined.tar'
+    discriminator_load_file = '../../models/pretrained_models/classifier/cnn/epoch5_cnn_classifier_load_test.tar'
 
     model = load_pretrained_classifier(vocabulary, discriminator_load_file)
     model.eval()

@@ -86,7 +86,7 @@ class GeneratorBase:
     # Used to create fake data samples to train the discriminator
     # Returned values as batched sentences as variables
     def create_samples(self, input_variable_batch, full_input_variable_batch, input_lengths, max_sample_length,
-                       pad_length, sample=False):
+                       pad_length, discriminator_batch_size, sample=False):
 
         self.encoder.eval()
         self.decoder.eval()
@@ -94,11 +94,11 @@ class GeneratorBase:
         encoder_outputs, encoder_hidden = self.encoder(input_variable_batch, input_lengths, None)
         encoder_hidden = concat_encoder_hidden_directions(encoder_hidden)
         # Multiple layers are currently removed for simplicity
-        decoder_input = Variable(torch.LongTensor([SOS_token] * self.batch_size))
+        decoder_input = Variable(torch.LongTensor([SOS_token] * discriminator_batch_size))
         decoder_input = decoder_input.cuda() if self.use_cuda else decoder_input
         decoder_hidden = encoder_hidden
 
-        decoder_outputs = [[] for _ in range(0, self.batch_size)]
+        decoder_outputs = [[] for _ in range(0, discriminator_batch_size)]
         create_fake_sample_break_early = False
 
         # Without teacher forcing: use its own predictions as the next input
@@ -107,7 +107,7 @@ class GeneratorBase:
             create_fake_inner_time_start = time.time()
             decoder_output, decoder_hidden, decoder_attention \
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
-                               self.batch_size)
+                               discriminator_batch_size)
             timings[timings_var_create_fake_inner] += (time.time() - create_fake_inner_time_start)
 
             if sample:
