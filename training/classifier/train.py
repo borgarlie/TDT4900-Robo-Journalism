@@ -10,8 +10,8 @@ from utils.time_utils import *
 
 # Train one batch
 # Example:
-# scores = [[0.2], [123.2], [-500]]
-# ground_truth = [[0], [1], [0]], 0 = false data, 1 = real data (original)
+# scores = [[0.2, -5.3], [123.2, -50.9], [-500.1, -30.5]]
+# ground_truth = [[0, 1], [1, 0], [0, 1]], [0, 1] = false data, [1, 0] = real data (original)
 def train(ground_truth, sequences, model, optimizer, criterion):
     optimizer.zero_grad()
     scores = model(sequences)
@@ -21,7 +21,7 @@ def train(ground_truth, sequences, model, optimizer, criterion):
     return loss.data[0]
 
 
-# ground_truth = [1, 1, 1, 1, ..., 0, 0, 0, 0, ...]
+# ground_truth = [[1, 0], [1, 0], [1, 0, [1, 0], ..., [0, 1], [0, 1], [0, 1], [0, 1], ...]
 def train_iters(config, ground_truth, titles, vocabulary, model, optimizer, ground_truth_eval, eval_titles, writer):
 
     n_epochs = config['train']['num_epochs']
@@ -85,7 +85,7 @@ def train_iters(config, ground_truth, titles, vocabulary, model, optimizer, grou
         evaluate(ground_truth_eval, eval_titles, vocabulary, model, writer, batch_loss_avg, epoch)
         model.train()
         # save each epoch after epoch 7 with different naming
-        if epoch > 20:
+        if epoch > 4:
             print("Saving model", flush=True)
             save_state({
                 'model': model.state_dict()
@@ -106,7 +106,7 @@ def batch_sequences(vocabulary, titles, ground_truth):
     seq_padded = [pad_seq(s, max(seq_lengths)) for s in sequences]
 
     sequences = Variable(torch.LongTensor(seq_padded))
-    ground_truth_batched = Variable(torch.FloatTensor(ground_truth)).unsqueeze(1)
+    ground_truth_batched = Variable(torch.FloatTensor(ground_truth))
 
     if use_cuda:
         sequences = sequences.cuda()

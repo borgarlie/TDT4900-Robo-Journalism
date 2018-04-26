@@ -19,7 +19,7 @@ class CNNDiscriminator(nn.Module):
             [nn.Conv2d(1, self.num_kernels, (kernel, self.hidden_size)) for kernel in self.kernel_sizes])
 
         self.dropout = nn.Dropout(self.dropout_p)
-        self.fc1 = nn.Linear(len(self.kernel_sizes) * self.num_kernels, 1)
+        self.fc1 = nn.Linear(len(self.kernel_sizes) * self.num_kernels, 2)
 
     def forward(self, x):
         x = self.embed(x)

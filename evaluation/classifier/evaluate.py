@@ -19,7 +19,7 @@ def evaluate(ground_truth, titles, vocabulary, model, writer, train_loss, epoch)
     for i in range(len(titles)):
         sequence = indexes_from_sentence(vocabulary, titles[i])
         sequence = Variable(torch.LongTensor([sequence]))
-        current_ground_truth = Variable(torch.FloatTensor([[ground_truth[i]]]))
+        current_ground_truth = Variable(torch.FloatTensor([ground_truth[i]]))
         if use_cuda:
             sequence = sequence.cuda()
             current_ground_truth = current_ground_truth.cuda()

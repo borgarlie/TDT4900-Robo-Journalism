@@ -87,7 +87,7 @@ if __name__ == '__main__':
             titles = titles[:num_articles]
             fake_titles = fake_titles[:num_articles]
         all_titles = titles + fake_titles
-        ground_truth = [1 for i in titles] + [0 for i in fake_titles]
+        ground_truth = [[1, 0] for i in titles] + [[0, 1] for i in fake_titles]
 
     # shuffle titles and ground truth equally
     c = list(zip(all_titles, ground_truth))
@@ -112,7 +112,7 @@ if __name__ == '__main__':
 
     fake_count = 0
     for gt in ground_truth_eval:
-        if gt == 0:
+        if gt[0] == 0:
             fake_count += 1
     print("fake_count_eval: %d / %d" % (fake_count, len(ground_truth_eval)), flush=True)
 
