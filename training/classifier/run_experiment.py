@@ -81,13 +81,14 @@ if __name__ == '__main__':
             fake_titles = fake_titles[:num_articles]
             sampled_titles = sampled_titles[:num_articles]
         all_titles = titles + titles + fake_titles + sampled_titles
-        ground_truth = [1 for i in titles] + [1 for i in titles] + [0 for i in fake_titles] + [0 for i in sampled_titles]
+        ground_truth = [[1, 0] for i in titles] + [[1, 0] for i in titles] + [[0, 1] for i in fake_titles] + [[0, 1] for i in sampled_titles]
     else:
         if num_articles != -1:
             titles = titles[:num_articles]
             fake_titles = fake_titles[:num_articles]
         all_titles = titles + fake_titles
         ground_truth = [[1, 0] for i in titles] + [[0, 1] for i in fake_titles]
+        # ground_truth = [[random.uniform(0.7, 1.2), random.uniform(0, 0.15)] for i in titles] + [[random.uniform(0.0, 0.05), random.uniform(0.7, 1.2)] for i in fake_titles]
 
     # shuffle titles and ground truth equally
     c = list(zip(all_titles, ground_truth))

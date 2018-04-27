@@ -50,15 +50,16 @@ def prepare_batch(vocabulary, abstracts):
 
 def evaluate_all_data(sequences, batch_size, model, vocabulary):
     batches = list(chunks(sequences, batch_size))
-    total_score = 0.0
+    total_score = [0.0, 0.0]
     for i in range(0, len(batches)):
-        if i % 10 == 0:
+        if i+1 % 10 == 0:
             print("Processing batch %d of %d" % (i, len(batches)), flush=True)
         prepared_batch = prepare_batch(vocabulary, batches[i])
-        scores = evaluate_batch(prepared_batch, model)
-        total_score += scores.mean().data[0]
-    mean_score = total_score / len(batches)
-    print("Scores %.10f" % mean_score, flush=True)
+        scores = evaluate_batch(prepared_batch, model).mean(dim=0)
+        total_score[0] += scores.data[0]
+        total_score[1] += scores.data[1]
+    mean_score = [total_score[0] / len(batches), total_score[1] / len(batches)]
+    print("Scores real: %.4f, fake: %.4f" % (mean_score[0], mean_score[1]), flush=True)
 
 
 def evaluate_batch(sequences, model):
@@ -67,33 +68,54 @@ def evaluate_batch(sequences, model):
     return torch.nn.functional.sigmoid(scores)
 
 
+def evaluate_on_dataset(dataset_path, batch_size, model, vocabulary):
+    print("Loading dataset", flush=True)
+    fake_abstracts = open(dataset_path + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
+    fake_abstracts = fake_abstracts[0:max_abstracts]
+    print("Evaluating", flush=True)
+    evaluate_all_data(fake_abstracts, batch_size, model, vocabulary)
+
+
 if __name__ == '__main__':
     cuda_device = 1
     torch.cuda.set_device(cuda_device)
 
     max_abstracts = 1000
-    batch_size = 32
+    batch_size = 50
     vocabulary_path = '../../data/cnn_pickled/cnn_pointer_50k'
 
-    # dataset_path = '../../data/cnn_fake_data/cnn_13epoch'
-    dataset_path = '../../data/cnn_real_data/cnn_real_1'
-    # dataset_path = '../../data/cnn_fake_data/cnn_13epoch_sampled'
-    # dataset_path = '../../data/cnn_fake_data/sampled_test1'
+    dataset_path_real = '../../data/cnn_real_data/cnn_real_1'
+    dataset_path_fake = '../../data/cnn_fake_data/cnn_13epoch'
+    dataset_path_sampled = '../../data/cnn_fake_data/cnn_13epoch_sampled'
+    dataset_path_sampled2 = '../../data/cnn_fake_data/sampled_test1'
+    dataset_path_random = '../../data/cnn_fake_data/random1'
 
-    print("Loading datasets", flush=True)
+    print("Loading model and vocabulary", flush=True)
     _, vocabulary = load_dataset(vocabulary_path)
 
     # discriminator_load_file = '../../models/pretrained_models/classifier/cnn/cnn_classifier_13epoch.tar'
     # discriminator_load_file = '../../models/pretrained_models/classifier/cnn/cnn_classifier_13epoch_combined.tar'
-    discriminator_load_file = '../../models/pretrained_models/classifier/cnn/epoch5_cnn_classifier_load_test.tar'
+    discriminator_load_file = '../../models/pretrained_models/classifier/cnn/epoch10_cnn_classifier_2class_test_4.tar'
 
     model = load_pretrained_classifier(vocabulary, discriminator_load_file)
     model.eval()
     model.cuda()
 
-    fake_abstracts = open(dataset_path + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
-    fake_abstracts = fake_abstracts[0:max_abstracts]
-
     print("Evaluating data", flush=True)
-    evaluate_all_data(fake_abstracts, batch_size, model, vocabulary)
+
+    # print("Random:", flush=True)
+    # evaluate_on_dataset(dataset_path_random, batch_size, model, vocabulary)
+
+    print("Real:", flush=True)
+    evaluate_on_dataset(dataset_path_real, batch_size, model, vocabulary)
+
+    print("Fake:", flush=True)
+    evaluate_on_dataset(dataset_path_fake, batch_size, model, vocabulary)
+
+    print("Sampled 1:", flush=True)
+    evaluate_on_dataset(dataset_path_sampled, batch_size, model, vocabulary)
+
+    print("Sampled 2:", flush=True)
+    evaluate_on_dataset(dataset_path_sampled2, batch_size, model, vocabulary)
+
     print("Done", flush=True)
