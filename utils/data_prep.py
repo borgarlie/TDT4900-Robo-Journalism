@@ -33,6 +33,10 @@ def indexes_from_sentence(vocabulary, sentence):
     return [vocabulary.word2index[word] for word in sentence.split(' ')] + [EOS_token]
 
 
+def indexes_from_sentence_no_eos(vocabulary, sentence):
+    return [vocabulary.word2index[word] for word in sentence.split(' ')]
+
+
 def variable_from_sentence(vocabulary, sentence):
     indexes = indexes_from_sentence(vocabulary, sentence)
     indexes.append(EOS_token)

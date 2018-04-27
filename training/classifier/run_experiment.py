@@ -49,9 +49,7 @@ if __name__ == '__main__':
 
     writer = SummaryWriter(config['tensorboard']['log_path'])
 
-    relative_path = config['train']['dataset']
-    relative_path_fake_data = config['train']['fake_dataset']
-    relative_path_sampled_data = config['train']['sampled_dataset']
+    relative_path = config['train']['real_data_file']
     num_articles = config['train']['num_articles']
     num_evaluate = config['train']['num_evaluate']
 
@@ -68,52 +66,43 @@ if __name__ == '__main__':
     vocabulary_path = config['train']['vocabulary_path']
     _, vocabulary = load_dataset(vocabulary_path)
 
-    sampled_data = True if os.path.isfile(relative_path_sampled_data + '.abstract.txt') else False
+    real_data = open(relative_path + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
 
-    titles = open(relative_path + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
-    fake_titles = open(relative_path_fake_data + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
+    # TODO: Remove 620 , make it train_length instead ?
+    max_train_examples = 620
+    real_data = real_data[:max_train_examples]
 
-    # Dirty fix to allow two fake datasets
-    if sampled_data:
-        sampled_titles = open(relative_path_sampled_data + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
-        if num_articles != -1:
-            titles = titles[:num_articles]
-            fake_titles = fake_titles[:num_articles]
-            sampled_titles = sampled_titles[:num_articles]
-        all_titles = titles + titles + fake_titles + sampled_titles
-        ground_truth = [[1, 0] for i in titles] + [[1, 0] for i in titles] + [[0, 1] for i in fake_titles] + [[0, 1] for i in sampled_titles]
-    else:
-        if num_articles != -1:
-            titles = titles[:num_articles]
-            fake_titles = fake_titles[:num_articles]
-        all_titles = titles + fake_titles
-        ground_truth = [[1, 0] for i in titles] + [[0, 1] for i in fake_titles]
-        # ground_truth = [[random.uniform(0.7, 1.2), random.uniform(0, 0.15)] for i in titles] + [[random.uniform(0.0, 0.05), random.uniform(0.7, 1.2)] for i in fake_titles]
+    # Add EOS to real dataset (can probably do this in the files later instead
+    # TODO: Fix in file
+    for i in range(0, len(real_data)):
+        real_data[i] += " <EOS>"
 
-    # shuffle titles and ground truth equally
-    c = list(zip(all_titles, ground_truth))
-    random.shuffle(c)
-    all_titles_shuffled, ground_truth_shuffled = zip(*c)
-
-    train_length = len(all_titles_shuffled) - num_evaluate
+    train_length = len(real_data) - num_evaluate
     # Append remainder to evaluate set so that the training set has exactly a multiple of batch size
     num_evaluate += train_length % batch_size
-    train_length = len(all_titles_shuffled) - num_evaluate
+    train_length = len(real_data) - num_evaluate
+
+    real_training_data = real_data[:train_length]
+    real_validation_data = real_data[train_length:]
+
+    # TODO: Load validation data from validation folder
+    fake_validation_data = []
+
+    all_validation_data = real_validation_data + fake_validation_data
 
     print("Train length: ", train_length, flush=True)
     print("Num eval: ", num_evaluate, flush=True)
     print("Range train: %d - %d" % (0, train_length), flush=True)
     print("Range test: %d - %d" % (train_length, train_length + num_evaluate), flush=True)
 
-    ground_truth_train = ground_truth_shuffled[0:train_length]
-    train_titles = all_titles_shuffled[0:train_length]
+    ground_truth = [[1, 0] for i in real_training_data] + [[0, 1] for i in real_training_data]
+    # len(real_training_data) should be equal to len(fake_training_data) - ensured by 'max_train_examples'
 
-    ground_truth_eval = ground_truth_shuffled[train_length:train_length+num_evaluate]
-    train_eval = all_titles_shuffled[train_length:train_length+num_evaluate]
+    ground_truth_eval = [[1, 0] for i in real_validation_data] + [[0, 1] for i in fake_validation_data]
 
     fake_count = 0
     for gt in ground_truth_eval:
-        if gt[0] == 0:
+        if gt[1] == 1:
             fake_count += 1
     print("fake_count_eval: %d / %d" % (fake_count, len(ground_truth_eval)), flush=True)
 
@@ -122,8 +111,8 @@ if __name__ == '__main__':
         model = model.cuda()
 
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-05)
-    train_iters(config, ground_truth_train, train_titles, vocabulary, model, optimizer, ground_truth_eval, train_eval,
-                writer)
+    train_iters(config, vocabulary, model, optimizer, writer, real_training_data, ground_truth,
+                all_validation_data, ground_truth_eval, max_train_examples)
 
     writer.close()
 

@@ -1,5 +1,6 @@
 import random
 
+import os
 from torch import nn
 
 from evaluation.classifier.evaluate import evaluate
@@ -21,19 +22,28 @@ def train(ground_truth, sequences, model, optimizer, criterion):
     return loss.data[0]
 
 
+def read_directory(directory):
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+        if filename.endswith(".abstract.txt"):
+            yield os.path.join(directory, file)
+
+
 # ground_truth = [[1, 0], [1, 0], [1, 0, [1, 0], ..., [0, 1], [0, 1], [0, 1], [0, 1], ...]
-def train_iters(config, ground_truth, titles, vocabulary, model, optimizer, ground_truth_eval, eval_titles, writer):
+def train_iters(config, vocabulary, model, optimizer, writer, real_training_data, ground_truth, validation_data,
+                ground_truth_eval, max_train_examples):
 
     n_epochs = config['train']['num_epochs']
     batch_size = config['train']['batch_size']
     print_every = config['log']['print_every']
+    directory = config['train']['fake_data_directory']
 
     start = time.time()
     print_loss_total = 0  # Reset every print_every
 
     criterion = nn.BCEWithLogitsLoss()
 
-    num_batches = int(len(titles) / batch_size)
+    num_batches = int(len(real_training_data) * 2 / batch_size)
     n_iters = num_batches * n_epochs
 
     lowest_loss = 999
@@ -41,16 +51,26 @@ def train_iters(config, ground_truth, titles, vocabulary, model, optimizer, grou
 
     # Evaluate once before starting to train
     model.eval()
-    evaluate(ground_truth_eval, eval_titles, vocabulary, model, writer, 1, 0)
+    evaluate(ground_truth_eval, validation_data, vocabulary, model, writer, 1, 0)
     model.train()
+
+    # Find fake data files and train for 1 epoch per file
+    files = list(read_directory(directory))
+    n_epochs = len(files)
+    # TODO: Currently not using the num_epochs from config. Can probably make it such that it means n_epochs_per_file
 
     print("Starting training", flush=True)
     for epoch in range(1, n_epochs + 1):
         print("Starting epoch: %d" % epoch, flush=True)
         batch_loss_avg = 0
 
+        current_file = files[epoch-1]
+        fake_training_data = open(current_file, encoding='utf-8').read().strip().split('\n')
+
+        all_training_data = real_training_data + fake_training_data[:max_train_examples]
+
         # shuffle ground_truth and titles equally
-        c = list(zip(ground_truth, titles))
+        c = list(zip(ground_truth, all_training_data))
         random.shuffle(c)
         ground_truth_shuffled, titles_shuffled = zip(*c)
 
@@ -82,10 +102,10 @@ def train_iters(config, ground_truth, titles, vocabulary, model, optimizer, grou
 
         # evaluate epoch on test set
         model.eval()
-        evaluate(ground_truth_eval, eval_titles, vocabulary, model, writer, batch_loss_avg, epoch)
+        evaluate(ground_truth_eval, validation_data, vocabulary, model, writer, batch_loss_avg, epoch)
         model.train()
         # save each epoch after epoch 7 with different naming
-        if epoch > 4:
+        if epoch > 2:
             print("Saving model", flush=True)
             save_state({
                 'model': model.state_dict()
@@ -95,11 +115,13 @@ def train_iters(config, ground_truth, titles, vocabulary, model, optimizer, grou
     print("Done with training")
 
 
+# TODO: Make sure that its ok to use already padded stuff
+# TODO: Make sure there is no error with EOS and PAD generally. (Should be the same for real and fake data)
 def batch_sequences(vocabulary, titles, ground_truth):
     sequences = []
     batch_size = len(titles)
     for i in range(batch_size):
-        sequence = indexes_from_sentence(vocabulary, titles[i])
+        sequence = indexes_from_sentence_no_eos(vocabulary, titles[i])
         sequences.append(sequence)
 
     seq_lengths = [len(s) for s in sequences]
