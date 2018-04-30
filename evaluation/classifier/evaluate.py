@@ -17,7 +17,7 @@ def evaluate(ground_truth, titles, vocabulary, model, writer, train_loss, epoch)
     total_loss = 0
     scores = []
     for i in range(len(titles)):
-        sequence = indexes_from_sentence(vocabulary, titles[i])
+        sequence = indexes_from_sentence_no_eos(vocabulary, titles[i])
         sequence = Variable(torch.LongTensor([sequence]))
         current_ground_truth = Variable(torch.FloatTensor([ground_truth[i]]))
         if use_cuda:

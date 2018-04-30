@@ -8,7 +8,7 @@ from tensorboardX import SummaryWriter
 sys.path.append('../..')  # ugly dirtyfix for imports to work
 
 from models.classifier.cnn_classifier import CNNDiscriminator
-from training.classifier.train import train_iters
+from training.classifier.train import *
 from preprocess.preprocess_pointer import *
 
 
@@ -68,10 +68,6 @@ if __name__ == '__main__':
 
     real_data = open(relative_path + '.abstract.txt', encoding='utf-8').read().strip().split('\n')
 
-    # TODO: Remove 620 , make it train_length instead ?
-    max_train_examples = 620
-    real_data = real_data[:max_train_examples]
-
     # Add EOS to real dataset (can probably do this in the files later instead
     # TODO: Fix in file
     for i in range(0, len(real_data)):
@@ -85,8 +81,14 @@ if __name__ == '__main__':
     real_training_data = real_data[:train_length]
     real_validation_data = real_data[train_length:]
 
+    # TODO: Remove 620 , make it train_length instead ?
+    max_train_examples = train_length
+    real_data = real_data[:max_train_examples]
+
     # TODO: Load validation data from validation folder
-    fake_validation_data = []
+    validation_directory = config['train']['validation_data_directory']
+    current_file = list(read_directory(validation_directory))[0]
+    fake_validation_data = open(current_file, encoding='utf-8').read().strip().split('\n')
 
     all_validation_data = real_validation_data + fake_validation_data
 

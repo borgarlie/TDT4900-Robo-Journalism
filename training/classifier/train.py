@@ -44,7 +44,6 @@ def train_iters(config, vocabulary, model, optimizer, writer, real_training_data
     criterion = nn.BCEWithLogitsLoss()
 
     num_batches = int(len(real_training_data) * 2 / batch_size)
-    n_iters = num_batches * n_epochs
 
     lowest_loss = 999
     total_runtime = 0.0
@@ -56,63 +55,67 @@ def train_iters(config, vocabulary, model, optimizer, writer, real_training_data
 
     # Find fake data files and train for 1 epoch per file
     files = list(read_directory(directory))
-    n_epochs = len(files)
-    # TODO: Currently not using the num_epochs from config. Can probably make it such that it means n_epochs_per_file
+    num_training_dataset = len(files)
 
+    n_epochs = 5
+    n_iters = num_batches * n_epochs * num_training_dataset
+
+    # TODO: Currently not using the num_epochs from config. Can probably make it such that it means n_epochs_per_file
     print("Starting training", flush=True)
     for epoch in range(1, n_epochs + 1):
-        print("Starting epoch: %d" % epoch, flush=True)
-        batch_loss_avg = 0
+        for dataset_num in range(0, num_training_dataset):
+            print("Starting epoch: %d for dataset: %d" % (epoch, dataset_num), flush=True)
+            batch_loss_avg = 0
 
-        current_file = files[epoch-1]
-        fake_training_data = open(current_file, encoding='utf-8').read().strip().split('\n')
+            current_file = files[dataset_num]
+            fake_training_data = open(current_file, encoding='utf-8').read().strip().split('\n')
 
-        all_training_data = real_training_data + fake_training_data[:max_train_examples]
+            all_training_data = real_training_data + fake_training_data[:max_train_examples]
 
-        # shuffle ground_truth and titles equally
-        c = list(zip(ground_truth, all_training_data))
-        random.shuffle(c)
-        ground_truth_shuffled, titles_shuffled = zip(*c)
+            # shuffle ground_truth and titles equally
+            c = list(zip(ground_truth, all_training_data))
+            random.shuffle(c)
+            ground_truth_shuffled, titles_shuffled = zip(*c)
 
-        # split into batches
-        ground_truth_batches = list(chunks(ground_truth_shuffled, batch_size))
-        title_batches = list(chunks(titles_shuffled, batch_size))
+            # split into batches
+            ground_truth_batches = list(chunks(ground_truth_shuffled, batch_size))
+            title_batches = list(chunks(titles_shuffled, batch_size))
 
-        for batch in range(num_batches):
-            ground_truth_batched, sequences = batch_sequences(vocabulary, title_batches[batch],
-                                                              ground_truth_batches[batch])
-            loss = train(ground_truth_batched, sequences, model, optimizer, criterion)
+            for batch in range(num_batches):
+                ground_truth_batched, sequences = batch_sequences(vocabulary, title_batches[batch],
+                                                                  ground_truth_batches[batch])
+                loss = train(ground_truth_batched, sequences, model, optimizer, criterion)
 
-            print_loss_total += loss
-            batch_loss_avg += loss
-            # calculate number of batches processed
-            itr = (epoch-1) * num_batches + batch + 1
+                print_loss_total += loss
+                batch_loss_avg += loss
+                # calculate number of batches processed
+                itr = (epoch - 1) * num_training_dataset * num_batches + dataset_num * num_batches + batch + 1
 
-            if itr % print_every == 0:
-                print_loss_avg = print_loss_total / print_every
-                print_loss_total = 0
-                progress, total_runtime = time_since(start, itr / n_iters, total_runtime)
-                start = time.time()
-                print('%s (%d %d%%) %.4f' % (progress, itr, itr / n_iters * 100, print_loss_avg), flush=True)
-                if print_loss_avg < lowest_loss:
-                    lowest_loss = print_loss_avg
-                    print(" ^ Lowest loss so far", flush=True)
+                if itr % print_every == 0:
+                    print_loss_avg = print_loss_total / print_every
+                    print_loss_total = 0
+                    progress, total_runtime = time_since(start, itr / n_iters, total_runtime)
+                    start = time.time()
+                    print('%s (%d %d%%) %.4f' % (progress, itr, itr / n_iters * 100, print_loss_avg), flush=True)
+                    if print_loss_avg < lowest_loss:
+                        lowest_loss = print_loss_avg
+                        print(" ^ Lowest loss so far", flush=True)
 
-        batch_loss_avg /= num_batches
+            batch_loss_avg /= num_batches
 
-        # evaluate epoch on test set
-        model.eval()
-        evaluate(ground_truth_eval, validation_data, vocabulary, model, writer, batch_loss_avg, epoch)
-        model.train()
-        # save each epoch after epoch 7 with different naming
-        if epoch > 2:
-            print("Saving model", flush=True)
-            save_state({
-                'model': model.state_dict()
-            }, "epoch%d_" % epoch + config['save']['save_file'])
-            print("Model saved", flush=True)
+            # evaluate epoch on test set
+            model.eval()
+            evaluate(ground_truth_eval, validation_data, vocabulary, model, writer, batch_loss_avg, epoch)
+            model.train()
+            # save each epoch after epoch 7 with different naming
+            if dataset_num > 7:
+                print("Saving model", flush=True)
+                save_state({
+                    'model': model.state_dict()
+                }, "epoch%d_dataset_num%d_" % (epoch, dataset_num) + config['save']['save_file'])
+                print("Model saved", flush=True)
 
-    print("Done with training")
+        print("Done with training")
 
 
 # TODO: Make sure that its ok to use already padded stuff
