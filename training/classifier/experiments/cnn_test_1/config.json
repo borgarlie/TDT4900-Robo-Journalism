@@ -17,7 +17,8 @@
     "kernel_sizes" : [3, 4, 5]
   },
   "save" : {
-    "save_file" : "cnn_classifier_sampled_folder_test5.tar"
+    "save_file" : "cnn_classifier_sampled_folder_test5.tar",
+    "save_after_dataset_num": 10
   },
   "log" : {
     "print_every" : 1000
