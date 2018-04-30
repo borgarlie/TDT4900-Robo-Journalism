@@ -37,6 +37,7 @@ def train_iters(config, vocabulary, model, optimizer, writer, real_training_data
     batch_size = config['train']['batch_size']
     print_every = config['log']['print_every']
     directory = config['train']['fake_data_directory']
+    save_after_dataset_num = config['save']['save_after_dataset_num']
 
     start = time.time()
     print_loss_total = 0  # Reset every print_every
@@ -57,10 +58,8 @@ def train_iters(config, vocabulary, model, optimizer, writer, real_training_data
     files = list(read_directory(directory))
     num_training_dataset = len(files)
 
-    n_epochs = 5
     n_iters = num_batches * n_epochs * num_training_dataset
 
-    # TODO: Currently not using the num_epochs from config. Can probably make it such that it means n_epochs_per_file
     print("Starting training", flush=True)
     for epoch in range(1, n_epochs + 1):
         for dataset_num in range(0, num_training_dataset):
@@ -108,7 +107,7 @@ def train_iters(config, vocabulary, model, optimizer, writer, real_training_data
             evaluate(ground_truth_eval, validation_data, vocabulary, model, writer, batch_loss_avg, epoch)
             model.train()
             # save each epoch after epoch 7 with different naming
-            if dataset_num > 7:
+            if dataset_num > save_after_dataset_num:
                 print("Saving model", flush=True)
                 save_state({
                     'model': model.state_dict()
