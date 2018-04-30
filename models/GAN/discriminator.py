@@ -35,8 +35,7 @@ class GANDiscriminator:
         self.model.eval()
         scores = self.model(sequences)
         self.model.train()
-        scores = scores.squeeze()
-
+        scores = Variable(scores.data.narrow(1, 0, 1)).squeeze()
         sigm = nn.functional.sigmoid(scores).data
         return Variable(torch.cuda.FloatTensor(sigm))
 

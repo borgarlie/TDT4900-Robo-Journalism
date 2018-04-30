@@ -56,8 +56,8 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
     total_runtime = 0
 
     # generate ground truth to use for discriminator (always the same number of positive and negative samples)
-    ground_truth = [1 for _ in range(discriminator_batch_size)] + [0 for _ in range(discriminator_batch_size)]
-    ground_truth_batched = Variable(torch.FloatTensor(ground_truth)).unsqueeze(1)
+    ground_truth = [[1, 0] for _ in range(discriminator_batch_size)] + [[0, 1] for _ in range(discriminator_batch_size)]
+    ground_truth_batched = Variable(torch.FloatTensor(ground_truth))
     if use_cuda:
         ground_truth_batched = ground_truth_batched.cuda()
 
@@ -75,7 +75,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
         # TODO: Could it be useful to re-shuffle for these batches?
         # a seperate list for discriminator batches because of different batch size
         if batch_size == discriminator_batch_size:
-            discriminator_training_data = training_batches
+            discriminator_training_batches = training_batches
         else:
             discriminator_training_batches = list(chunks(training_pairs, discriminator_batch_size))
 
