@@ -15,6 +15,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
     n_generator = config['train']['n_generator']
     n_discriminator = config['train']['n_discriminator']  # This is a scaling factor of n_generator
     discriminator_n_epochs = config['train']['discriminator_n_epochs']
+    discriminator_fake_data_sample_rate = config['train']['discriminator_fake_data_sample_rate']
     max_sample_length = config['train']['max_sample_length']
     if max_sample_length > max_abstract_length:
         max_sample_length = max_abstract_length
@@ -159,10 +160,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     # pad_abstract_length = max_sample_length
 
                     # Alternate between sampling and argmax for fake data
-                    # n_discriminator needs to be a multiple of 2 for this to be balanced
-                    sample = True if m % 2 == 0 else False
-                    # To only use argmax use:
-                    # sample = False
+                    sample = True if random.random() <= discriminator_fake_data_sample_rate else False
 
                     init_descriminator_time_start = time.time()
 
