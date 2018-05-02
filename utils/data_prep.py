@@ -144,3 +144,7 @@ def has_trigram(current_sequence, next_word):
         # all equal = overlap
         return True
     return False
+
+
+def multiply_data_in_dim(data, num, dim):
+    return torch.cat((data, ) * num, dim=dim)

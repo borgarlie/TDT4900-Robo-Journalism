@@ -2,7 +2,10 @@ import json
 import sys
 import os
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 from torch import optim
+
 from tensorboardX import SummaryWriter
 
 sys.path.append('../..')  # ugly dirtyfix for imports to work
@@ -21,7 +24,7 @@ from preprocess.preprocess_pointer import *
 
 def load_pretrained_generator(filename):
     if os.path.isfile(filename):
-        state = torch.load(filename)
+        state = torch.load(filename, map_location=lambda storage, loc: storage.cuda(0))
         return state['model_state_encoder'], state['model_state_decoder']
     else:
         raise FileNotFoundError
@@ -29,7 +32,7 @@ def load_pretrained_generator(filename):
 
 def load_pretrained_discriminator(filename):
     if os.path.isfile(filename):
-        state = torch.load(filename)
+        state = torch.load(filename, map_location=lambda storage, loc: storage.cuda(0))
         return state['model']
     else:
         raise FileNotFoundError
@@ -98,7 +101,9 @@ if __name__ == '__main__':
     generator_learning_rate = config['train']['generator_learning_rate']
     discriminator_learning_rate = config['train']['discriminator_learning_rate']
 
+    log_message("Loading dataset")
     summary_pairs, vocabulary = load_dataset(relative_path)
+    log_message("Done loading dataset")
 
     n_generator = config['train']['n_generator']
 
@@ -164,39 +169,38 @@ if __name__ == '__main__':
         generator_decoder = generator_decoder.cuda()
         discriminator_model = discriminator_model.cuda()
 
-    # generator_encoder_optimizer = optim.SGD(generator_encoder.parameters(), lr=generator_learning_rate)
-    # generator_decoder_optimizer = optim.SGD(generator_decoder.parameters(), lr=generator_learning_rate)
     generator_encoder_optimizer = optim.Adagrad(generator_encoder.parameters(), lr=generator_learning_rate,
                                                 weight_decay=1e-05)
     generator_decoder_optimizer = optim.Adagrad(generator_decoder.parameters(), lr=generator_learning_rate,
                                                 weight_decay=1e-05)
     generator_mle_criterion = torch.nn.NLLLoss()
 
-    # TODO: should this one be loaded?
     discriminator_optimizer = torch.optim.Adam(discriminator_model.parameters(), lr=discriminator_learning_rate,
                                                weight_decay=1e-05)
     discriminator_criterion = torch.nn.BCEWithLogitsLoss()
 
-    generator = GeneratorRlStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
-                                 generator_decoder_optimizer, generator_mle_criterion, batch_size,
-                                 use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
-                                 use_trigram_check, use_running_avg_baseline)
+    # generator = GeneratorRlStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
+    #                              generator_decoder_optimizer, generator_mle_criterion, batch_size,
+    #                              use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
+    #                              use_trigram_check, use_running_avg_baseline)
 
     # generator = GeneratorSuperStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
     #                                 generator_decoder_optimizer, generator_mle_criterion, batch_size,
     #                                 use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
     #                                 use_trigram_check, use_running_avg_baseline)
 
-    # generator = GeneratorSeqGanStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
-    #                                  generator_decoder_optimizer, generator_mle_criterion, batch_size,
-    #                                  use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
-    #                                  use_trigram_check, use_running_avg_baseline)
+    generator = GeneratorSeqGanStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
+                                     generator_decoder_optimizer, generator_mle_criterion, batch_size,
+                                     use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
+                                     use_trigram_check, use_running_avg_baseline)
 
     # GAN discriminator
     discriminator = GANDiscriminator(vocabulary, discriminator_model, discriminator_optimizer, discriminator_criterion)
 
     # ROUGE discriminator
     # discriminator = RougeDiscriminator(vocabulary)
+
+    log_message("Done loading models")
 
     # Train the generator and discriminator alternately in a standard GAN setup
     train_GAN(config, generator, discriminator, train_articles, test_articles, max_article_length, max_abstract_length,

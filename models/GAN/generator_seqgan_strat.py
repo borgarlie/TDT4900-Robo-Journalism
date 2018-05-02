@@ -60,6 +60,10 @@ class GeneratorSeqGanStrat(GeneratorBase):
         monte_carlo_length = min(max_target_length, max_monte_carlo_length)
         num_samples = 0
 
+        encoder_outputs_temp = multiply_data_in_dim(encoder_outputs, self.num_monte_carlo_samples, dim=1)
+        full_input_variable_batch_temp = multiply_data_in_dim(full_input_variable_batch,
+                                                              self.num_monte_carlo_samples, dim=0)
+
         # Policy iteration
         for di in range(max_target_length):
             decoder_output, decoder_hidden, decoder_attention \
@@ -78,15 +82,33 @@ class GeneratorSeqGanStrat(GeneratorBase):
 
                 monte_carlo_time_start = time.time()
 
+                # Multiply the batch size by monte_carlo_samples
+                # NOTE: Not sure if we need to do .clone() on action, but just to be safe we do it for now.
+                action_temp = multiply_data_in_dim(action.clone(), self.num_monte_carlo_samples, dim=0)
+                decoder_hidden_temp = multiply_data_in_dim(decoder_hidden, self.num_monte_carlo_samples, dim=1)
+                if di == 0:
+                    accumulated_sequence_temp = None
+                else:
+                    accumulated_sequence_temp = multiply_data_in_dim(accumulated_sequence, self.num_monte_carlo_samples,
+                                                                     dim=0)
+                batch_size_temp = self.batch_size * self.num_monte_carlo_samples
+
+                sample_multiplied \
+                    = self.monte_carlo_expansion(action_temp, decoder_hidden_temp, encoder_outputs_temp,
+                                                 full_input_variable_batch_temp, accumulated_sequence_temp,
+                                                 monte_carlo_length, batch_size_temp)
+
+                monte_carlo_outer_time_start = time.time()
+
+                samples = sample_multiplied.chunk(self.num_monte_carlo_samples, dim=0)
+
                 temp_reward = 0
-                # run n monte carlo samples
-                for n in range(0, self.num_monte_carlo_samples):
-                    sample = self.monte_carlo_expansion(action, decoder_hidden, encoder_outputs,
-                                                        full_input_variable_batch, accumulated_sequence, monte_carlo_length)
-                    monte_carlo_outer_time_start = time.time()
-                    current_reward = discriminator.evaluate(sample, full_target_variable_batch_2, extended_vocabs)
+                for i in range(0, self.num_monte_carlo_samples):
+                    # NOTE: Can possibly speed up by evaluating on the entire batch and chunking the reward afterwards
+                    current_reward = discriminator.evaluate(samples[i], full_target_variable_batch_2, extended_vocabs)
                     temp_reward += current_reward
-                    timings[timings_var_monte_carlo_outer] += (time.time() - monte_carlo_outer_time_start)
+
+                timings[timings_var_monte_carlo_outer] += (time.time() - monte_carlo_outer_time_start)
 
                 # calculate average reward
                 avg_reward = temp_reward / self.num_monte_carlo_samples
@@ -178,13 +200,15 @@ class GeneratorSeqGanStrat(GeneratorBase):
 
         if self.beta < 1.00:
             return total_loss.data[0], mle_loss.data[0], policy_loss.data[0], print_log_sum.data[0], \
-                   total_print_reward, print_baseline, total_print_adjusted_reward
+                   total_print_reward.data[0], print_baseline, total_print_adjusted_reward.data[0]
         else:
             return total_loss.data[0], total_loss.data[0], policy_loss.data[0], print_log_sum.data[0], \
-                   total_print_reward, print_baseline, total_print_adjusted_reward
+                   total_print_reward.data[0], print_baseline, total_print_adjusted_reward.data[0]
 
     def monte_carlo_expansion(self, action, decoder_hidden, encoder_outputs, full_input_variable_batch,
-                              initial_sequence, max_sample_length):
+                              initial_sequence, max_sample_length, batch_size):
+
+        action.volatile = True
 
         start_check_for_pad_and_eos = int(max_sample_length / 3) * 2
 
@@ -207,7 +231,7 @@ class GeneratorSeqGanStrat(GeneratorBase):
             monte_carlo_inner_time_start = time.time()
             decoder_output, decoder_hidden, _ \
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
-                               self.batch_size)
+                               batch_size)
             timings[timings_var_monte_carlo_inner] += (time.time() - monte_carlo_inner_time_start)
 
             before_topk_monte = time.time()
