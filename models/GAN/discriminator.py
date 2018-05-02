@@ -4,7 +4,6 @@ from sumeval.metrics.rouge import RougeCalculator
 from torch.autograd import Variable
 
 from utils.data_prep import get_sentence_from_tokens_and_clean, UNK_token
-from utils.logger import log_message
 
 
 class GANDiscriminator:
@@ -27,10 +26,12 @@ class GANDiscriminator:
     def evaluate(self, sequences, reference_batch, extended_vocabs):
 
         # Insert UNK instead of using out of vocabulary words
-        for batch_index in range(0, len(sequences)):
-            for token_index in range(0, len(sequences[batch_index])):
-                if sequences[batch_index][token_index].data[0] >= self.vocabulary.n_words:
-                    sequences[batch_index][token_index].data[0] = UNK_token
+        # copy_params_time = time.time()
+        # for batch_index in range(0, len(sequences)):
+        #     for token_index in range(0, len(sequences[batch_index])):
+        #         if sequences[batch_index][token_index].data[0] >= self.vocabulary.n_words:
+        #             sequences[batch_index][token_index].data[0] = UNK_token
+        # timings[timings_var_copy_params] += time.time() - copy_params_time
 
         self.model.eval()
         scores = self.model(sequences)

@@ -60,9 +60,11 @@ class GeneratorSeqGanStrat(GeneratorBase):
         monte_carlo_length = min(max_target_length, max_monte_carlo_length)
         num_samples = 0
 
+        multiply_time_2 = time.time()
         encoder_outputs_temp = multiply_data_in_dim(encoder_outputs, self.num_monte_carlo_samples, dim=1)
         full_input_variable_batch_temp = multiply_data_in_dim(full_input_variable_batch,
                                                               self.num_monte_carlo_samples, dim=0)
+        timings[timings_var_copy_params] += time.time() - multiply_time_2
 
         # Policy iteration
         for di in range(max_target_length):
@@ -81,9 +83,9 @@ class GeneratorSeqGanStrat(GeneratorBase):
                 full_policy_values.append(log_prob)
 
                 monte_carlo_time_start = time.time()
-
                 # Multiply the batch size by monte_carlo_samples
-                # NOTE: Not sure if we need to do .clone() on action, but just to be safe we do it for now.
+                multiply_time = time.time()
+                # NOTE: Not sure if we need to do .clone() here, but just to be safe.
                 action_temp = multiply_data_in_dim(action.clone(), self.num_monte_carlo_samples, dim=0)
                 decoder_hidden_temp = multiply_data_in_dim(decoder_hidden, self.num_monte_carlo_samples, dim=1)
                 if di == 0:
@@ -93,21 +95,20 @@ class GeneratorSeqGanStrat(GeneratorBase):
                                                                      dim=0)
                 batch_size_temp = self.batch_size * self.num_monte_carlo_samples
 
+                # Test to see how much time is used for multiplying data
+                timings[timings_var_copy_params] += time.time() - multiply_time
+
                 sample_multiplied \
                     = self.monte_carlo_expansion(action_temp, decoder_hidden_temp, encoder_outputs_temp,
                                                  full_input_variable_batch_temp, accumulated_sequence_temp,
                                                  monte_carlo_length, batch_size_temp)
 
                 monte_carlo_outer_time_start = time.time()
-
-                samples = sample_multiplied.chunk(self.num_monte_carlo_samples, dim=0)
-
+                current_reward = discriminator.evaluate(sample_multiplied, None, None)
+                current_reward_chunked = current_reward.chunk(self.num_monte_carlo_samples, dim=0)
                 temp_reward = 0
                 for i in range(0, self.num_monte_carlo_samples):
-                    # NOTE: Can possibly speed up by evaluating on the entire batch and chunking the reward afterwards
-                    current_reward = discriminator.evaluate(samples[i], full_target_variable_batch_2, extended_vocabs)
-                    temp_reward += current_reward
-
+                    temp_reward += current_reward_chunked[i]
                 timings[timings_var_monte_carlo_outer] += (time.time() - monte_carlo_outer_time_start)
 
                 # calculate average reward
@@ -124,17 +125,16 @@ class GeneratorSeqGanStrat(GeneratorBase):
             topv, topi = decoder_output.data.topk(1)
             ni = topi
 
-            # Update accumulated sequence
-            if accumulated_sequence is None:
-                accumulated_sequence = Variable(ni).clone()
-            else:
-                accumulated_sequence = torch.cat((accumulated_sequence, Variable(ni)), 1)
-
             # Remove UNK before setting next input to decoder
             for token_index in range(0, len(ni)):
                 if ni[token_index][0] >= self.vocabulary.n_words:
                     ni[token_index][0] = UNK_token
             decoder_input = Variable(ni)
+
+            if accumulated_sequence is None:
+                accumulated_sequence = decoder_input
+            else:
+                accumulated_sequence = torch.cat((accumulated_sequence, decoder_input), 1)
 
             # Break the policy iteration loop if all the variables in the batch is at EOS or PAD
             if di > start_check_for_pad_and_eos:
@@ -207,24 +207,23 @@ class GeneratorSeqGanStrat(GeneratorBase):
 
     def monte_carlo_expansion(self, action, decoder_hidden, encoder_outputs, full_input_variable_batch,
                               initial_sequence, max_sample_length, batch_size):
-
         action.volatile = True
-
         start_check_for_pad_and_eos = int(max_sample_length / 3) * 2
 
-        current_action = action.unsqueeze(1).clone()
-        if initial_sequence is not None:
-            start = len(initial_sequence.data[0]) + 1
-            decoder_output_variables = torch.cat((initial_sequence, current_action), 1)
-        else:
-            start = 1
-            decoder_output_variables = current_action
-
         # Prepare next decoder input with UNK
+        monte_carlo_cat_time_start_2 = time.time()
         for token_index in range(0, len(action)):
             if action[token_index].data[0] >= self.vocabulary.n_words:
                 action[token_index].data[0] = UNK_token
         decoder_input = action.unsqueeze(1)
+
+        if initial_sequence is not None:
+            start = len(initial_sequence.data[0]) + 1
+            decoder_output_variables = torch.cat((initial_sequence, decoder_input), 1)
+        else:
+            start = 1
+            decoder_output_variables = decoder_input
+        timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start_2)
 
         monte_carlo_sampling_break_early = False
         for di in range(start, max_sample_length):
@@ -237,18 +236,15 @@ class GeneratorSeqGanStrat(GeneratorBase):
             before_topk_monte = time.time()
             m = Categorical(decoder_output)
             action = m.sample()
-            cloned_action = action.unsqueeze(1).clone()
-
             timings[timings_var_monte_carlo_top1] += (time.time() - before_topk_monte)
 
             monte_carlo_cat_time_start = time.time()
-            decoder_output_variables = torch.cat((decoder_output_variables, cloned_action), 1)
-            timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
-
             for token_index in range(0, len(action)):
                 if action[token_index].data[0] >= self.vocabulary.n_words:
                     action[token_index].data[0] = UNK_token
             decoder_input = action.unsqueeze(1)
+            decoder_output_variables = torch.cat((decoder_output_variables, decoder_input), 1)
+            timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
 
             if di > start_check_for_pad_and_eos:
                 if is_whole_batch_pad_or_eos(decoder_input.data):
