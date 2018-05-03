@@ -81,6 +81,7 @@ if __name__ == '__main__':
     allow_negative_reward = config['train']['allow_negative_reward']
     use_trigram_check = config['train']['use_trigram_check']
     use_running_avg_baseline = config['train']['use_running_avg_baseline']
+    discriminator_batch_size = config['train']['discriminator_batch_size']
 
     # load generator parameters
     generator_embedding_size = config['generator_model']['embedding_size']
@@ -192,7 +193,7 @@ if __name__ == '__main__':
     generator = GeneratorSeqGanStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
                                      generator_decoder_optimizer, generator_mle_criterion, batch_size,
                                      use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
-                                     use_trigram_check, use_running_avg_baseline)
+                                     use_trigram_check, use_running_avg_baseline, discriminator_batch_size)
 
     # GAN discriminator
     discriminator = GANDiscriminator(vocabulary, discriminator_model, discriminator_optimizer, discriminator_criterion)

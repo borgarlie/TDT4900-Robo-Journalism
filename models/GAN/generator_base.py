@@ -8,7 +8,7 @@ import time
 class GeneratorBase:
     def __init__(self, vocabulary, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion,
                  batch_size, use_cuda, beta, num_monte_carlo_samples, sample_rate, negative_reward, use_trigram_check,
-                 use_running_avg_baseline):
+                 use_running_avg_baseline, discriminator_batch_size):
         self.vocabulary = vocabulary
         self.encoder = encoder
         self.decoder = decoder
@@ -25,6 +25,16 @@ class GeneratorBase:
         self.allow_negative_rewards = negative_reward
         self.use_trigram_check = use_trigram_check
         self.use_running_avg_baseline = use_running_avg_baseline
+        self.discriminator_batch_size = discriminator_batch_size
+
+        self.rollout_batchsize = self.batch_size * self.num_monte_carlo_samples
+        self.MASK = torch.LongTensor([UNK_token] * self.batch_size).cuda()
+        self.MONTE_CARLO_MASK = torch.LongTensor([UNK_token] * self.rollout_batchsize).cuda()
+        self.CREATE_FAKE_MASK = torch.LongTensor([UNK_token] * self.discriminator_batch_size).cuda()
+        self.UPPER_BOUND = torch.LongTensor([self.vocabulary.n_words] * self.batch_size).cuda()
+        self.MONTE_CARLO_UPPER_BOUND = torch.LongTensor([self.vocabulary.n_words] * self.rollout_batchsize).cuda()
+        self.CREATE_FAKE_UPPER_BOUND \
+            = torch.LongTensor([self.vocabulary.n_words] * self.discriminator_batch_size).cuda()
 
     def get_teacher_forcing_mle(self, encoder_hidden, encoder_outputs, max_target_length, full_input_variable_batch,
                                 full_target_variable_batch, target_variable):
@@ -75,10 +85,12 @@ class GeneratorBase:
             else:
                 accumulated_sequence = torch.cat((accumulated_sequence, Variable(ni)), 1)
 
-            for token_index in range(0, len(ni)):
-                if ni[token_index][0] >= self.vocabulary.n_words:
-                    ni[token_index][0] = UNK_token
-            decoder_input = Variable(ni)
+            # Remove UNK before setting next input to decoder
+            unk_check_time_start = time.time()
+            ni = ni.squeeze(1)
+            ni = where(ni < self.UPPER_BOUND, ni, self.MASK)
+            decoder_input = Variable(ni.unsqueeze(1))
+            timings[timings_var_unk_check] += time.time() - unk_check_time_start
 
         baseline = discriminator.evaluate(accumulated_sequence, full_target_variable_batch_2, extended_vocabs)
         return baseline
@@ -113,18 +125,23 @@ class GeneratorBase:
             if sample:
                 m = Categorical(decoder_output)
                 ni = m.sample()
-                for token_index in range(0, len(ni)):
-                    if ni[token_index].data[0] >= self.vocabulary.n_words:
-                        ni[token_index].data[0] = UNK_token
-                decoder_input = ni.unsqueeze(1)
-                ni = ni.unsqueeze(1).data
+                # Remove UNK before setting next input to decoder
+                unk_check_time_start = time.time()
+                ni = ni.data
+                ni = where(ni < self.CREATE_FAKE_UPPER_BOUND, ni, self.CREATE_FAKE_MASK)
+                ni = ni.unsqueeze(1)
+                decoder_input = Variable(ni)
+                timings[timings_var_unk_check] += time.time() - unk_check_time_start
             else:
                 topv, topi = decoder_output.data.topk(1)
                 ni = topi  # next input, batch of top softmax scores
-                for token_index in range(0, len(ni)):
-                    if ni[token_index][0] >= self.vocabulary.n_words:
-                        ni[token_index][0] = UNK_token
+                # Remove UNK before setting next input to decoder
+                unk_check_time_start = time.time()
+                ni = ni.squeeze(1)
+                ni = where(ni < self.CREATE_FAKE_UPPER_BOUND, ni, self.CREATE_FAKE_MASK)
+                ni = ni.unsqueeze(1)
                 decoder_input = Variable(ni)
+                timings[timings_var_unk_check] += time.time() - unk_check_time_start
 
             decoder_output_data = ni.cpu().numpy()
             for batch_index in range(0, len(decoder_output_data)):

@@ -11,10 +11,10 @@ import time
 class GeneratorSeqGanStrat(GeneratorBase):
     def __init__(self, vocabulary, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion,
                  batch_size, use_cuda, beta, num_monte_carlo_samples, sample_rate, negative_reward, use_trigram_check,
-                 use_running_avg_baseline):
+                 use_running_avg_baseline, discriminator_batch_size):
         GeneratorBase.__init__(self, vocabulary, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion,
                  batch_size, use_cuda, beta, num_monte_carlo_samples, sample_rate, negative_reward, use_trigram_check,
-                 use_running_avg_baseline)
+                 use_running_avg_baseline, discriminator_batch_size)
 
     # discriminator is used to calculate reward
     # target batch is used for MLE
@@ -126,10 +126,12 @@ class GeneratorSeqGanStrat(GeneratorBase):
             ni = topi
 
             # Remove UNK before setting next input to decoder
-            for token_index in range(0, len(ni)):
-                if ni[token_index][0] >= self.vocabulary.n_words:
-                    ni[token_index][0] = UNK_token
-            decoder_input = Variable(ni)
+            unk_check_time_start = time.time()
+            # TODO: We can create a UPPER_BOUND and a MASK with a extra dimension instead of squeeze / unsqueeze
+            ni = ni.squeeze(1)
+            ni = where(ni < self.UPPER_BOUND, ni, self.MASK)
+            decoder_input = Variable(ni.unsqueeze(1))
+            timings[timings_var_unk_check] += time.time() - unk_check_time_start
 
             if accumulated_sequence is None:
                 accumulated_sequence = decoder_input
@@ -211,12 +213,13 @@ class GeneratorSeqGanStrat(GeneratorBase):
         start_check_for_pad_and_eos = int(max_sample_length / 3) * 2
 
         # Prepare next decoder input with UNK
-        monte_carlo_cat_time_start_2 = time.time()
-        for token_index in range(0, len(action)):
-            if action[token_index].data[0] >= self.vocabulary.n_words:
-                action[token_index].data[0] = UNK_token
-        decoder_input = action.unsqueeze(1)
+        unk_check_time_start = time.time()
+        action = action.data
+        action = where(action < self.MONTE_CARLO_UPPER_BOUND, action, self.MONTE_CARLO_MASK)
+        decoder_input = Variable(action.unsqueeze(1))
+        timings[timings_var_unk_check] += time.time() - unk_check_time_start
 
+        monte_carlo_cat_time_start_2 = time.time()
         if initial_sequence is not None:
             start = len(initial_sequence.data[0]) + 1
             decoder_output_variables = torch.cat((initial_sequence, decoder_input), 1)
@@ -238,11 +241,13 @@ class GeneratorSeqGanStrat(GeneratorBase):
             action = m.sample()
             timings[timings_var_monte_carlo_top1] += (time.time() - before_topk_monte)
 
+            unk_check_time_start = time.time()
+            action = action.data
+            action = where(action < self.MONTE_CARLO_UPPER_BOUND, action, self.MONTE_CARLO_MASK)
+            decoder_input = Variable(action.unsqueeze(1))
+            timings[timings_var_unk_check] += time.time() - unk_check_time_start
+
             monte_carlo_cat_time_start = time.time()
-            for token_index in range(0, len(action)):
-                if action[token_index].data[0] >= self.vocabulary.n_words:
-                    action[token_index].data[0] = UNK_token
-            decoder_input = action.unsqueeze(1)
             decoder_output_variables = torch.cat((decoder_output_variables, decoder_input), 1)
             timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
 
