@@ -117,6 +117,7 @@ def get_word_from_token_unked(token, vocabulary):
 
 def is_whole_batch_pad_or_eos(batched_input):
     before = time.time()
+    batched_input = batched_input.cpu()
     is_only_pad_or_eos = True
     for token_index in range(0, len(batched_input)):
         # token_index = this batch element
