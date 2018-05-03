@@ -56,6 +56,7 @@ def train_iters(config, vocabulary, model, optimizer, writer, real_training_data
 
     # Find fake data files and train for 1 epoch per file
     files = list(read_directory(directory))
+    random.shuffle(files)
     num_training_dataset = len(files)
 
     n_iters = num_batches * n_epochs * num_training_dataset
@@ -68,6 +69,10 @@ def train_iters(config, vocabulary, model, optimizer, writer, real_training_data
 
             current_file = files[dataset_num]
             fake_training_data = open(current_file, encoding='utf-8').read().strip().split('\n')
+
+            if current_file.startswith("fake"):
+                for i in range(0, len(fake_training_data)):
+                    fake_training_data[i] += " <EOS>"
 
             all_training_data = real_training_data + fake_training_data[:max_train_examples]
 

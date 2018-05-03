@@ -147,4 +147,6 @@ def has_trigram(current_sequence, next_word):
 
 
 def multiply_data_in_dim(data, num, dim):
+    if num == 1:
+        return data
     return torch.cat((data, ) * num, dim=dim)
