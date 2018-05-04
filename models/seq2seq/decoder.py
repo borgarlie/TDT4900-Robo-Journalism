@@ -1,7 +1,9 @@
+import time
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
-from torch.autograd import Variable
+
+from utils.logger import *
 
 
 class AttnDecoderRNN(nn.Module):
@@ -67,37 +69,56 @@ class PointerGeneratorDecoder(nn.Module):
         self.out_vocabulary = nn.Linear(self.embedding_size, self.vocabulary_size)
         self.pointer_linear = nn.Linear(self.hidden_size * 2 + self.embedding_size, 1)
 
+        self.full_vocab_padding = nn.ZeroPad2d((0, self.vocabulary_size + max_length, 0, 0))
+        self.right_padding = nn.ZeroPad2d((0, max_length, 0, 0))
+
     def forward(self, input, hidden, encoder_outputs, full_input, batch_size=1, use_cuda=True):
+        before1 = time.time()
         embedded_input = self.embedding(input).view(1, batch_size, self.embedding_size)
         embedded_input = self.dropout(embedded_input)
+        timings[timings_var_decoder_test1] += time.time() - before1
+
         # calculate new decoder state
+        before2 = time.time()
         decoder_output, decoder_hidden = self.gru(embedded_input, hidden)
+        timings[timings_var_decoder_test2] += time.time() - before2
 
         # calculate attention weights
+        before3 = time.time()
         decoder_state_linear = self.decoder_state_linear(decoder_hidden)
         attention_dist = F.tanh((self.w_h * encoder_outputs) + decoder_state_linear)
         attention_dist = (self.attention_weight_v * attention_dist).sum(2)
         attention_dist = F.softmax(attention_dist, dim=0).transpose(0, 1)
+        timings[timings_var_decoder_test3] += time.time() - before3
 
         # calculate context vectors
+        before4 = time.time()
         encoder_context = torch.bmm(attention_dist.unsqueeze(1), encoder_outputs.transpose(0, 1))
         combined_context = torch.cat((decoder_hidden.squeeze(0), encoder_context.squeeze(1)), 1)
+        timings[timings_var_decoder_test4] += time.time() - before4
 
+        before5 = time.time()
         p_vocab = F.softmax(self.out_vocabulary(self.out_hidden(combined_context)), dim=1)
+        timings[timings_var_decoder_test5] += time.time() - before5
 
+        before6 = time.time()
         pointer_combined = torch.cat((combined_context, embedded_input.squeeze(0)), 1)
         p_gen = F.sigmoid(self.pointer_linear(pointer_combined))
+        timings[timings_var_decoder_test6] += time.time() - before6
 
-        # create temporal variable to use for distributions
-        token_input_dist = Variable(torch.zeros((batch_size, self.vocabulary_size + self.max_length)))
-        padding_matrix = Variable(torch.zeros(batch_size, self.max_length))
-        if use_cuda:
-            token_input_dist = token_input_dist.cuda()
-            padding_matrix = padding_matrix.cuda()
+        before7 = time.time()
+        token_input_dist = self.full_vocab_padding(attention_dist)
+        token_input_dist = token_input_dist.narrow(1, attention_dist.size()[1],
+                                                   token_input_dist.size()[1] - attention_dist.size()[1])
+        timings[timings_var_decoder_test7] += time.time() - before7
 
         # in place scatter add
+        before8 = time.time()
         token_input_dist.scatter_add_(1, full_input, attention_dist)
+        timings[timings_var_decoder_test8] += time.time() - before8
 
-        p_final = torch.cat((p_vocab * p_gen, padding_matrix), 1) + (1 - p_gen) * token_input_dist
+        before9 = time.time()
+        p_final = self.right_padding((p_vocab * p_gen)) + (1 - p_gen) * token_input_dist
+        timings[timings_var_decoder_test9] += time.time() - before9
 
         return p_final, decoder_hidden, attention_dist
