@@ -20,7 +20,7 @@ class GeneratorBase:
         self.beta = beta
         self.num_monte_carlo_samples = num_monte_carlo_samples
         self.updates = 0
-        self.cumulative_reward = 0.0
+        self.cumulative_reward = 0
         self.sample_rate = sample_rate
         self.allow_negative_rewards = negative_reward
         self.use_trigram_check = use_trigram_check
@@ -110,8 +110,7 @@ class GeneratorBase:
         decoder_input = decoder_input.cuda() if self.use_cuda else decoder_input
         decoder_hidden = encoder_hidden
 
-        decoder_outputs = [[] for _ in range(0, discriminator_batch_size)]
-        create_fake_sample_break_early = False
+        accumulated_sequence = None
 
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_sample_length):
@@ -143,19 +142,15 @@ class GeneratorBase:
                 decoder_input = Variable(ni)
                 timings[timings_var_unk_check] += time.time() - unk_check_time_start
 
-            decoder_output_data = ni.cpu().numpy()
-            for batch_index in range(0, len(decoder_output_data)):
-                decoder_outputs[batch_index].append(decoder_output_data[batch_index].item())
+            if accumulated_sequence is None:
+                accumulated_sequence = decoder_input
+            else:
+                accumulated_sequence = torch.cat((accumulated_sequence, decoder_input), 1)
 
-            if is_whole_batch_pad_or_eos(ni):
-                decode_breakings[decode_breaking_fake_sampling] += di
-                create_fake_sample_break_early = True
-                break
+        # TODO: Need to add EOS here as well for those that are max length
 
-        if not create_fake_sample_break_early:
-            decode_breakings[decode_breaking_fake_sampling] += max_sample_length - 1
-
-        decoder_outputs_padded = [pad_seq(s, pad_length) for s in decoder_outputs]
+        decoder_outputs = accumulated_sequence.data.cpu().numpy()
+        decoder_outputs_padded = [pad_seq(s.tolist(), pad_length) for s in decoder_outputs]
         decoder_output_variables = Variable(torch.LongTensor(decoder_outputs_padded))
         if self.use_cuda:
             decoder_output_variables = decoder_output_variables.cuda()
