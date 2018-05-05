@@ -36,6 +36,11 @@ class GeneratorBase:
         self.CREATE_FAKE_UPPER_BOUND \
             = torch.LongTensor([self.vocabulary.n_words] * self.discriminator_batch_size).cuda()
 
+        self.EOS_MATRIX_MONTE_CARLO = torch.LongTensor([EOS_token] * self.rollout_batchsize).cuda()
+        self.PAD_MATRIX_MONTE_CARLO = torch.LongTensor([PAD_token] * self.rollout_batchsize).cuda()
+        self.EOS_MATRIX_CREATE_FAKE = torch.LongTensor([EOS_token] * self.discriminator_batch_size).cuda()
+        self.PAD_MATRIX_CREATE_FAKE = torch.LongTensor([PAD_token] * self.discriminator_batch_size).cuda()
+
     def get_teacher_forcing_mle(self, encoder_hidden, encoder_outputs, max_target_length, full_input_variable_batch,
                                 full_target_variable_batch, target_variable):
         mle_loss = 0
@@ -112,6 +117,11 @@ class GeneratorBase:
 
         accumulated_sequence = None
 
+        if max_sample_length == pad_length:
+            max_sample_length = max_sample_length - 1
+
+        ni = None
+
         # Without teacher forcing: use its own predictions as the next input
         for di in range(max_sample_length):
 
@@ -128,8 +138,7 @@ class GeneratorBase:
                 unk_check_time_start = time.time()
                 ni = ni.data
                 ni = where(ni < self.CREATE_FAKE_UPPER_BOUND, ni, self.CREATE_FAKE_MASK)
-                ni = ni.unsqueeze(1)
-                decoder_input = Variable(ni)
+                decoder_input = Variable(ni.unsqueeze(1))
                 timings[timings_var_unk_check] += time.time() - unk_check_time_start
             else:
                 topv, topi = decoder_output.data.topk(1)
@@ -138,8 +147,7 @@ class GeneratorBase:
                 unk_check_time_start = time.time()
                 ni = ni.squeeze(1)
                 ni = where(ni < self.CREATE_FAKE_UPPER_BOUND, ni, self.CREATE_FAKE_MASK)
-                ni = ni.unsqueeze(1)
-                decoder_input = Variable(ni)
+                decoder_input = Variable(ni.unsqueeze(1))
                 timings[timings_var_unk_check] += time.time() - unk_check_time_start
 
             if accumulated_sequence is None:
@@ -147,7 +155,10 @@ class GeneratorBase:
             else:
                 accumulated_sequence = torch.cat((accumulated_sequence, decoder_input), 1)
 
-        # TODO: Need to add EOS here as well for those that are max length
+        # Adding EOS for those that are max_length and PAD to the rest
+        last_tokens = where(ni > self.EOS_MATRIX_CREATE_FAKE, self.EOS_MATRIX_CREATE_FAKE,
+                            self.PAD_MATRIX_CREATE_FAKE)
+        accumulated_sequence = torch.cat((accumulated_sequence, Variable(last_tokens.unsqueeze(1))), 1)
 
         decoder_outputs = accumulated_sequence.data.cpu().numpy()
         decoder_outputs_padded = [pad_seq(s.tolist(), pad_length) for s in decoder_outputs]

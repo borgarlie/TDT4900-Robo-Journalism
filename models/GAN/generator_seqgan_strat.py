@@ -57,6 +57,8 @@ class GeneratorSeqGanStrat(GeneratorBase):
         monte_carlo_length = min(max_target_length, max_monte_carlo_length)
         num_samples = 0
 
+        eos_check_start = monte_carlo_length - 10
+
         multiply_time_2 = time.time()
         encoder_outputs_temp = multiply_data_in_dim(encoder_outputs, self.num_monte_carlo_samples, dim=1)
         full_input_variable_batch_temp = multiply_data_in_dim(full_input_variable_batch,
@@ -64,7 +66,7 @@ class GeneratorSeqGanStrat(GeneratorBase):
         timings[timings_var_copy_params] += time.time() - multiply_time_2
 
         # Policy iteration
-        for di in range(max_target_length):
+        for di in range(monte_carlo_length):
             decoder_output, decoder_hidden, decoder_attention \
                 = self.decoder(decoder_input, decoder_hidden, encoder_outputs, full_input_variable_batch,
                                self.batch_size)
@@ -120,6 +122,11 @@ class GeneratorSeqGanStrat(GeneratorBase):
             topv, topi = decoder_output.data.topk(1)
             ni = topi
 
+            # Check for EOS so that we stop sampling if all are EOS or PAD
+            if di > eos_check_start:
+                if is_whole_batch_pad_or_eos(ni):
+                    break
+
             # Remove UNK before setting next input to decoder
             unk_check_time_start = time.time()
             ni = ni.squeeze(1)
@@ -163,11 +170,10 @@ class GeneratorSeqGanStrat(GeneratorBase):
 
         backprop_time_start = time.time()
 
-        # TODO: MLE should probably be divided too ?
         # divide by sequence length
         policy_loss = policy_loss / num_samples
-
         if self.beta < 1.00:
+            mle_loss = mle_loss / max_target_length
             total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
         else:
             total_loss = policy_loss
@@ -192,8 +198,6 @@ class GeneratorSeqGanStrat(GeneratorBase):
 
     def monte_carlo_expansion(self, action, decoder_hidden, encoder_outputs, full_input_variable_batch,
                               initial_sequence, max_sample_length, batch_size):
-        # action.volatile = True
-
         # Prepare next decoder input with UNK
         unk_check_time_start = time.time()
         action = action.data
@@ -232,6 +236,13 @@ class GeneratorSeqGanStrat(GeneratorBase):
             decoder_output_variables = torch.cat((decoder_output_variables, decoder_input), 1)
             timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
 
-        # TODO: Add EOS to the samples that did not produce EOS, and add PAD to rest
+        # Add EOS to the samples that did not produce EOS, and add PAD to rest
+        unk_check_time_start = time.time()
+        last_tokens = where(action > self.EOS_MATRIX_MONTE_CARLO, self.EOS_MATRIX_MONTE_CARLO,
+                            self.PAD_MATRIX_MONTE_CARLO)
+        timings[timings_var_unk_check] += time.time() - unk_check_time_start
+        monte_carlo_cat_time_start = time.time()
+        decoder_output_variables = torch.cat((decoder_output_variables, Variable(last_tokens.unsqueeze(1))), 1)
+        timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
 
         return decoder_output_variables

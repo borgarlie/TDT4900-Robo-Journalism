@@ -37,17 +37,17 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
     lowest_loss_discriminator = 999
 
     # Print first 3 argmax before training to compare
-    generator.encoder.eval()
-    generator.decoder.eval()
-    samples = eval_pairs[0:3]
-    evaluate_argmax(generator.vocabulary, samples, generator.encoder, generator.decoder,
-                    max_abstract_length)
-    rouge_samples = eval_pairs[0:1000]
-    rouge_score = evaluate_rouge(rouge_samples, generator.encoder, generator.decoder, max_article_length,
-                                 max_abstract_length, discriminator)
-    log_message("Rouge score before training: %.6f" % rouge_score)
-    generator.encoder.train()
-    generator.decoder.train()
+    # generator.encoder.eval()
+    # generator.decoder.eval()
+    # samples = eval_pairs[0:3]
+    # evaluate_argmax(generator.vocabulary, samples, generator.encoder, generator.decoder,
+    #                 max_abstract_length)
+    # rouge_samples = eval_pairs[0:1000]
+    # rouge_score = evaluate_rouge(rouge_samples, generator.encoder, generator.decoder, max_article_length,
+    #                              max_abstract_length, discriminator)
+    # log_message("Rouge score before training: %.6f" % rouge_score)
+    # generator.encoder.train()
+    # generator.decoder.train()
 
     itr_discriminator = 0
     itr_generator = 0
@@ -69,17 +69,14 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
         random.shuffle(training_pairs)
 
         chunking_time_start = time.time()
-
         # split into batches
         training_batches = list(chunks(training_pairs, batch_size))
-
         # TODO: Could it be useful to re-shuffle for these batches?
         # a seperate list for discriminator batches because of different batch size
         if batch_size == discriminator_batch_size:
             discriminator_training_batches = training_batches
         else:
             discriminator_training_batches = list(chunks(training_pairs, discriminator_batch_size))
-
         timings[timings_var_chunkings] += (time.time() - chunking_time_start)
 
         count_disc = 0
@@ -88,19 +85,15 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
             # train generator for n_generator batches
             for n in range(n_generator):
                 init_generator_time_start = time.time()
-
                 input_variable, full_input_variable, input_lengths, target_var, full_target_var, target_lengths, extended_vocabs, full_target_var_2 \
                     = prepare_batch(batch_size, training_batches[batch], max_article_length, max_abstract_length)
-
                 timings[timings_var_init_generator] += (time.time() - init_generator_time_start)
 
                 generator_train_time_start = time.time()
-
                 loss, mle_loss, policy_loss, policy_log_sum, reward, baseline, adjusted_reward \
                     = generator.train_on_batch(input_variable, full_input_variable, input_lengths, full_target_var,
                                                target_lengths, discriminator, max_sample_length, target_var,
                                                extended_vocabs, full_target_var_2)
-
                 timings[timings_var_generator_train] += (time.time() - generator_train_time_start)
 
                 print_loss_generator += loss
@@ -140,53 +133,45 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                         log_message(" ^ Lowest generator loss so far")
                     log_profiling(print_every, n_discriminator)
                     # Generating a few arg max summaries to see if there are differences
-                    generator.encoder.eval()
-                    generator.decoder.eval()
-                    samples = eval_pairs[0:3]
-                    evaluate_argmax(generator.vocabulary, samples, generator.encoder, generator.decoder,
-                                    max_abstract_length)
-                    rouge_samples = eval_pairs[0:1000]
-                    rouge_score = evaluate_rouge(rouge_samples, generator.encoder, generator.decoder,
-                                                 max_article_length,
-                                                 max_abstract_length, discriminator)
-                    log_message("Rouge score: %.6f" % rouge_score)
-                    generator.encoder.train()
-                    generator.decoder.train()
+                    # generator.encoder.eval()
+                    # generator.decoder.eval()
+                    # samples = eval_pairs[0:3]
+                    # evaluate_argmax(generator.vocabulary, samples, generator.encoder, generator.decoder,
+                    #                 max_abstract_length)
+                    # rouge_samples = eval_pairs[0:1000]
+                    # rouge_score = evaluate_rouge(rouge_samples, generator.encoder, generator.decoder,
+                    #                              max_article_length,
+                    #                              max_abstract_length, discriminator)
+                    # log_message("Rouge score: %.6f" % rouge_score)
+                    # generator.encoder.train()
+                    # generator.decoder.train()
                 batch += 1
                 # generate n_discriminator batches to train discriminator on
                 discriminator_training_data = []
                 for m in range(n_discriminator):
                     # generate fake data
-                    # pad_abstract_length = max_sample_length
-
                     # Alternate between sampling and argmax for fake data
                     sample = True if random.random() <= discriminator_fake_data_sample_rate else False
 
                     init_descriminator_time_start = time.time()
-
                     pad_abstract_length = max_abstract_length
-                    # TODO: Check if we need to set it to 101(?) or if we can set it lower (i.e. max_sample_length)
-
                     real_data_article_variable, full_real_data_article_variable, real_data_article_lengths, \
-                    real_data_variable, _, _, _, _ \
+                    real_data_variable, _, target_lengths, _, _ \
                         = prepare_batch(discriminator_batch_size, discriminator_training_batches[count_disc],
                                         max_article_length, pad_abstract_length)
-
                     real_data_variable = real_data_variable.transpose(1, 0)
 
                     create_fake_time_start = time.time()
-
+                    max_target_length = max(target_lengths)
                     fake_data_variable = generator.create_samples(
                         real_data_article_variable, full_real_data_article_variable, real_data_article_lengths,
-                        max_sample_length, pad_abstract_length, discriminator_batch_size, sample=sample)
-
+                        max_target_length, pad_abstract_length, discriminator_batch_size, sample=sample)
                     timings[timings_var_create_fake] += (time.time() - create_fake_time_start)
 
                     d_titles_real_and_fake = torch.cat((real_data_variable, fake_data_variable), 0)
                     discriminator_training_data.append(d_titles_real_and_fake)
                     count_disc += 1
                     count_disc = count_disc % len(discriminator_training_batches)
-
                     timings[timings_var_init_discriminator] += (time.time() - init_descriminator_time_start)
 
                 discriminator_train_time_start = time.time()
@@ -217,9 +202,9 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
             'model_state_encoder': generator.encoder.state_dict(),
             'model_state_decoder': generator.decoder.state_dict(),
         }, config['experiment_path'] + "/" + "/epoch%d_" % epoch + config['save']['save_file_generator'])
-        # save_state({
-        #     'model': discriminator.model.state_dict()
-        # }, config['experiment_path'] + "/" + "/epoch%d_" % epoch + config['save']['save_file_discriminator'])
+        save_state({
+            'model': discriminator.model.state_dict()
+        }, config['experiment_path'] + "/" + "/epoch%d_" % epoch + config['save']['save_file_discriminator'])
 
         generator.encoder.eval()
         generator.decoder.eval()
