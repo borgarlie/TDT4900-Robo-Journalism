@@ -147,54 +147,54 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     # generator.decoder.train()
                 batch += 1
                 # generate n_discriminator batches to train discriminator on
-                discriminator_training_data = []
+            discriminator_training_data = []
+            for m in range(n_discriminator):
+                # generate fake data
+                # Alternate between sampling and argmax for fake data
+                sample = True if random.random() <= discriminator_fake_data_sample_rate else False
+
+                init_descriminator_time_start = time.time()
+                pad_abstract_length = max_abstract_length
+                real_data_article_variable, full_real_data_article_variable, real_data_article_lengths, \
+                real_data_variable, _, target_lengths, _, _ \
+                    = prepare_batch(discriminator_batch_size, discriminator_training_batches[count_disc],
+                                    max_article_length, pad_abstract_length)
+                real_data_variable = real_data_variable.transpose(1, 0)
+
+                create_fake_time_start = time.time()
+                max_target_length = max(target_lengths)
+                fake_data_variable = generator.create_samples(
+                    real_data_article_variable, full_real_data_article_variable, real_data_article_lengths,
+                    max_target_length, pad_abstract_length, discriminator_batch_size, sample=sample)
+                timings[timings_var_create_fake] += (time.time() - create_fake_time_start)
+
+                d_titles_real_and_fake = torch.cat((real_data_variable, fake_data_variable), 0)
+                discriminator_training_data.append(d_titles_real_and_fake)
+                count_disc += 1
+                count_disc = count_disc % len(discriminator_training_batches)
+                timings[timings_var_init_discriminator] += (time.time() - init_descriminator_time_start)
+
+            discriminator_train_time_start = time.time()
+
+            # train discriminator for discriminator_n_epochs epochs
+            for k in range(discriminator_n_epochs):
+                # train discriminator on all sample batches
                 for m in range(n_discriminator):
-                    # generate fake data
-                    # Alternate between sampling and argmax for fake data
-                    sample = True if random.random() <= discriminator_fake_data_sample_rate else False
+                    # train and calculate loss
+                    loss = discriminator.train(ground_truth_batched, discriminator_training_data[m])
+                    print_loss_discriminator += loss
+                    # calculate number of batches processed
+                    itr_discriminator += 1
+                    if itr_discriminator % print_every == 0:
+                        print_loss_avg = print_loss_discriminator / print_every
+                        print_loss_discriminator = 0
+                        log_message('Discriminator loss at %d - %d - %d - %d - : %.4f'
+                                    % (itr_discriminator, batch, k, m, print_loss_avg))
+                        if print_loss_avg < lowest_loss_discriminator:
+                            lowest_loss_discriminator = print_loss_avg
+                            log_message(" ^ Lowest discriminator loss so far")
 
-                    init_descriminator_time_start = time.time()
-                    pad_abstract_length = max_abstract_length
-                    real_data_article_variable, full_real_data_article_variable, real_data_article_lengths, \
-                    real_data_variable, _, target_lengths, _, _ \
-                        = prepare_batch(discriminator_batch_size, discriminator_training_batches[count_disc],
-                                        max_article_length, pad_abstract_length)
-                    real_data_variable = real_data_variable.transpose(1, 0)
-
-                    create_fake_time_start = time.time()
-                    max_target_length = max(target_lengths)
-                    fake_data_variable = generator.create_samples(
-                        real_data_article_variable, full_real_data_article_variable, real_data_article_lengths,
-                        max_target_length, pad_abstract_length, discriminator_batch_size, sample=sample)
-                    timings[timings_var_create_fake] += (time.time() - create_fake_time_start)
-
-                    d_titles_real_and_fake = torch.cat((real_data_variable, fake_data_variable), 0)
-                    discriminator_training_data.append(d_titles_real_and_fake)
-                    count_disc += 1
-                    count_disc = count_disc % len(discriminator_training_batches)
-                    timings[timings_var_init_discriminator] += (time.time() - init_descriminator_time_start)
-
-                discriminator_train_time_start = time.time()
-
-                # train discriminator for discriminator_n_epochs epochs
-                for k in range(discriminator_n_epochs):
-                    # train discriminator on all sample batches
-                    for m in range(n_discriminator):
-                        # train and calculate loss
-                        loss = discriminator.train(ground_truth_batched, discriminator_training_data[m])
-                        print_loss_discriminator += loss
-                        # calculate number of batches processed
-                        itr_discriminator += 1
-                        if itr_discriminator % print_every == 0:
-                            print_loss_avg = print_loss_discriminator / print_every
-                            print_loss_discriminator = 0
-                            log_message('Discriminator loss at %d - %d - %d - %d - : %.4f'
-                                        % (itr_discriminator, batch, k, m, print_loss_avg))
-                            if print_loss_avg < lowest_loss_discriminator:
-                                lowest_loss_discriminator = print_loss_avg
-                                log_message(" ^ Lowest discriminator loss so far")
-
-                timings[timings_var_discriminator_train] += (time.time() - discriminator_train_time_start)
+            timings[timings_var_discriminator_train] += (time.time() - discriminator_train_time_start)
 
         # save each epoch
         log_message("Saving model")
