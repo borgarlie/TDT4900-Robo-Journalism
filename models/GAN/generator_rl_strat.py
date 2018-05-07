@@ -9,10 +9,10 @@ import time
 class GeneratorRlStrat(GeneratorBase):
     def __init__(self, vocabulary, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion,
                  batch_size, use_cuda, beta, num_monte_carlo_samples, sample_rate, negative_reward, use_trigram_check,
-                 use_running_avg_baseline):
+                 use_running_avg_baseline, discriminator_batch_size):
         GeneratorBase.__init__(self, vocabulary, encoder, decoder, encoder_optimizer, decoder_optimizer, mle_criterion,
                  batch_size, use_cuda, beta, num_monte_carlo_samples, sample_rate, negative_reward, use_trigram_check,
-                 use_running_avg_baseline)
+                 use_running_avg_baseline, discriminator_batch_size)
 
     # discriminator is used to calculate reward
     # target batch is used for MLE
@@ -34,7 +34,7 @@ class GeneratorRlStrat(GeneratorBase):
             baseline = self.get_argmax_baseline(encoder_hidden, encoder_outputs, max_target_length,
                                                 full_input_variable_batch, discriminator, full_target_variable_batch_2,
                                                 extended_vocabs)
-            print_baseline = baseline.mean()
+            print_baseline = baseline.sum(0) / self.batch_size
 
         # MLE loss
         if self.beta < 1.00:
@@ -48,15 +48,12 @@ class GeneratorRlStrat(GeneratorBase):
 
         full_policy_values = []
         accumulated_sequence = None
-
-        policy_iteration_time_start = time.time()
-        policy_iteration_break_early = False
-
-        start_check_for_pad_and_eos = int(max_target_length / 3) * 2
+        action = None
         num_samples = 0
 
-        # Policy iteration
-        for di in range(max_target_length):
+        policy_iteration_time_start = time.time()
+        # Policy iteration, max_monte_carlo_length should be 99 in current use case
+        for di in range(max_monte_carlo_length):
             num_samples += 1
 
             decoder_output, decoder_hidden, decoder_attention \
@@ -67,38 +64,34 @@ class GeneratorRlStrat(GeneratorBase):
             log_prob = m.log_prob(action)
             full_policy_values.append(log_prob)
 
-            cloned_action = action.unsqueeze(1).clone()
-            # Update accumulated sequence
+            # Remove UNK before setting next input to decoder
+            unk_check_time_start = time.time()
+            action = action.data
+            action = where(action < self.UPPER_BOUND, action, self.MASK)
+            decoder_input = Variable(action.unsqueeze(1))
+            timings[timings_var_unk_check] += time.time() - unk_check_time_start
+
             if accumulated_sequence is None:
-                accumulated_sequence = cloned_action
+                accumulated_sequence = decoder_input
             else:
-                accumulated_sequence = torch.cat((accumulated_sequence, cloned_action), 1)
+                accumulated_sequence = torch.cat((accumulated_sequence, decoder_input), 1)
 
-            ni = action
-            for token_index in range(0, len(ni)):
-                if ni[token_index].data[0] >= self.vocabulary.n_words:
-                    ni[token_index].data[0] = UNK_token
-            decoder_input = ni.unsqueeze(1)
+        # Add EOS to the samples that did not produce EOS, and add PAD to rest
+        unk_check_time_start = time.time()
+        last_tokens = where(action > self.EOS_MATRIX, self.EOS_MATRIX, self.PAD_MATRIX)
+        timings[timings_var_unk_check] += time.time() - unk_check_time_start
+        monte_carlo_cat_time_start = time.time()
+        accumulated_sequence = torch.cat((accumulated_sequence, Variable(last_tokens.unsqueeze(1))), 1)
+        timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
 
-            # Break the policy iteration loop if all the variables in the batch is at EOS or PAD
-            if di > start_check_for_pad_and_eos:
-                if is_whole_batch_pad_or_eos(decoder_input.data):
-                    decode_breakings[decode_breaking_policy] += di
-                    policy_iteration_break_early = True
-                    break
-
-        if not policy_iteration_break_early:
-            decode_breakings[decode_breaking_policy] += max_target_length - 1
-
-        policy_loss = 0
         reward = discriminator.evaluate(accumulated_sequence, full_target_variable_batch_2, extended_vocabs)
+        current_mean_reward = reward.sum(0) / self.batch_size
+        print_reward = current_mean_reward.data[0]
 
         if self.use_running_avg_baseline:
-            self.cumulative_reward += reward.mean().data[0]
+            self.cumulative_reward += current_mean_reward
             self.updates += 1
-            # Calculate running average baseline
-            avg = self.cumulative_reward / self.updates
-            baseline = Variable(torch.cuda.FloatTensor([avg]))
+            baseline = self.cumulative_reward / self.updates
             print_baseline = baseline.data[0]
 
         adjusted_reward = reward - baseline
@@ -106,10 +99,12 @@ class GeneratorRlStrat(GeneratorBase):
             for j in range(0, len(adjusted_reward.data)):
                 if adjusted_reward.data[j] < 0.0:
                     adjusted_reward.data[j] = 0.0
+        print_adjusted_reward = (adjusted_reward.sum(0) / self.batch_size).data[0]
 
         # TODO: Alternative: Test with instead of setting negative values to 0,
         # instead just scale them by divinding by 100 or something?
 
+        policy_loss = 0
         print_log_sum = 0
         for i in range(0, len(full_policy_values)):
             print_log_sum += torch.sum(full_policy_values[i])
@@ -121,11 +116,10 @@ class GeneratorRlStrat(GeneratorBase):
 
         backprop_time_start = time.time()
 
-        # TODO: MLE should probably be divided too ?
         # divide by sequence length
         policy_loss = policy_loss / num_samples
-
         if self.beta < 1.00:
+            mle_loss = mle_loss / max_target_length
             total_loss = self.beta * policy_loss + (1 - self.beta) * mle_loss
         else:
             total_loss = policy_loss
@@ -143,7 +137,7 @@ class GeneratorRlStrat(GeneratorBase):
 
         if self.beta < 1.00:
             return total_loss.data[0], mle_loss.data[0], policy_loss.data[0], print_log_sum.data[0], \
-                   reward.mean(), print_baseline, adjusted_reward.mean()
+                   print_reward, print_baseline, print_adjusted_reward
         else:
             return total_loss.data[0], total_loss.data[0], policy_loss.data[0], print_log_sum.data[0], \
-                   reward.mean(), print_baseline, adjusted_reward.mean()
+                   print_reward, print_baseline, print_adjusted_reward

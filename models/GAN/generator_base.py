@@ -26,8 +26,8 @@ class GeneratorBase:
         self.use_trigram_check = use_trigram_check
         self.use_running_avg_baseline = use_running_avg_baseline
         self.discriminator_batch_size = discriminator_batch_size
-
         self.rollout_batchsize = self.batch_size * self.num_monte_carlo_samples
+
         self.MASK = torch.LongTensor([UNK_token] * self.batch_size).cuda()
         self.MONTE_CARLO_MASK = torch.LongTensor([UNK_token] * self.rollout_batchsize).cuda()
         self.CREATE_FAKE_MASK = torch.LongTensor([UNK_token] * self.discriminator_batch_size).cuda()
@@ -36,6 +36,8 @@ class GeneratorBase:
         self.CREATE_FAKE_UPPER_BOUND \
             = torch.LongTensor([self.vocabulary.n_words] * self.discriminator_batch_size).cuda()
 
+        self.EOS_MATRIX = torch.LongTensor([EOS_token] * self.batch_size).cuda()
+        self.PAD_MATRIX = torch.LongTensor([PAD_token] * self.batch_size).cuda()
         self.EOS_MATRIX_MONTE_CARLO = torch.LongTensor([EOS_token] * self.rollout_batchsize).cuda()
         self.PAD_MATRIX_MONTE_CARLO = torch.LongTensor([PAD_token] * self.rollout_batchsize).cuda()
         self.EOS_MATRIX_CREATE_FAKE = torch.LongTensor([EOS_token] * self.discriminator_batch_size).cuda()

@@ -180,20 +180,20 @@ if __name__ == '__main__':
                                                weight_decay=1e-05)
     discriminator_criterion = torch.nn.BCEWithLogitsLoss()
 
-    # generator = GeneratorRlStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
-    #                              generator_decoder_optimizer, generator_mle_criterion, batch_size,
-    #                              use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
-    #                              use_trigram_check, use_running_avg_baseline)
+    generator = GeneratorRlStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
+                                 generator_decoder_optimizer, generator_mle_criterion, batch_size,
+                                 use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
+                                 use_trigram_check, use_running_avg_baseline, discriminator_batch_size)
 
     # generator = GeneratorSuperStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
     #                                 generator_decoder_optimizer, generator_mle_criterion, batch_size,
     #                                 use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
     #                                 use_trigram_check, use_running_avg_baseline)
 
-    generator = GeneratorSeqGanStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
-                                     generator_decoder_optimizer, generator_mle_criterion, batch_size,
-                                     use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
-                                     use_trigram_check, use_running_avg_baseline, discriminator_batch_size)
+    # generator = GeneratorSeqGanStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
+    #                                  generator_decoder_optimizer, generator_mle_criterion, batch_size,
+    #                                  use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
+    #                                  use_trigram_check, use_running_avg_baseline, discriminator_batch_size)
 
     # GAN discriminator
     discriminator = GANDiscriminator(vocabulary, discriminator_model, discriminator_optimizer, discriminator_criterion)
