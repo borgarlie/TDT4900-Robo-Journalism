@@ -83,6 +83,15 @@ def get_sentence_from_tokens_and_clean(tokens, vocabulary, extended_vocabulary):
     return sequence
 
 
+def get_sentence_from_tokens_and_clean_unked(tokens, vocabulary):
+    words = []
+    for token in tokens:
+        words.append(get_word_from_token_unked(token, vocabulary))
+    sequence = ' '.join(words)
+    sequence = clean_sequence(sequence)
+    return sequence
+
+
 def clean_sequence(line):
     line = re.sub(r'<EOS>', '', line)
     line = re.sub(r'<PAD>', '', line)

@@ -10,7 +10,7 @@ from tensorboardX import SummaryWriter
 
 sys.path.append('../..')  # ugly dirtyfix for imports to work
 
-from models.GAN.discriminator import RougeDiscriminator, GANDiscriminator
+from models.GAN.discriminator import RougeDiscriminator, GANDiscriminator, JointRougeAndGANDiscriminator
 from models.GAN.generator_rl_strat import GeneratorRlStrat
 from models.GAN.generator_super_strat import GeneratorSuperStrat
 from models.GAN.generator_seqgan_strat import GeneratorSeqGanStrat
@@ -196,10 +196,15 @@ if __name__ == '__main__':
     #                                  use_trigram_check, use_running_avg_baseline, discriminator_batch_size)
 
     # GAN discriminator
-    discriminator = GANDiscriminator(vocabulary, discriminator_model, discriminator_optimizer, discriminator_criterion)
+    # discriminator = GANDiscriminator(vocabulary, discriminator_model, discriminator_optimizer, discriminator_criterion)
 
     # ROUGE discriminator
     # discriminator = RougeDiscriminator(vocabulary)
+
+    # Joint discriminator
+    phi = 0.5
+    discriminator = JointRougeAndGANDiscriminator(vocabulary, discriminator_model, discriminator_optimizer,
+                                                  discriminator_criterion, phi)
 
     log_message("Done loading models")
 

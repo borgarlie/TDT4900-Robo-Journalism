@@ -13,7 +13,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
 
     log_message("Starting GAN training")
     n_generator = config['train']['n_generator']
-    n_discriminator = config['train']['n_discriminator']  # This is a scaling factor of n_generator
+    n_discriminator = config['train']['n_discriminator']
     discriminator_n_epochs = config['train']['discriminator_n_epochs']
     discriminator_fake_data_sample_rate = config['train']['discriminator_fake_data_sample_rate']
     max_sample_length = config['train']['max_sample_length']
@@ -162,10 +162,10 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                 real_data_variable = real_data_variable.transpose(1, 0)
 
                 create_fake_time_start = time.time()
-                max_target_length = max(target_lengths)
                 fake_data_variable = generator.create_samples(
                     real_data_article_variable, full_real_data_article_variable, real_data_article_lengths,
-                    max_target_length, pad_abstract_length, discriminator_batch_size, sample=sample)
+                    pad_abstract_length, pad_abstract_length, discriminator_batch_size, sample=sample)
+
                 timings[timings_var_create_fake] += (time.time() - create_fake_time_start)
 
                 d_titles_real_and_fake = torch.cat((real_data_variable, fake_data_variable), 0)
