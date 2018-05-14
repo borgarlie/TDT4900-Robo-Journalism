@@ -87,27 +87,20 @@ def train_iters(config, training_pairs, eval_pairs, vocabulary, encoder, decoder
     log_message("Starting training")
     for epoch in range(start_epoch, n_epochs + 1):
         log_message("Starting epoch: %d" % epoch)
-        batch_loss_avg = 0
 
-        # shuffle articles and titles (equally)
-        # c = list(zip(articles, titles))
-        random.shuffle(training_pairs)  # TODO: Check that this is ok
-        # articles_shuffled, titles_shuffled = zip(*c)
-
+        random.shuffle(training_pairs)
         # split into batches
         training_pair_batches = list(chunks(training_pairs, batch_size))
-        # title_batches = list(chunks(titles_shuffled, batch_size))
 
         for batch in range(num_batches):
-            input_variable, full_input_variable, input_lengths, target_variable, full_target_variable, target_lengths \
-                = prepare_batch(batch_size, training_pair_batches[batch], max_article_length, max_abstract_length)
+            input_variable, full_input_variable, input_lengths, target_variable, full_target_variable, target_lengths, \
+                _, _ = prepare_batch(batch_size, training_pair_batches[batch], max_article_length, max_abstract_length)
 
             loss = train(config, vocabulary, input_variable, full_input_variable, input_lengths, target_variable,
                          full_target_variable, target_lengths,
                          encoder, decoder, encoder_optimizer, decoder_optimizer, criterion)
 
             print_loss_total += loss
-            batch_loss_avg += loss
             # calculate number of batches processed
             itr = (epoch-1) * num_batches + batch + 1
 
@@ -117,9 +110,8 @@ def train_iters(config, training_pairs, eval_pairs, vocabulary, encoder, decoder
                 progress, total_runtime = time_since(start, itr / n_iters, total_runtime)
                 start = time.time()
                 lowest_loss = log_training_message(progress, itr, itr / n_iters * 100, print_loss_avg, lowest_loss)
-
-        # log to tensorboard
-        writer.add_scalar('loss', batch_loss_avg / num_batches, epoch)
+                # log to tensorboard
+                writer.add_scalar('loss', print_loss_avg, itr)
 
         # save each epoch after epoch 7 with different naming
         if epoch > 7:

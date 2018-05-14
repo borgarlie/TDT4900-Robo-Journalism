@@ -3,6 +3,7 @@ import sys
 import os
 import torch
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 from torch import optim
 from tensorboardX import SummaryWriter

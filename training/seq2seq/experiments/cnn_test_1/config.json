@@ -5,7 +5,7 @@
     "num_evaluate" : 13000,
     "throw" : 0,
     "with_categories": false,
-    "num_epochs" : 13,
+    "num_epochs" : 20,
     "batch_size" : 16,
     "learning_rate" : 0.015,
     "teacher_forcing_ratio" : 1.0,
@@ -24,7 +24,7 @@
     "dropout_p" : 0.0
   },
   "save" : {
-    "save_file" : "cnn_test1.pth.tar",
+    "save_file" : "baseline.pth.tar",
     "attention_path" : "attention/"
   },
   "log" : {
@@ -32,6 +32,6 @@
     "filename" : "experiments/cnn_test_1/output.log"
   },
   "tensorboard" : {
-    "log_path" : "../../log/seq2seq/cnn_test1"
+    "log_path" : "../../log/seq2seq/baseline"
   }
 }
