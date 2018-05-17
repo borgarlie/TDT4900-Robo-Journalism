@@ -23,9 +23,9 @@ timings_var_copy_params = 'COPY_PARAMS'
 timings_var_policy_iteration = 'POLICY_ITERATION'
 timings_var_monte_carlo_top1 = 'MONTE_CARLO_TOP1'
 timings_var_unk_check = 'UNK_CHECK'
-
 timings_var_check_eos_pad = 'EOS_AND_PAD_CHECK'
-
+timings_var_for_test = 'FOR_TEST#############'
+timings_var_discriminator_transfer = 'DISCRIMINATOR_TRANSFER'
 
 
 # Discriminator timings
@@ -53,8 +53,9 @@ timings[timings_var_create_fake_inner] = 0.0
 timings[timings_var_discriminator_train] = 0.0
 timings[timings_var_monte_carlo_top1] = 0.0
 timings[timings_var_unk_check] = 0.0
-
 timings[timings_var_check_eos_pad] = 0.0
+timings[timings_var_for_test] = 0.0
+timings[timings_var_discriminator_transfer] = 0.0
 
 decode_breaking_monte_carlo_sampling = 'MONTE_CARLO'
 decode_breaking_baseline = 'BASELINE'

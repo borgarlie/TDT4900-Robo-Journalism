@@ -61,6 +61,7 @@ class GeneratorSeqGanStrat(GeneratorBase):
 
         multiply_time_2 = time.time()
         encoder_outputs_temp = multiply_data_in_dim(encoder_outputs, self.num_monte_carlo_samples, dim=1)
+        full_target_variable_batch_2 = full_target_variable_batch_2 * self.num_monte_carlo_samples
         full_input_variable_batch_temp = multiply_data_in_dim(full_input_variable_batch,
                                                               self.num_monte_carlo_samples, dim=0)
         timings[timings_var_copy_params] += time.time() - multiply_time_2
@@ -101,7 +102,7 @@ class GeneratorSeqGanStrat(GeneratorBase):
                                                  monte_carlo_length, batch_size_temp)
 
                 monte_carlo_outer_time_start = time.time()
-                current_reward = discriminator.evaluate(sample_multiplied, None, None)
+                current_reward = discriminator.evaluate(sample_multiplied, full_target_variable_batch_2, None)
                 current_reward_chunked = current_reward.chunk(self.num_monte_carlo_samples, dim=0)
                 temp_reward = 0
                 for i in range(0, self.num_monte_carlo_samples):

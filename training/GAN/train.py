@@ -196,6 +196,17 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
 
             timings[timings_var_discriminator_train] += (time.time() - discriminator_train_time_start)
 
+            # save on half epoch
+            if batch == int(num_batches/2):
+                log_message("Saving model on half epoch")
+                save_state({
+                    'model_state_encoder': generator.encoder.state_dict(),
+                    'model_state_decoder': generator.decoder.state_dict(),
+                }, config['experiment_path'] + "/" + "/epoch%d_half_" % epoch + config['save']['save_file_generator'])
+                save_state({
+                    'model': discriminator.model.state_dict()
+                }, config['experiment_path'] + "/" + "/epoch%d_half_" % epoch + config['save']['save_file_discriminator'])
+
         # save each epoch
         log_message("Saving model")
         save_state({
