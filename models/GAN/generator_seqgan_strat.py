@@ -120,17 +120,22 @@ class GeneratorSeqGanStrat(GeneratorBase):
                 timings[timings_var_monte_carlo] += (time.time() - monte_carlo_time_start)
 
             # Get top1 for the next input to the decoder
-            topv, topi = decoder_output.data.topk(1)
-            ni = topi
+            # topv, topi = decoder_output.data.topk(1)
+            # ni = topi
+            # ni = ni.squeeze(1)
+
+            # sample next action
+            m = Categorical(decoder_output)
+            action = m.sample()
+            ni = action.data
 
             # Check for EOS so that we stop sampling if all are EOS or PAD
             if di > eos_check_start:
-                if is_whole_batch_pad_or_eos(ni):
+                if is_whole_batch_pad_or_eos_squeezed(ni):
                     break
 
             # Remove UNK before setting next input to decoder
             unk_check_time_start = time.time()
-            ni = ni.squeeze(1)
             ni = where(ni < self.UPPER_BOUND, ni, self.MASK)
             decoder_input = Variable(ni.unsqueeze(1))
             timings[timings_var_unk_check] += time.time() - unk_check_time_start
