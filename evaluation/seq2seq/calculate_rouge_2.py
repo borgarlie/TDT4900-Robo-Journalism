@@ -29,9 +29,6 @@ def clean_modelsummary(input_txt):
     for line in input_txt:
         line = line.split(" ")
         line = " ".join(line[2:])
-        # line = line[16:]
-        # line = re.sub(r'\d+', '', line)
-        # line = line[3:]
         line = re.sub(r'<EOS>', '', line)
         line = re.sub(r'<PAD>', '', line)
         line = line.strip()
@@ -83,18 +80,12 @@ if __name__ == '__main__':
     # path = '../output_for_eval/pointer_gen_ntb_baseline_2.txt'
     # path = '../output_for_eval/cnn_beam_output_GAN_4.log'
     # path = '../output_for_eval/cnn_beam_output_rougetest_3.log'
-    path = '../output_for_eval/output_rougetest_eval.txt'
+    # path = '../output_for_eval/old_rouge/output_eval_rouge_argmax_trigram_metric_pretrained.txt'
+    path = '../output_for_eval/rl_strat_test_data/beam_output_rl_strat_mle_epoch4_test_data.txt'
 
-    # path = '../output_for_eval/cnn_beam_output_1.log'
     print("Started extracting titles...")
     reference, hypothesis = read_file(path)
     print(len(hypothesis))
-
-    # for i in range(0, len(reference)):
-    #     reference[i] = split_sentence(reference[i])
-    #
-    # for i in range(0, len(hypothesis)):
-    #     hypothesis[i] = split_sentence(hypothesis[i])
 
     print("Done extracting titles...")
     print("starting to evaluate %d examples..." % len(reference))
