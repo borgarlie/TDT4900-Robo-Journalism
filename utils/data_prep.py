@@ -137,6 +137,19 @@ def is_whole_batch_pad_or_eos(batched_input):
     return is_only_pad_or_eos
 
 
+def is_whole_batch_pad_or_eos_squeezed(batched_input):
+    before = time.time()
+    batched_input = batched_input.cpu()
+    is_only_pad_or_eos = True
+    for token_index in range(0, len(batched_input)):
+        # token_index = this batch element
+        if batched_input[token_index] != PAD_token and batched_input[token_index] != EOS_token:
+            is_only_pad_or_eos = False
+            break
+    timings[timings_var_check_eos_pad] += (time.time() - before)
+    return is_only_pad_or_eos
+
+
 # using indexes
 def has_trigram(current_sequence, next_word):
     if len(current_sequence) < 3:

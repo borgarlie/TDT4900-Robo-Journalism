@@ -84,9 +84,13 @@ class GeneratorRlStrat(GeneratorBase):
         accumulated_sequence = torch.cat((accumulated_sequence, Variable(last_tokens.unsqueeze(1))), 1)
         timings[timings_var_monte_carlo_cat] += (time.time() - monte_carlo_cat_time_start)
 
-        reward = discriminator.evaluate(accumulated_sequence, full_target_variable_batch_2, extended_vocabs)
+        reward, gan_reward, rouge_reward = discriminator.evaluate(accumulated_sequence, full_target_variable_batch_2, extended_vocabs)
         current_mean_reward = reward.sum(0) / self.batch_size
-        print_reward = current_mean_reward.data[0]
+        current_mean_gan_reward = gan_reward.sum(0) / self.batch_size
+        current_mean_rouge_reward = rouge_reward.sum(0) / self.batch_size
+        print_reward = reward.sum(0) / self.batch_size
+        print_gan_reward = current_mean_gan_reward.data[0]
+        print_rouge_reward = current_mean_rouge_reward.data[0]
 
         if self.use_running_avg_baseline:
             self.cumulative_reward += current_mean_reward
@@ -107,9 +111,18 @@ class GeneratorRlStrat(GeneratorBase):
         policy_loss = 0
         print_log_sum = 0
         for i in range(0, len(full_policy_values)):
-            print_log_sum += torch.sum(full_policy_values[i])
-            loss = -full_policy_values[i] * adjusted_reward
-            policy_loss += torch.sum(loss) / self.batch_size
+            # print_log_sum += torch.sum(full_policy_values[i])
+            try:
+                print_log_sum += torch.sum(full_policy_values[i])
+                loss = -full_policy_values[i] * adjusted_reward
+                policy_loss += torch.sum(loss) / self.batch_size
+            except RuntimeError as e:
+                log_message(e)
+                log_message("Runtime error while updating print log sum")
+                log_message("Full policy value i")
+                log_message(full_policy_values[i])
+                num_samples -= 1
+
         print_log_sum = print_log_sum / self.batch_size
 
         timings[timings_var_policy_iteration] += (time.time() - policy_iteration_time_start)
@@ -137,7 +150,7 @@ class GeneratorRlStrat(GeneratorBase):
 
         if self.beta < 1.00:
             return total_loss.data[0], mle_loss.data[0], policy_loss.data[0], print_log_sum.data[0], \
-                   print_reward, print_baseline, print_adjusted_reward
+                   print_reward, print_baseline, print_adjusted_reward, print_gan_reward, print_rouge_reward
         else:
             return total_loss.data[0], total_loss.data[0], policy_loss.data[0], print_log_sum.data[0], \
-                   print_reward, print_baseline, print_adjusted_reward
+                   print_reward, print_baseline, print_adjusted_reward, print_gan_reward, print_rouge_reward

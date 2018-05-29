@@ -76,6 +76,7 @@ if __name__ == '__main__':
     num_throw = config['train']['throw']
     batch_size = config['train']['batch_size']
     beta = config['train']['beta']
+    phi = config['train']['lambda']
     num_monte_carlo_samples = config['train']['num_monte_carlo_samples']
     sample_rate = config['train']['sample_rate']
     allow_negative_reward = config['train']['allow_negative_reward']
@@ -180,31 +181,30 @@ if __name__ == '__main__':
                                                weight_decay=1e-05)
     discriminator_criterion = torch.nn.BCEWithLogitsLoss()
 
-    generator = GeneratorRlStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
-                                 generator_decoder_optimizer, generator_mle_criterion, batch_size,
-                                 use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
-                                 use_trigram_check, use_running_avg_baseline, discriminator_batch_size)
+    # generator = GeneratorRlStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
+    #                              generator_decoder_optimizer, generator_mle_criterion, batch_size,
+    #                              use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
+    #                              use_trigram_check, use_running_avg_baseline, discriminator_batch_size)
 
     # generator = GeneratorSuperStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
     #                                 generator_decoder_optimizer, generator_mle_criterion, batch_size,
     #                                 use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
     #                                 use_trigram_check, use_running_avg_baseline)
 
-    # generator = GeneratorSeqGanStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
-    #                                  generator_decoder_optimizer, generator_mle_criterion, batch_size,
-    #                                  use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
-    #                                  use_trigram_check, use_running_avg_baseline, discriminator_batch_size)
+    generator = GeneratorSeqGanStrat(vocabulary, generator_encoder, generator_decoder, generator_encoder_optimizer,
+                                     generator_decoder_optimizer, generator_mle_criterion, batch_size,
+                                     use_cuda, beta, num_monte_carlo_samples, sample_rate, allow_negative_reward,
+                                     use_trigram_check, use_running_avg_baseline, discriminator_batch_size)
 
     # GAN discriminator
     # discriminator = GANDiscriminator(vocabulary, discriminator_model, discriminator_optimizer, discriminator_criterion)
 
     # ROUGE discriminator
-    # discriminator = RougeDiscriminator(vocabulary)
+    discriminator = RougeDiscriminator(vocabulary)
 
     # Joint discriminator
-    phi = 0.5
-    discriminator = JointRougeAndGANDiscriminator(vocabulary, discriminator_model, discriminator_optimizer,
-                                                  discriminator_criterion, phi)
+    # discriminator = JointRougeAndGANDiscriminator(vocabulary, discriminator_model, discriminator_optimizer,
+    #                                               discriminator_criterion, phi)
 
     log_message("Done loading models")
 

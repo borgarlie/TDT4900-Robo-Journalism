@@ -99,7 +99,7 @@ class GeneratorBase:
             decoder_input = Variable(ni.unsqueeze(1))
             timings[timings_var_unk_check] += time.time() - unk_check_time_start
 
-        baseline = discriminator.evaluate(accumulated_sequence, full_target_variable_batch_2, extended_vocabs)
+        baseline, _, _ = discriminator.evaluate(accumulated_sequence, full_target_variable_batch_2, extended_vocabs)
         return baseline
 
     # Used to create fake data samples to train the discriminator

@@ -10,16 +10,17 @@
     "generator_learning_rate" : 0.0001,
     "discriminator_learning_rate" : 0.0001,
     "beta" : 1.00,
+    "lambda": 0.75,
     "n_generator" : 4,
-    "n_discriminator" : 4,
-    "discriminator_n_epochs" : 1,
+    "n_discriminator" : 0,
+    "discriminator_n_epochs" : 0,
     "discriminator_fake_data_sample_rate" : 1.00,
     "num_monte_carlo_samples" : 4,
-    "max_sample_length" : 70,
-    "sample_rate" : 0.20,
-    "allow_negative_reward" : false,
+    "max_sample_length" : 99,
+    "sample_rate" : 0.80,
+    "allow_negative_reward" : true,
     "use_trigram_check" : false,
-    "use_running_avg_baseline": true
+    "use_running_avg_baseline": false
   },
   "evaluate" : {
     "expansions" : 3,
@@ -40,17 +41,17 @@
     "num_kernels" : 100,
     "kernel_sizes" : [3, 4, 5],
     "load" : true,
-    "load_file" : "../../models/pretrained_models/classifier/cnn/epoch50_cnn_classifier_sampled_folder_test5.tar"
+    "load_file" : "../../models/pretrained_models/classifier/cnn/epoch49_cnn_discriminator_pretrained_inside_gan.pth.tar"
   },
   "save" : {
-    "save_file_generator" : "cnn_generator_gantest_1.pth.tar",
-    "save_file_discriminator" : "cnn_discriminator_gantest_1.pth.tar"
+    "save_file_generator" : "cnn_generator_seqGAN_start_sr_0.80.pth.tar",
+    "save_file_discriminator" : "cnn_discriminator_seqGAN_start_sr_0.80.pth.tar"
   },
   "log" : {
     "print_every" : 200,
     "filename": "experiments/cnn_test_1/output_gantest_1.log"
   },
   "tensorboard" : {
-    "log_path" : "../../log/GAN/output_gantest_1"
+    "log_path" : "../../log/GAN/seqGAN_start_sr_0.80"
   }
 }

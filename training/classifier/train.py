@@ -50,9 +50,9 @@ def train_iters(config, vocabulary, model, optimizer, writer, real_training_data
     total_runtime = 0.0
 
     # Evaluate once before starting to train
-    model.eval()
-    evaluate(ground_truth_eval, validation_data, vocabulary, model, writer, 1, 0)
-    model.train()
+    # model.eval()
+    # evaluate(ground_truth_eval, validation_data, vocabulary, model, writer, 1, 0)
+    # model.train()
 
     # Find fake data files and train for 1 epoch per file
     files = list(read_directory(directory))
@@ -100,6 +100,9 @@ def train_iters(config, vocabulary, model, optimizer, writer, real_training_data
                     print_loss_total = 0
                     progress, total_runtime = time_since(start, itr / n_iters, total_runtime)
                     start = time.time()
+                    # Making a loss dictionary for tensorboard
+                    loss_dict = {'train_loss': print_loss_avg}
+                    writer.add_scalars('Loss', loss_dict, itr)
                     print('%s (%d %d%%) %.4f' % (progress, itr, itr / n_iters * 100, print_loss_avg), flush=True)
                     if print_loss_avg < lowest_loss:
                         lowest_loss = print_loss_avg
@@ -108,11 +111,11 @@ def train_iters(config, vocabulary, model, optimizer, writer, real_training_data
             batch_loss_avg /= num_batches
 
             # evaluate epoch on test set
-            model.eval()
-            evaluate(ground_truth_eval, validation_data, vocabulary, model, writer, batch_loss_avg, epoch)
-            model.train()
+            # model.eval()
+            # evaluate(ground_truth_eval, validation_data, vocabulary, model, writer, batch_loss_avg, epoch)
+            # model.train()
             # save each epoch after epoch 7 with different naming
-            if dataset_num > save_after_dataset_num:
+            if dataset_num >= save_after_dataset_num:
                 print("Saving model", flush=True)
                 save_state({
                     'model': model.state_dict()
@@ -132,7 +135,7 @@ def batch_sequences(vocabulary, titles, ground_truth):
         sequences.append(sequence)
 
     seq_lengths = [len(s) for s in sequences]
-    seq_padded = [pad_seq(s, max(seq_lengths)) for s in sequences]
+    seq_padded = [pad_seq(s, 101) for s in sequences]
 
     sequences = Variable(torch.LongTensor(seq_padded))
     ground_truth_batched = Variable(torch.FloatTensor(ground_truth))

@@ -31,6 +31,8 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
     print_loss_policy_log_sum = 0
     print_loss_discriminator = 0
     print_total_reward = 0
+    print_total_gan_reward = 0
+    print_total_rouge_reward = 0
     print_baseline = 0
     print_adjusted_reward = 0
     lowest_loss_generator = 999
@@ -76,7 +78,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
         if batch_size == discriminator_batch_size:
             discriminator_training_batches = training_batches
         else:
-            discriminator_training_batches = list(chunks(training_pairs, discriminator_batch_size))
+            discriminator_training_batches = list(chunks(training_pairs, discriminator_batch_size))[:-1]
         timings[timings_var_chunkings] += (time.time() - chunking_time_start)
 
         count_disc = 0
@@ -90,10 +92,10 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                 timings[timings_var_init_generator] += (time.time() - init_generator_time_start)
 
                 generator_train_time_start = time.time()
-                loss, mle_loss, policy_loss, policy_log_sum, reward, baseline, adjusted_reward \
-                    = generator.train_on_batch(input_variable, full_input_variable, input_lengths, full_target_var,
-                                               target_lengths, discriminator, max_sample_length, target_var,
-                                               extended_vocabs, full_target_var_2)
+                loss, mle_loss, policy_loss, policy_log_sum, reward, baseline, adjusted_reward, gan_reward, \
+                rouge_reward = generator.train_on_batch(input_variable, full_input_variable, input_lengths,
+                                                full_target_var, target_lengths, discriminator, max_sample_length,
+                                                target_var, extended_vocabs, full_target_var_2)
                 timings[timings_var_generator_train] += (time.time() - generator_train_time_start)
 
                 print_loss_generator += loss
@@ -103,6 +105,8 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                 print_total_reward += reward
                 print_baseline += baseline
                 print_adjusted_reward += adjusted_reward
+                print_total_gan_reward += gan_reward
+                print_total_rouge_reward += rouge_reward
                 # calculate number of batches processed
                 itr_generator += 1
                 if itr_generator % print_every == 0:
@@ -113,6 +117,10 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     print_total_reward_avg = print_total_reward / print_every
                     print_avg_baseline = print_baseline / print_every
                     print_adjusted_reward_avg = print_adjusted_reward / print_every
+                    print_disc_loss_avg = print_loss_discriminator / print_every
+                    print_gan_reward_avg = print_total_gan_reward / print_every
+                    print_rouge_reward_avg = print_total_rouge_reward / print_every
+                    print_loss_discriminator = 0
                     print_loss_generator = 0
                     print_loss_mle = 0
                     print_loss_policy = 0
@@ -120,14 +128,25 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     print_total_reward = 0
                     print_baseline = 0
                     print_adjusted_reward = 0
+                    print_total_gan_reward = 0
+                    print_total_rouge_reward = 0
                     progress, total_runtime = time_since(start, itr_generator / n_iters, total_runtime)
                     start = time.time()
+                    log_message('Discriminator loss at %d: %.4f' % (itr_discriminator, print_disc_loss_avg))
                     log_message('%s (%d %d%%)' % (progress, itr_generator, itr_generator / n_iters * 100))
-                    log_message('Generator loss (total, mle, policy, policy_log_sum, reward, baseline, adjusted_reward)'
-                                ': %.4f, %.4f, %.4f, %.4f, %.4f, %.4f, %.4f'
+                    log_message('Generator loss (total, mle, policy, policy_log_sum, reward, baseline, adjusted_reward,'
+                                ' gan_reward, rouge_reward)'
+                                ': %.4f, %.4f, %.4f, %.4f, %.4f, %.4f, %.4f, %.4f, %.4f'
                                 % (print_loss_avg, print_loss_avg_mle, print_loss_avg_policy,
                                    print_loss_avg_policy_log_sum, print_total_reward_avg, print_avg_baseline,
-                                   print_adjusted_reward_avg))
+                                   print_adjusted_reward_avg, print_gan_reward_avg, print_rouge_reward_avg))
+                    # Making a loss dictionary for tensorboard
+                    log_dict = {'total_loss': print_loss_avg, 'mle': print_loss_avg_mle,
+                                'policy': print_loss_avg_policy, 'policy_log_sum': print_loss_avg_policy_log_sum,
+                                'reward': print_total_reward_avg, 'baseline': print_avg_baseline,
+                                'adjusted_reward': print_adjusted_reward_avg, 'disc_loss': print_disc_loss_avg,
+                                'gan_reward': print_gan_reward_avg, 'rouge_reward': print_rouge_reward_avg}
+                    writer.add_scalars('Logging', log_dict, itr_generator)
                     if print_loss_avg < lowest_loss_generator:
                         lowest_loss_generator = print_loss_avg
                         log_message(" ^ Lowest generator loss so far")
@@ -185,14 +204,14 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                     print_loss_discriminator += loss
                     # calculate number of batches processed
                     itr_discriminator += 1
-                    if itr_discriminator % print_every == 0:
-                        print_loss_avg = print_loss_discriminator / print_every
-                        print_loss_discriminator = 0
-                        log_message('Discriminator loss at %d - %d - %d - %d - : %.4f'
-                                    % (itr_discriminator, batch, k, m, print_loss_avg))
-                        if print_loss_avg < lowest_loss_discriminator:
-                            lowest_loss_discriminator = print_loss_avg
-                            log_message(" ^ Lowest discriminator loss so far")
+                    # if itr_discriminator % print_every == 0:
+                    #     print_loss_avg = print_loss_discriminator / print_every
+                    #     print_loss_discriminator = 0
+                    #     log_message('Discriminator loss at %d - %d - %d - %d - : %.4f'
+                    #                 % (itr_discriminator, batch, k, m, print_loss_avg))
+                    #     if print_loss_avg < lowest_loss_discriminator:
+                    #         lowest_loss_discriminator = print_loss_avg
+                    #         log_message(" ^ Lowest discriminator loss so far")
 
             timings[timings_var_discriminator_train] += (time.time() - discriminator_train_time_start)
 
@@ -216,8 +235,7 @@ def train_GAN(config, generator, discriminator, training_pairs, eval_pairs, max_
                 save_state({
                     'model_state_encoder': generator.encoder.state_dict(),
                     'model_state_decoder': generator.decoder.state_dict(),
-                }, config['experiment_path'] + "/" + "/epoch%d_3quarter_" % epoch + config['save'][
-                    'save_file_generator'])
+                }, config['experiment_path'] + "/" + "/epoch%d_3quarter_" % epoch + config['save']['save_file_generator'])
 
         # save each epoch
         log_message("Saving model")

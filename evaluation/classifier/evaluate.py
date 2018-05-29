@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from torch import nn
 
 from utils.data_prep import *
@@ -55,3 +55,11 @@ def calculate_accuracy(gold_truth, predictions):
     # calculate total accuracy
     accuracy = accuracy_score(gold_truth, predictions)
     print("Total Accuracy: %0.4f" % accuracy, flush=True)
+
+
+def calculate_f1(gold_truth, predictions):
+    precision, recall, f1_score, support = precision_recall_fscore_support(gold_truth, predictions, average='macro')
+    print(precision, flush=True)
+    print(recall, flush=True)
+    print(f1_score, flush=True)
+    print(support, flush=True)

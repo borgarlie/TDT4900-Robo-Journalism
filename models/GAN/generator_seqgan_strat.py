@@ -102,7 +102,7 @@ class GeneratorSeqGanStrat(GeneratorBase):
                                                  monte_carlo_length, batch_size_temp)
 
                 monte_carlo_outer_time_start = time.time()
-                current_reward = discriminator.evaluate(sample_multiplied, full_target_variable_batch_2, None)
+                current_reward, gan_reward, rouge_reward = discriminator.evaluate(sample_multiplied, full_target_variable_batch_2, None)
                 current_reward_chunked = current_reward.chunk(self.num_monte_carlo_samples, dim=0)
                 temp_reward = 0
                 for i in range(0, self.num_monte_carlo_samples):
@@ -156,16 +156,22 @@ class GeneratorSeqGanStrat(GeneratorBase):
 
         print_log_sum = 0
         for i in range(0, len(full_policy_values)):
-            print_log_sum += torch.sum(full_policy_values[i])
-            total_print_reward += torch.sum(full_sequence_rewards[i])
-            adjusted_full_sequence_reward = full_sequence_rewards[i] - baseline
-            if not self.allow_negative_rewards:
-                for j in range(0, len(adjusted_full_sequence_reward.data)):
-                    if adjusted_full_sequence_reward.data[j] < 0.0:
-                        adjusted_full_sequence_reward.data[j] = 0.0
-            total_print_adjusted_reward += torch.sum(adjusted_full_sequence_reward)
-            loss = -full_policy_values[i] * adjusted_full_sequence_reward
-            policy_loss += torch.sum(loss) / self.batch_size
+            try:
+                print_log_sum += torch.sum(full_policy_values[i])
+                total_print_reward += torch.sum(full_sequence_rewards[i])
+                adjusted_full_sequence_reward = full_sequence_rewards[i] - baseline
+                if not self.allow_negative_rewards:
+                    for j in range(0, len(adjusted_full_sequence_reward.data)):
+                        if adjusted_full_sequence_reward.data[j] < 0.0:
+                            adjusted_full_sequence_reward.data[j] = 0.0
+                total_print_adjusted_reward += torch.sum(adjusted_full_sequence_reward)
+                loss = -full_policy_values[i] * adjusted_full_sequence_reward
+                policy_loss += torch.sum(loss) / self.batch_size
+            except RuntimeError as e:
+                log_message(e)
+                log_message("Runtime error while updating print log sum")
+                num_samples -= 1
+
         print_log_sum = print_log_sum / self.batch_size
         total_print_reward = total_print_reward / self.batch_size
         total_print_reward = total_print_reward / num_samples
@@ -195,12 +201,16 @@ class GeneratorSeqGanStrat(GeneratorBase):
 
         timings[timings_var_backprop] += (time.time() - backprop_time_start)
 
+        total_print_reward_data = total_print_reward.data[0]
+
         if self.beta < 1.00:
             return total_loss.data[0], mle_loss.data[0], policy_loss.data[0], print_log_sum.data[0], \
-                   total_print_reward.data[0], print_baseline, total_print_adjusted_reward.data[0]
+                   total_print_reward_data, print_baseline, total_print_adjusted_reward.data[0], \
+                   total_print_reward_data, total_print_reward_data
         else:
             return total_loss.data[0], total_loss.data[0], policy_loss.data[0], print_log_sum.data[0], \
-                   total_print_reward.data[0], print_baseline, total_print_adjusted_reward.data[0]
+                   total_print_reward_data, print_baseline, total_print_adjusted_reward.data[0], \
+                   total_print_reward_data, total_print_reward_data
 
     def monte_carlo_expansion(self, action, decoder_hidden, encoder_outputs, full_input_variable_batch,
                               initial_sequence, max_sample_length, batch_size):

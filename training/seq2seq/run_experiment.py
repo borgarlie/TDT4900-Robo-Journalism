@@ -20,7 +20,7 @@ from utils.logger import *
 
 def load_state(filename):
     if os.path.isfile(filename):
-        state = torch.load(filename)
+        state = torch.load(filename, map_location=lambda storage, loc: storage.cuda(0))
         return (state['epoch'], state['runtime'],
                 state['model_state_encoder'], state['model_state_decoder'],
                 state['optimizer_state_encoder'], state['optimizer_state_decoder'])

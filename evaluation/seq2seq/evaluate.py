@@ -144,9 +144,9 @@ def evaluate_beams(config, vocabulary, encoder, decoder, input_variable, full_in
     return_beams = config['evaluate']['return_beams']
 
     # first decoder beam. input_hidden = encoder_hidden
-    init_attention_weights = torch.zeros(input_length, input_length)
+    init_attention_weights = torch.zeros(120, input_length)
     beams = [Beam([], [], init_attention_weights, [], SOS_token, encoder_hidden, full_input_variable, extended_vocab)]
-    for i in range(input_length):
+    for i in range(120):
         beams = expand_and_prune_beams(vocabulary, beams, encoder_outputs, decoder, expansions, keep_beams)
 
     pruned_beams = prune_beams(beams, return_beams)

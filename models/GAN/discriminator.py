@@ -40,7 +40,8 @@ class GANDiscriminator:
         self.model.train()
         scores = Variable(scores.data.narrow(1, 0, 1)).squeeze()
         sigm = nn.functional.sigmoid(scores).data
-        return Variable(torch.cuda.FloatTensor(sigm))
+        gan_reward = Variable(torch.cuda.FloatTensor(sigm))
+        return gan_reward, gan_reward, gan_reward
 
 
 class JointRougeAndGANDiscriminator:
@@ -66,8 +67,8 @@ class JointRougeAndGANDiscriminator:
     def evaluate(self, sequences, reference_batch, extended_vocabs):
         gan_rewards = self.evaluate_gan(sequences)
         rouge_reward = self.evaluate_rouge(sequences, reference_batch, extended_vocabs)
-        joint_reward = self.phi * gan_rewards + (1 - self.phi) * rouge_reward
-        return joint_reward
+        joint_reward = self.phi * rouge_reward + (1 - self.phi) * gan_rewards
+        return joint_reward, gan_rewards, rouge_reward
 
     def evaluate_gan(self, sequences):
         self.model.eval()
@@ -84,7 +85,7 @@ class JointRougeAndGANDiscriminator:
         generated_batch, reference_batch = self.convert_batch(generated_batch, reference_batch)
         rouge_l_points = []
         for i in range(0, len(generated_batch)):
-            rouge_l = self.rouge.rouge_1(
+            rouge_l = self.rouge.rouge_2(
                 summary=generated_batch[i],
                 references=reference_batch[i])
             rouge_l_points.append(rouge_l)
@@ -144,4 +145,5 @@ class RougeDiscriminator:
                 summary=generated_batch[i],
                 references=reference_batch[i])
             rouge_l_points.append(rouge_l)
-        return Variable(torch.cuda.FloatTensor(rouge_l_points))
+        rouge_reward = Variable(torch.cuda.FloatTensor(rouge_l_points))
+        return rouge_reward, rouge_reward, rouge_reward
