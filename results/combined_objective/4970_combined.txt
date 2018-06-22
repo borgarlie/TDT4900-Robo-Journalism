@@ -1,0 +1,2 @@
+hacker is understood to have compromised a server that manages a password-protected website , typically used to manage the transfer of large data files over the internet .
+it is not known whether the hacker stole data or caused any damage during the attack .

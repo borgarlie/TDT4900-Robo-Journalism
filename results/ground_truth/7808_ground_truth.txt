@@ -1,0 +1,4 @@
+microsoft 's kinect sensor uses changes in skin colour to monitor heart rate .
+it can read beats per minute wirelessly on a person standing four feet away .
+kinect on the xbox one can also detect slight eye and muscle movements .
+the sensor will be sold with the console from 22 november .

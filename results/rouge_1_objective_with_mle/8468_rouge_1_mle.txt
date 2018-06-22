@@ -1,0 +1,3 @@
+dubbed wirelurker , the malware targets both mac computers and laptops -lrb- pictured -rrb- as well as phones and tablets running ios .
+it was discovered by experts at palo alto networks who detailed their findings in a research paper .
+the researchers said this malware combines a number of techniques to successfully ` realise a new brand of threat to all ios devices '

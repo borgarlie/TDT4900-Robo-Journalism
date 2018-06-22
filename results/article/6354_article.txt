@@ -1,0 +1,26 @@
+there are countless ways people can spy on you nowadays - from hidden microphones to google glass , drones and security cameras .
+if this makes you feel paranoid , a firm has created a router that detects such surveillance devices and blocks them from accessing your wi-fi network .
+owners of the cyborg unplug , can also disconnect all target devices from any network they are associated with , including paired connections with phones .
+scroll down for video .
+cyborg unplug ` sniffs ' out surveillance and undercover devices including google glass , hidden microphones and security cameras .
+any device using the network to spy or stream content over the network are detected .
+an alarm is then signalled and the detected device is disconnected .
+every wireless device has a unique hardware signature assigned to it by the manufacturer , .
+these signatures are broadcast by wireless devices as they probe for , connect to and use wireless networks .
+cyborg .
+unplug ` sniffs ' the air for these signatures , looking for devices its .
+owner has selected to ban .
+if a banned device is discovered an alarm is .
+triggered .
+further , .
+if that device is found to be connected to a network that cyborg unplug .
+is trained to guard , a stream of special ` de-authentication ' signals .
+-lrb- packets -rrb- are sent to disconnect it .
+it does this automatically , without any interaction required from its owner .
+` every wireless device has a unique hardware signature assigned to it by the manufacturer , ' explained developer julian oliver .
+` these signatures are broadcast by wireless devices as they probe for , connect to and use wireless networks .
+` cyborg unplug sniffs the air for these signatures , looking for devices its owner has selected to ban .
+if a banned device is discovered an alarm is triggered .
+` further , if that device is found to be connected to a network that cyborg unplug is trained to guard , a stream of special ` de-authentication ' signals -lrb- packets -rrb- are sent to disconnect it .
+` it does this automatically , without any interaction required from its owner .
+' cyborg unplug can be operated in two modes the recommended mode is territory mode , disconnecting target devices , such

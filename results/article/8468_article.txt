@@ -1,0 +1,18 @@
+apple devices are at risk of a virus described by researchers as ` the biggest scale ' malware they have ever seen .
+dubbed wirelurker , the malware targets both mac computers as well as phones and tablets running ios when connected using a usb cable .
+after it has infected the mac , when a mobile device is connected to the infected computer the virus spreads and installs malicious apps .
+dubbed wirelurker , the malware targets both mac computers and laptops -lrb- pictured -rrb- as well as phones and tablets running ios .
+it was discovered by experts at palo alto networks who detailed their findings in a research paper .
+it was discovered by experts at palo alto networks who detailed their findings in a research paper .
+` we believe that this malware heralds a new era in attacking apple 's desktop and mobile platforms , ' explained lead researcher claud xiao .
+wirelurker monitors ios devices , including ipods , iphones and ipads , connected to a mac via usb .
+the virus begins by infecting the mac os software , through malicious files or links .
+when a device is connected to this infected mac , the malware automatically installs malicious apps onto the phone or tablet .
+the researchers said this malware combines a number of techniques to successfully ` realise a new brand of threat to all ios devices ' .
+the experts suggest ios and mac owners only download apps from the official apple app store , and that they make sure to keep their software up to date .
+` it is only the second known malware that attacks ios devices through os x via usb -lsb- and -rsb- is the first malware to automate generation of malicious ios applications , through binary file replacement .
+' wirelurker monitors ios devices , including ipods , iphones and ipads , connected to a mac via usb .
+the virus begins by infecting the mac os software , through malicious files or links .
+when a device is connected to this infected mac , the malware automatically installs malicious apps onto the phone or tablet .
+the researchers said this malware combines a number of techniques to successfully ` realise a new brand of threat to all ios devices ' .
+wirelurker is then capable of stealing information from the devices it

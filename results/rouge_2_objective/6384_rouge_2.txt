@@ -1,0 +1,3 @@
+the usb type-c connector is built on existing usb 3.1 and usb 2.0 technologies .
+the artist 's renderings , created by taiwanese manufacturer foxconn , has been designed for use with thinner , sleeker devices , such as tablets and ultrabooks , and solves the annoying problem of inserting drives the wrong way up .
+the usb 2.0 specification was released in 2000 and became the standard by the end of 2001 , followed by usb 3.0 in 2008 , and 3.1 in july 2013 .

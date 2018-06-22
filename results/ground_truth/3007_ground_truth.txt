@@ -1,0 +1,5 @@
+the nanosensor was created by researchers at aarhus university .
+it mimics the reaction wine creates on a human tongue .
+called inano , it uses salivary proteins to measure molecules .
+from this , it determines the astringency - and overall flavour - of wine .
+this can only currently be tested once the drink is produced .

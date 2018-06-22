@@ -1,0 +1,18 @@
+the internet has revolutionised the way we communicate and a third of the world 's population use it to stay connected .
+now , texas-based internet cartographer and computer scientist john matherly has used software to ` ping ' all of these global web devices and create a map demonstrating the technology 's global reach .
+in the majority of cases , this signal was sent to routers rather than individual gadgets , but mr matherly said iphone and android devices have appeared previously .
+connected : texas-based internet cartographer and computer scientist john matherly has used software to ` ping ' global web devices to build a map -lrb- pictured -rrb- demonstrating the technology 's global reach .
+the cartographer said it took around five hours to ping all ip addresses on august 2 .
+the map then took more than 12 hours to create .
+` pinging ' an ip address involves sending a signal to the device from a server , which causes the connection to ` light up ' - albeit not physically .
+mr matherly is founder of shodan , a search engine for connected devices .
+different colours represent the density of devices in that region , and unsurprisingly , the world 's largest cities in developed countries glow the brightest .
+red areas contain a lot of web-enabled devices , while green areas contain fewer .
+black areas are regions where no signal was received .
+while it may be no surprise that there seem to be less internet-connected devices in parts of africa , mr matherly explained his map is not precise because some organisations block ping requests .
+it is thought that areas of china should be coloured bright red on the map , but the country 's ` great firewall ' explains why most of the country looks dark .
+the cartographer said it took five hours to ` ping ' all ip addresses on 2 august .
+the map then took more than 12 hours to create .
+red areas contain a lot of web-enabled devices , while black areas contain the fewest .
+it is easy to see how well-connected areas like europe and the us -lrb- pictured -rrb- contrast with greenland and africa .
+internet blackout : it is thought that areas of china should be coloured bright red on the map , but the country 's

@@ -1,0 +1,3 @@
+scientists from tübingen university in germany believe the human brain works slower in old age as it has to process a lifetime of stored-up information to recall simple facts .
+they programmed a computer to learn new words and commands on a daily basis by ` reading ' - much like a human would learn .
+the team used computers to study cognitive development in age .

@@ -1,0 +1,6 @@
+carat app , for ios and android devices , was produced by university of helsinki and university of california , berkeley computer scientists .
+uses crowdsourced data to investigate a phones ' energy consumption .
+monitors phone usage over a week , feeding data to a central server .
+information is analysed and personal power-saving tips given to users .
+suggestions include shutting certain apps down or upgrading software .
+the longer the app is used , the more tailored the suggestions become .

@@ -1,0 +1,6 @@
+more than 2.2 million flights are managed by nats -lrb- formerly known as national air traffic services -rrb- in uk airspace .
+flights peak at more than 8,000 a day and the visualisation plots 7,000 of these movements during 24 hours .
+the day begins with transatlantic traffic heading towards the uk on separated and organised tracks .
+this is joined by traffic from europe and the first waves of departures from uk airports .
+traffic levels then grow to show main uk routes , as well as hubs around london , manchester and central scotland .
+visualisation also plots

@@ -1,0 +1,2 @@
+the device 's built-in camera registers the movement of the eye to take the shot and to make sure it 's not mistaken for a blink , the wink will need to be exaggerated to register .
+photos can now take photos by winking in the direction of the object they want to photograph .

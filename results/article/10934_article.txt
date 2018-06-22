@@ -1,0 +1,25 @@
+by .
+ellie zolfagharifard .
+published : .
+13:49 est , 3 march 2014 .
+| .
+updated : .
+07:15 est , 4 march 2014 .
+each morning residents of the east india state of assam watch the sun rise more than 90 minutes earlier than the west of the country .
+this is because time on the clocks across india are set to be exactly the same in each of its states and provinces , regardless of location .
+the result is a huge discrepancy between the time shown on the clock and where the sun is in the sky -- a problem that this map reveals is widespread throughout the world .
+click on the the image to enlarge it ... this map shows the difference between clock time and ` solar time ' .
+the ` late ' places are shown in red , the ` early ' places in green .
+the deeper the shade , the more out of sync time is .
+the map , created by google engineer stefano maggiolo , highlights the huge differences between solar time and clock-time in large parts of our planet .
+mr maggiolo said that the map was inspired by a trip to spain , whose time zone means that madrid 's sunset is more than an hour later than that of naples .
+this is because of the latitude and earth 's tilt as it moves around the sun causing solar daysto vary throughout the year .
+` the modern calendar compensates by letting midday oscillate a bit around the year , ' explains mr maggiolo , in his blog .
+large parts of the u.s. and canada have a discrepancy of around an hour between solar time and clock time .
+mr maggiolo said that the map was inspired by a trip to spain , whose time zone means that madrid 's sunset is more than an hour later than that of naples .
+a solar day is the length of time between the sun reaching its highest point in the sky two consecutive times .
+the length of a solar day varies .
+throughout the year , and the accumulated effect of these variations .
+produces seasonal deviations of up to 16 minutes .
+this is because of earth 's tilt and its elliptical orbit as it moves around the sun .
+the

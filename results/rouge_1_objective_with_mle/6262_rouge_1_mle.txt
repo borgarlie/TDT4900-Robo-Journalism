@@ -1,0 +1,3 @@
+mobiles have a large number of adjustable settings which can be tweaked to prolong battery life , they are often tricky to understand .
+it uses crowdsourced measurements to work out how much of an impact certain settings and apps are having on a specific battery .
+the app will start to receive personalised recommendations for improving battery life .

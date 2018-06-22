@@ -1,0 +1,3 @@
+twitter is also trialling a mute option on its apps .
+the tool lets people silence users temporarily , but does not block them from sending notifications and direct messages .
+the feature can mute irritating or boring tweets temporarily , rather than blocking the account completely .

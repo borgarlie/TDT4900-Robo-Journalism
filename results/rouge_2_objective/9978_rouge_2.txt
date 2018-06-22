@@ -1,0 +1,2 @@
+birmingham university project has created a robot that can grab plates and cups .
+the robot - which they have named boris - is the first to have enough intelligence to work out how to grip any single item put in front of it .

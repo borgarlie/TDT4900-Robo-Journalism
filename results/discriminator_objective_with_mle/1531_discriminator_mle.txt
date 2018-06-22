@@ -1,0 +1,3 @@
+game will run at 60 frames-per-second on next-gen hardware , and 30 fps on current gen. assassin 's creed .
+mcdonnell miller investigating an organisation called the xof -- who are responsible for destroying the mother base .
+animation has been overhauled thanks to the power of the fox engine .

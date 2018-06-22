@@ -1,0 +1,28 @@
+bike helmets are the latest product to get the ` smart ' upgrade .
+a team of students has devised a helmet with built-in sensors and smartphone functionality to provide data after a crash .
+the so-called ` black box ' helmet can also call emergency services , talk to the cyclist and provide hands-free calling .
+scroll down for video .
+students at oregon state university and intel have devised a ` smart ' bike helmet -lrb- shown -rrb- that collects data during a crash .
+the ` black box ' has accelerometers and sensors to work out what happened .
+it also records the rider 's distance , speed and direction at all times .
+the helmet was devised by students at oregon state university in partnership with intel .
+its potentially live-saving features include accelerometers , speakers , a microphone and an led headlamp .
+together the features provide the rider with information while cycling , or data in the event of an accident .
+in the event of a crash the helmet will also talk to the rider and ask if they are okay .
+if they say ` yes ' or fail to respond , emergency services will be contacted on their behalf .
+using a synced smartphone as well , the rider can be put through a few quick medical tests to see if they might be badly hurt .
+all of the data from the crash can then be studied after to understand what happened .
+the helmet syncs with an app that can provide medical questions to the rider after a crash or call emergency services by asking the rider questions via a speaker -lrb- shown above the led headlamp -rrb- .
+and the helmet can also play music or allow for hands-free calling .
+inside the 3d-printed outer shell is a regular bike helmet -lrb- shown -rrb- .
+the product is only in the prototype phase at the moment so no potential release date or price has been announced .
+- bluetooth radio .
+- magnetometer .
+- gyroscope .
+- two accelerometers to detect a sudden impact .
+- communications hardware to call pre-set emergency contact number .
+- above-the-ear speakers .
+- microphone .
+- led headlight .
+the helmet syncs with an android app on smartphones to transfer data .
+this includes distance , speed and the direction

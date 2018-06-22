@@ -1,0 +1,3 @@
+mobiles have a large number of adjustable settings which can be tweaked to prolong battery life , they are often tricky to understand .
+a free ios and android app called carat offers frustrated smartphone users personalised advice to boost their phone 's battery life .
+it uses crowdsourced measurements to work out how much of an impact certain settings and apps are having on a specific battery .

@@ -1,0 +1,2 @@
+professor george eleftheriades and michael selvanayagam tested a new approach to cloaking , by surrounding an object with small antennas that collectively radiate an electromagnetic field .
+the radiated field cancels out any waves scattering off the cloaked object .

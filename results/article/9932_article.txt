@@ -1,0 +1,13 @@
+a spelling mistake in the words ` not recommended ' on the obamacare website led to the site going down , it was revealed today in internal notes from ` war .
+room ' meetings of experts scrabbling to breathe life into the shambolic operation .
+the error limited the choices obamacare shoppers were offered in october and often presented them with overpriced options .
+ultimately , at least some of the website 's many outages were brought about by this simple typo , as technicians struggled to give the public an experience that mirrored president obama 's promises .
+` in states where the federal government helps run these marketplaces , the average american will have more than 50 different plans to choose from , with different levels of coverage , ' the president claimed during a september 26 speech in largo , maryland .
+` and because insurance companies are competing against one another for your business , a lot of americans will pay significantly less for their insurance than they do now .
+' in large measure , that did n't happen .
+and a tech team met at least once per day in october to sort out this and hundreds of .
+other technical problems with the ill-fated roll out .
+one of the reasons the obamacare website ground to a halt so often in october was a typo in the system that determined whether states had certified insurance companies to participate in the federal health care exchange .
+as a result of the spelling error , so few insurance plans were green-lighted that insurance shoppers started seeing ' fewer options than would be desired to promote consumer choice ' in a section of the group 's october 28 notes titled ` certification suppression updates , ' a meeting secretary recorded that ' -lsb- p -rsb- erhaps due to a misspelling in `` not recommended , '' there are errors in the certification suppression data .
+' it 's not clear how the phrase was mangled , but ` recommended ' is commonly misspelled with an extra letter ` c. ' ' -lsb- t -rsb- his misspelling was not recognized in the system , ' the notes continue , ` and it is not updating accurately as a result .
+' certification and suppression refer to the thumbs-up and thumbs-down rulings made on each health insurance

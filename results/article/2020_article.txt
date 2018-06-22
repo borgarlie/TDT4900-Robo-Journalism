@@ -1,0 +1,18 @@
+by .
+damien gayle .
+published : .
+08:00 est , 30 january 2013 .
+| .
+updated : .
+08:10 est , 30 january 2013 .
+the new pro version of microsoft 's surface tablet will come out of the box with nearly two-thirds of its 64gb storage already used up , it emerged today .
+set for its north american release next week , the $ 899 tablet computer will boot up with just 23gb of usable space , while its 128gb big brother will actually only have 83gb free .
+the revelation is an embarrassment for microsoft , with the lack of free space damaging claims its latest top of the range tablet could be a fully featured laptop replacement .
+not so spacious : microsoft 's surface pro tablet , which will ship with more than two-thirds of its 64gb storage space already used up by its operating system and pre-installed apps .
+and it compares badly with tablet rival apple 's freshly announced 128gb ipad , which is expected to ship with 115gb free for storing files and apps .
+the problem stems from the surface pro 's use of the full version of the windows 8 operating system , rather than the slimmed-down windows rt installed on its cheaper siblings .
+windows 8 alone takes up 20gb of space , but the os claims even more of the surface 's solid-state hard drive for a ` recovery partition ' to back up users ' data right there on their tablets .
+add to that the surface pro 's built-in apps and the trial version of office 2013 it ships with , and users of the 64gb version will find most of their devices already full .
+other tablets , including the ipad , the surface rt , and android-powered devices , run on specially slimmed down operating systems which dispense with much of the functionality of those found on laptop and desktop computers to save space .
+that means they are unable to run the same software as ` real ' computers and users must purchase apps that are specially designed for the tablet format .
+microsoft had accordingly made great shakes of the surface pro 's ability to run full windows versions of popular software packages , but the lack of space seems to contradict the company 's attempts to market the intel-powered

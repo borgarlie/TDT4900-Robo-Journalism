@@ -1,0 +1,2 @@
+dronestagram posts images drone strike locations from google maps satellite view to the popular photo-sharing service along with short summaries of what 's there .
+the service is the brainchild of london-based writer james bridle , who has earned world-wide reknown for his new aesthetic blog which aims to describe how now-ubiquitous computer networks change how we perceive the world .

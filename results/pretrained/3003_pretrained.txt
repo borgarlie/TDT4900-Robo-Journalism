@@ -1,0 +1,4 @@
+the $ 250 -lrb- # 168 -rrb- device recognises the electronic signature of different devices - such as kettles and washing machines .
+it recognises the home screen to an app , where users can keep an eye on their energy consumption and even control appliances through their phone .
+the neurio sensor is plugged into the house 's breaker panel , or circuit box .
+it measures both differential and current signals every split second and these signals are used to calculate power and energy consumption .

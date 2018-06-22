@@ -1,0 +1,22 @@
+by .
+daily mail reporter .
+published : .
+18:35 est , 14 december 2013 .
+| .
+updated : .
+18:36 est , 14 december 2013 .
+a motion-tracking device that can ` see ' through walls without using a camera could change the face of video gaming .
+researchers at massachusetts institute of technology have developed the 3d motion tracker which uses radio waves to mark a person 's location .
+the device can plot moves and even follow gestures , meaning that a person can switch a light off in a separate room just by raising their arm .
+scroll down for video .
+ground breaking : witrack can track movements and gestures , such as pointing at a lamp to switch it on , though walls without using cameras or wearable technology .
+using radio signals about 1,000 times less powerful than a smartphone , the witrack bounces off objects detected through a wall to pinpoint a person with 97 per cent accuracy .
+witrack relies on four antennae to plot movements .
+one sends radio waves and three receive them .
+an algorithm is then used to sift through readings caused by waves hitting household objects such as sofas .
+fadel adib , one of the researchers behind it , told extreme tech that the transmitted waves were ` structured in a particular way to measure the time from when the signal was transmitted until the reflections come back ' .
+the designers behind witrack envision it being used for video games and to control household appliances .
+plot : movements can be tracked though a wall , above , and followed on a computer in a separate room , below .
+with video game user , players would no longer have to remain in front of the computer , and could stalk enemies in hallways and launch ambushes from behind the sofa .
+it could also be used to help monitor elderly people who are at risk of falling , without an individual having to wear an alarm or put cameras inside their home .
+while it will be years before the device is ready for commercial release , it is already making its mark as being cheaper than other devices and also does away with the need of cameras and other wearable technology .

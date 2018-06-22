@@ -1,0 +1,5 @@
+# 36 starfish is a weight-activated sensor that fits to child 's car seat .
+it automatically pairs to parent 's iphone or android using bluetooth .
+when activated , starfish creates a ` geo-fence ' radius around itself .
+if the phone leaves the geo-fenced area , starfish will notify the parent .
+on average , one child dies in a hot car every nine days in the us .

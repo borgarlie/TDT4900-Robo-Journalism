@@ -1,0 +1,16 @@
+by .
+mark prigg .
+the federal communications commission has launched a major probe into why us consumers often suffer with slow internet connection while watching online video .
+the inquiry announced by fcc chairman tom wheeler will dissect the routes that video and other data travel to reach internet service providers such as comcast and verizon .
+netflix and other critics have accused the two internet service providers of deliberately slowing incoming traffic from websites unwilling to pay for a less congested entry point .
+fcc chairman tom wheeler today pledged to unravel the mystery behind the internet traffic jams bogging down the delivery of netflix videos and other online content .
+comcast and verizon contend netflix should bear some of the cost for handling the heavy traffic caused by its 36 million u.s subscribers watching video over high-speed internet connections .
+at peak viewing hours , netflix accounts for about one-third of the internet traffic in the u.s. , according to the research firm sandvine .
+the picture quality of netflix video , though , has been increasingly erratic during the past year at several major internet service providers , including comcast and verizon , which have a combined 30 million subscribers in the u.s. .
+while netflix has been streaming more smoothly at comcast since those two companies forged their partnership in february , some problems have still been occurring on verizon 's network .
+netflix ceo reed hastings has continued sniping at both comcast corp. and verizon communications , arguing they should be able to afford to deliver whatever online content that their subscribers want , given that their customers pay $ 50 to $ 80 per month for their internet service .
+netflix charges $ 8 to $ 12 per month for its internet video service .
+with the fcc inquiry , wheeler hopes to get a better understanding of how netflix and other websites are reaching the internet service providers through interconnection , or ` peering , ' arrangements .
+` the bottom line is that consumers need to understand what is occurring when the internet service they 've paid for does not adequately deliver the content they desire , especially content they 've also paid for , ' wheeler said in a statement .
+netflix 's most recent isp speed chart revealing the fastest and slowest providers .
+it has accused providers such

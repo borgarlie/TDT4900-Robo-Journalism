@@ -1,0 +1,2 @@
+scientists at a polish company that produce body armour systems are working to put a ` magic liquid ' that can harden on impact in their products .
+the liquid is called shear-thickening fluid -lrb- stf -rrb- , and does not conform to the model of newtonian liquids , such as water , in which the force required to move the fluid faster must increase exponentially , and its resistance to flow changes according to temperature .

@@ -1,0 +1,17 @@
+following the release of apple 's latest handsets , a wave of people flocked to sell their old models in order to get their hands on the new ones , on sites such as ebay and craigslist .
+but buying second-hand devices in this way can be risky , especially if you 're unsure if the handset on offer has been stolen or not .
+apple has released a tool that now lets potential buyers check to see if the activation lock on the handset is switched on , and whether the device needs a password to use .
+apple 's online tool -lrb- pictured -rrb- lets buyers check the status of a second-hand device .
+if activation lock is enabled , it means the handset is locked and needs a password to access .
+this suggests the owner of the phone has not removed these security steps , which in turn suggests the seller may not be the legal owner .
+if an activation lock is enabled , it suggests the owner of the phone has not removed the security steps needed to access the device .
+it would , therefore , be unusual for a person selling the handset to leave it locked and protected -- meaning there is a chance it is stolen , or does n't belong to the person selling it .
+activation lock was added to apple 's find my iphone feature in ios 7 .
+it is designed to prevent anyone else , other than the owner , from using an iphone , ipad , or ipod touch if it is lost or stolen .
+the feature is automatically enabled when find my iphone is switched on .
+to access a phone with activation lock enabled , users will need a password and the connected apple id .
+to enable find my iphone , go to settings , icloud , sign in with an apple id and select turn on find my iphone .
+if the activation lock is switched off , buyers can assume that the device is being sold legally .
+or , at the very least , it has been wiped and the previous owner 's details removed .
+to check a phone 's status , buyers enter the imei or serial number of the handset into the online tool .
+these numbers are listed in the phone 's settings

@@ -1,0 +1,2 @@
+students at oregon state university and intel have devised a ` smart ' bike helmet -lrb- shown -rrb- that collects data during a crash .
+it also records the rider 's distance , speed and direction at all times .

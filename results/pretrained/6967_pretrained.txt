@@ -1,0 +1,3 @@
+the software could allow google to charge more for advertisements .
+it will likely raise fresh concerns over privacy with google , which has a chequered history of handling its users data .
+the software works by sending an anonymous ` click id ' to the advertiser when somebody clicks on an advert .

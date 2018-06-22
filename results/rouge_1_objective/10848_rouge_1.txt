@@ -1,0 +1,3 @@
+device is an improved version of mri -lrb- magnetic resonance imaging -rrb- which is currently used by doctors to pick up tumours , multiple sclerosis , heart disease and other illnesses .
+it uses mathematical formulas called pattern-recognition algorithms to figure out in a few seconds if a patient has anything to worry about .
+each body tissue and disease has a unique fingerprint that can be used to quickly diagnose problems , say the scientists .

@@ -1,0 +1,20 @@
+it might look like a quirky plastic model of an ancient egyptian pyramid , but this model is in fact a 3d ` acoustic cloak ' , created using just a few perforated sheets of plastic .
+the device reroutes sound waves to create the impression that both the cloak and anything beneath it are not there .
+a refined version of the technology could one day be used for sonar avoidance and to refine noise in concert halls .
+the ` invisible ' pyramid : the world 's first 3d acoustic cloak -lrb- pictured -rrb- was created by u.s. engineers using just a few perforates sheets of plastic and a great deal of number crunching .
+the device reroutes sound waves to create the impression that both the cloak and anything beneath it are not there .
+the engineers used metamaterials - a combination of materials with special light-scattering qualities ; in this case in repeating patterns - to achieve unnatural properties .
+the pyramid is constructed using plastic plates with a repeating pattern of holes that are stacked on top of one another .
+its design means that sound waves can be manipulated by plastic and air .
+the cloak alters the sound waves ' trajectory to match what they would look like had they had reflected off a flat surface .
+because the sound waves are not .
+penetrating the pyramid , they are travelling a shorter distance , which .
+in turn affects the wave 's speed .
+the device then reroutes these slower .
+sound waves to create the impression that both the cloak and anything .
+beneath it are not there .
+engineers from duke university in durham , north carolina , claim that unlike other efforts , the acoustic cloaking device works in all three dimensions , no matter which direction the sound is coming from .
+` the particular trick we 're performing is hiding an object from sound waves , ' said steven cummer , professor of electrical and computer engineering .
+` by placing this cloak around an object , the sound waves behave like there is nothing more than a flat surface in their path , ' he explained .
+to achieve the effect , professor cummer and his colleagues used metamaterials , which are materials with light-scattering properties .
+his device uses a combination of materials in repeating

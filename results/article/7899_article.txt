@@ -1,0 +1,32 @@
+china has built the world 's fastest supercomputer - almost twice as fast as the previous u.s. record holder - with speeds equivalent to more than 338 million normal pcs .
+the tianhe-2 , which means milky way 2 , was developed by the national university of .
+defense technology in china 's changsha city and is capable of .
+sustained computing of 33.86 petaflops per second .
+that 's the equivalent of 33,860 trillion calculations per second , with the average everyday computer performing around 100 million per second -lrb- although some are faster and others may be slower -rrb- .
+china 's supercomputer tianhe-2 has been declared the top500 fastest supercomputer title .
+it was developed by the country 's national university of defense technology and is capable of operating at the equivalent of 33,860 trillion calculations per second .
+china 's tianhe-2 supercomputer , which means milky way 2 , knocked the u.s. department of energy 's titan machine off the number one spot .
+the chinese government sponsored the project and did n't expect the computer to be fully functional until 2015 .
+1 .
+tianhe-2 - china .
+2 .
+titan - u.s. 3 .
+sequoia - u.s. 4 .
+k computer - japan .
+5 .
+mira - u.s. 6 .
+stampede - u.s. 7 .
+juqueen - germany .
+8 .
+vulcan - u.s. 9 .
+supermuc - germany .
+10 .
+tianhe-1a - china .
+the results were published in the top500 report , an official bi-annual listing of the world 's faster supercomputers .
+according to this list , the u.s , dominates the top ten with computers in second , third , fifth , sixth and eighth place .
+japan 's k computer is in fourth spot .
+germany 's juqueen and supermuc are in seventh and ninth place , while tianhe-2 's predecessor , tianhe-1a , is tenth .
+the tianhe-1a was first in november 2010 and japan 's k computer overtook in 2011 .
+each computer on the list was tested against the linpack benchmark .
+the linpack benchmark is used as a ` yardstick of performance ' and was chosen because it is widely used across all relevant systems .
+the chinese government said it intends to install the tianhe-2 equipment at the national supercomputer centre in guangzhou , china where it will be used for `

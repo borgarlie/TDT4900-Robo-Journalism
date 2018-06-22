@@ -1,0 +1,6 @@
+texas-based cartographer used software to ` ping ' global web devices .
+using this data he drew a map demonstrating the internet 's global reach .
+signal was sent to routers rather than individual devices .
+red areas show parts of the world with the most connected devices , while black areas show regions where few people have access to the internet .
+map is n't complete because of censorship and security restrictions .
+it 's thought china , for example , has more internet connected devices than shown on the map .

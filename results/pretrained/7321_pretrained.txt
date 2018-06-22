@@ -1,0 +1,3 @@
+communication experts have devised a system that combines 360 ° cameras with virtual reality headsets to make video calls fully immersive .
+it combines the giroptic 360cam and an oculus rift headset .
+it is routed through the recipient 's 360cam and footage from the camera is then streamed to the caller 's oculus rift .

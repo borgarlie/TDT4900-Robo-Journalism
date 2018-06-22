@@ -1,0 +1,15 @@
+you may be mystified as to why your phone 's battery can drain in a matter of hours .
+and while mobiles have a large number of adjustable settings which can be tweaked to prolong battery life , they are often tricky to understand .
+now there 's a free app that offers users personalised advice about how to boost their phone 's battery life .
+a free ios and android app called carat offers frustrated smartphone users personalised advice to boost their phone 's battery life .
+a screenshot showing distribution information is shown left , and a j-score , which indicates how a device 's battery life compares with others running carat , is shown right .
+called carat , it uses crowdsourced measurements to work out how much of an impact certain settings and apps are having on a specific battery , before advising users what to do .
+after using their phone normally for around a week , people who download the app will start to receive personalised recommendations for improving battery life .
+this is because the app intermittently takes measurements about the device and how it is being used .
+these measurements are sent to carat 's servers and ` thrown into a statistical stew ' so that the measurements can be used as a benchmark to compare how power-hungry a certain device is .
+carat uses crowd-sourced measurements -lrb- illustrated -rrb- to work out how much of an impact certain settings are having on the battery and what users can do about it .
+users who download the app can use their phone normally , and after a week , will start to receive personalised recommendations for improving their battery life .
+carat analyses a specific phone 's energy use , drawing upon crowd sourced information .
+it offers users recommendations on how to boost the battery life of their device .
+for example , it might point out that twitter is using an unusually large amount of power compared to on other phones , indicating that either an individual is hooked on the social media app , or that it could contain an energy-sapping bug .
+an ` action list ' is shown on the main screen of the app , with instructions such as ` kill app x ' or ` upgrade os ' along with an estimate of how much

@@ -1,0 +1,18 @@
+by .
+sarah griffiths .
+learning to read braille - the tactile writing system used by people who are blind and visually impaired - is notoriously difficult .
+to make this a little easier , researchers have designed vibrating gloves that help people learn to read and write braille with minimal effort .
+vibrating motors at the knuckle of each finger in the gloves buzz to tell a wearer to press a corresponding key , and the system tells them which letter they are typing .
+life could get a little easier for visually impaired people as scientists from georgia tech have created vibrating gloves -lrb- pictured -rrb- which have help them learn to read braille more easily .
+the process is based on a technique known as passive haptic learning , and means wearers can learn braille even if they 're not paying full attention .
+and the gloves even teach the wearer when they are not paying attention .
+` the process is based on passive haptic learning -lrb- phl -rrb- , ' said thad starner , a georgia tech professor who is also the technical lead on google 's project glass .
+` we 've learned that people can acquire motor skills through vibrations without devoting active attention to their hands .
+' professor starner and phd student caitlyn seim put the gloves to the test to examine how well this technique can be used to teach braille .
+each participant wore a pair of gloves with tiny vibrating motors stitched into the knuckles .
+the motors vibrated in a sequence that corresponded with the typing pattern of a pre-determined phrase in braille , while audio cues let the users know the braille letters produced by typing that sequence .
+nearly 40 million people worldwide are blind , but because braille -lrb- stock image pictured -rrb- lessons are widely neglected in schools , only 10 per cent of those who are blind learn the language .
+scientists at georgia tech stitched tiny vibrating motors into the knuckles of each finger in the gloves .
+when one of the motors vibrates , the wearer presses a corresponding key and the system tells them which letter they are typing .
+the gloves were tested on people who had never learned braille before .
+after an initial lesson , participants were distracted for 30 minutes by playing a game and

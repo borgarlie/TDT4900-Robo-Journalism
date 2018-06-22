@@ -1,0 +1,5 @@
+washington-based microsoft has released a preview of skype translator .
+it lets people of different languages talk to each other on video calls .
+the software translates one language into text and speech of another .
+for now only spanish and english are available - and you need to have a windows 8.1 device .
+but eventually more than 40 languages will be supported - including even klingon from star trek .

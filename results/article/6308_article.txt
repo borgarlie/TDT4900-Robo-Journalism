@@ -1,0 +1,30 @@
+by .
+sarah griffiths .
+published : .
+11:54 est , 6 january 2014 .
+| .
+updated : .
+13:34 est , 6 january 2014 .
+if you have ever wondered how famous people through the ages might be connected to one another , a new interactive map could cure your curiosity .
+kindred britain , a network of nearly 30,000 individuals mostly made up of britons , explains how charles dickens is connected to napoleon bonaparte and how isaac newton is linked with jane austen , as well as a countless other connections .
+it looks at relationships of blood and marriage in a bid to highlight britain 's history as a giant family affair .
+kindred britain , a network of nearly 30,000 individuals explains how charles dickens is connected to napoleon bonaparte and how isaac newton is linked with jane austin , as well as a countless other connections .
+by dragging two nodes , representing two .
+british luminaries , on top of one another , people can immediately see how .
+the two individuals differ in terms of historical time and lifespans .
+any professional similarities are also shown .
+when the node 's outer circle turns .
+green , users can create a familial path between the two people , .
+which shows marriages and family lines .
+this .
+information can be viewed as a type of family tree , to highlight .
+different generations .
+a ` plot ' view additionally shows the nodes by year of .
+birth and year of death to show how the individuals compare on a .
+chronological scale .
+researchers at stanford university , california , created the interactive database to show the ` profoundly and unusually familial nature of british society and culture .
+' it also demonstrates how famous britons are also connected to international historical figures , including george washington and napoleon bonaparte .
+the scientists said that if it were a book , kindred britain would measure at least a foot in width .
+the content of the online project ' is made up of three key parts that show an individual 's network , timeline and geography .
+users can drag and drop ` nodes ' representing famous people onto one another to explore how they are connected to each other .
+historical luminaries include prime ministers , novelists and

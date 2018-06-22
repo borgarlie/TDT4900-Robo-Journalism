@@ -1,0 +1,19 @@
+by .
+sarah griffiths .
+it has only just been announced that scientists are working on printing a heart using a patient 's own cells and now a 3d model of a cancerous tumour has been created using a 3d printer .
+the model , which consists of a scaffold of fibrous proteins coated in cervical cancer cells , provides a realistic 3d representation of a tumour 's environment .
+it is hoped that it could help in the discovery of new drugs and cast new light on how tumours develop , grow and spread throughout the body .
+realistic : a 3d model of a cancerous tumour has been created using a 3d printer .
+the model , which consists of a scaffold of fibrous proteins coated in cervical cancer cells , has provided a realistic 3d representation of a tumour 's environment .
+3d printed hela cells in tumour-like configurations are pictured .
+3d printing is already being used in medicine .
+researchers have used the technology to make splints , valves and even a human ear .
+so far , the university of louisville in kentucky has printed human heart valves and small veins with cells .
+the team has also successfully tested the tiny blood vessels in mice and other small animals .
+professor williams , of the cardiovascular innovation institute , believes scientists will be able to print parts and assemble an entire heart in three to five years .
+the 3d printer uses a mixture of a gel and living cells to gradually build the shape of a blood vessel -- and one day a heart .
+the idea is that eventually , the cells would grow together to form the tissue .
+in the future it could take just three hours to print the whole structure of the heart .
+a group of researchers in china and the u.s. created a model of a grid structure that measures 1cm squared and is made from gelatine , alginate and fibrin to recreate the fibrous proteins that make up the extracellular matrix of a tumour .
+the grid structure is coated in hela cells - a unique , ` immortal ' cell line that was originally derived from a cervical cancer patient in 1951 .
+due to the cells ' ability to divide indefinitely in laboratory conditions , the cell line has been used in

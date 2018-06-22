@@ -1,0 +1,4 @@
+firebox 's musical beepegg plays a song when egg is cooked .
+three versions - original , disco diva , rock god - play different songs .
+each plays a different song to alert to different stages of cooking .
+costs # 14.99 .

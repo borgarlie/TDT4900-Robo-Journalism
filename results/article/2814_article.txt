@@ -1,0 +1,16 @@
+british cyber-police have shut down a virus network which infected millions of computers with malicious software to steal people 's passwords and banking information .
+the ` malware ' was spread by windows users opening links sent out via phishing emails and social networks , inadvertently downloading a virus onto their computers .
+seven servers located across europe which used by the criminals to control infected computers were shut down overnight , including one situated in gosport , hampshire .
+virus : the ramnit malware , spread on microsoft windows computers , has been brought down by authorities .
+a total of 3.2 million computers have fallen prey to the ` ramnit ' virus over the past three years , 33,000 of which were in the uk .
+the operation to bring down the network was led by the national crime agency 's national cyber crime unit -lrb- nccu -rrb- , along with authorities in italy , germany and the netherlands .
+a spokesman for the nca said that the botnet spread malware via seemingly trustworthy links sent out on phishing emails or social networking websites .
+he said : ` if users running windows operating systems clicked on the links , the malware would be installed , infecting the computer .
+` infected computers would then be under the control of criminals , enabling them to access personal or banking information , steal passwords and disable antivirus protection .
+' criminals have used the network to steal money from bank accounts , according to the agency .
+operation : the national crime agency led the investigation into the network of infected computers .
+none of the people responsible for the virus network have been arrested , according to the nsa , but they added that the investigation is still ongoing .
+despite the operation to dismantle the cyber-conspiracy , officials have urged web users to take care over clicking on unfamiliar links which are sent to them .
+the government is offering free software which can detect whether a computer has been infected and remove the virus if necessary .
+authorities were alerted to the threat from ramnit by microsoft after the us-based computer giant noticed a spike in virus activity .
+paul gillen , from the european cybercrime centre , said : ` we worked together to shut down the command and control servers for the network in

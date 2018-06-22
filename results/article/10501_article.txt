@@ -1,0 +1,17 @@
+in your social circles , there will likely be friends you love spending time with , those who calm you down , and others that you know are a bad influence .
+and now an app can reveal exactly how these different people make you feel , including which friends you should cut out of your life for good .
+called pplkpr , pronounced ` people keeper ' , it syncs with a heart rate monitor to track and log subtle changes in emotional state when you 're around these people .
+scroll down for video .
+the pplkpr app -lrb- right -rrb- syncs with a bluetooth heart rate monitor -lrb- left -rrb- to track emotions .
+when the monitor spots a change in heart rate , the app alerts the user .
+it asks the wearer to explain how they 're feeling and who they 're with , and over time , an algorithm learns the difference between the varying heart rates .
+and in doing so , it can even tell you which friends could be damaging your health .
+the free ios app was created by brooklyn-based artists kyle mcdonald and lauren mccarthy , and was recently tested on a group of students at carnegie mellon university .
+pplkpr pairs up with any bluetooth-enabled heart rate monitor , although the students were given mio devices during the test .
+from this list , the free ios app ranks friendships based on different emotions -lrb- left -rrb- .
+the app can then reveal which friends should be avoided during times of stress , it can block people who make the wearer anxious -lrb- right -rrb- , or send text messages to people who make the wearer happy or calm .
+using gps , the app also notifies wearers when they change locations , to ask if they 've just left , or are about to meet someone .
+the measurements are based on a metric called ` heart rate variability ' -lrb- example pictured -rrb- , where subtle changes in heart rhythm signal changes in an emotional state .
+this is fed into an algorithm .
+called pplkpr , or people keeper , it syncs with a heart rate monitor to track subtle changes in emotional state .
+pplkpr notifies the wearer when it detects heightened emotion , and asks them to report how they 're feeling .

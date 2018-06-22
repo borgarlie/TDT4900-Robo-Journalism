@@ -1,0 +1,26 @@
+by .
+victoria woollaston .
+published : .
+06:27 est , 23 august 2013 .
+| .
+updated : .
+09:26 est , 23 august 2013 .
+a pair of procrastinators have come up with a shocking way to tackle their facebook habits - a keyboard device that electrocutes them when they spend too long on the site .
+the pavlov poke gadget sits under the wrist of a computer user and monitors which sites and applications are used .
+if the user is meant to be working , but keeps getting distracted by facebook , for example , or spends too long chatting on forums , the device sends an electric shock .
+scroll down for video .
+pavlov poke , pictured , connects to a keyboard , monitors which sites are visited and gives users electric shocks when they procrastinate too much .
+it was created by doctorates from the massachusetts institute of technology who wanted to reduce the amount of time they spent on sites such as facebook and twitter .
+pavlov poke is made of an arduino board - a board that can be used to develop applications and service - that sits under the wrist of a user .
+the board is connected to a computer by usb .
+users must install application logging software that is designed to monitor and track which programs and sites are used .
+the device connects to this software - the developers use the apple mac ui inspector - and tracks usage .
+if the users spend too long on a site , a warning message will appear on the screen .
+if they continue to use it , the board will electrocute them .
+it was developed by ph.d students robert r. morris and dan mcduff at the massachusetts institute of technology .
+a video explaining the concept of the device claimed the pair ` wasted 50 hours a week procrastinating online ' and they needed a way of tackling this .
+pavlov poke uses what mcduff calls ` counter-conditioning ' techniques .
+it was named after ivan pavlov , famous for developing the theory of conditioning in dogs to make them behave a certain way .
+according to the video , the shock is unpleasant but it 's not dangerous .
+pavlov poke is an arduino board - a .
+board that can be used to develop

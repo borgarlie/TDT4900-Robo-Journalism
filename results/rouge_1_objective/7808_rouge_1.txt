@@ -1,0 +1,4 @@
+microsoft 's next-generation kinect sensor is able to detect and monitor a person 's heart rate from around four feet away - without touching them .
+the camera can then determine how many beats per minute the heart needs to make in order to reach that speed .
+microsoft unveiled its kinect sensor as part of its xbox one event in june .
+the sensor will be sold with the new console and both are available from midnight at stores across the uk .

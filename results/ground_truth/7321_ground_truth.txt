@@ -1,0 +1,5 @@
+360 ° video calling with virtual reality system was created by summit tech .
+it uses the giroptic 360cam with a connected oculus rift headset .
+when a call is received , it is routed through the recipient 's 360cam .
+footage from the camera is then streamed to the caller 's oculus rift .
+this makes it possible to have an immersive view of the place they are calling , as well as share the vr experience with others in real-time .

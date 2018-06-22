@@ -1,0 +1,23 @@
+by .
+daily mail reporter .
+published : .
+04:26 est , 30 december 2013 .
+| .
+updated : .
+13:23 est , 30 december 2013 .
+a russian hacker took over a bbc computer server before trying to sell access to the system on christmas day .
+it is understood the corporation 's security team responded to the issue three days later on saturday but now believes it has secured the site .
+it is not known whether the hacker stole data or caused any damage during the attack .
+a hacker is understood to have taken over a computer server at the bbc and tried to sell access to the site on christmas day -lrb- pictured is the bbc 's broadcasting house , in london -rrb- .
+the hacker is understood to have compromised a server that manages a password-protected website , typically used to manage the transfer of large data files over the internet .
+a bbc spokesman told reuters : ` we do not comment on security issues .
+' us cybersecurity firm hold security llc first identified the incident .
+the company monitors underground cyber-crime forums in search of stolen information .
+alex holden , hold security 's founder and chief information security officer , told reuters how the firm 's researchers spotted a notorious russian hacker , known online as ` hash ' and ` rev0lver ' attempting to sell access to the server on christmas day .
+the hacker offered proof he had infiltrated the site by showing files which could only be accessed by somebody controlling it , mr holden said .
+he said the firm had found no evidence any conversations led to a deal or that data was stolen from the bbc .
+it is not known whether the hacker stole data or caused any damage during the attack -lrb- file picture -rrb- .
+it is common for hackers to buy and sell access to compromised servers on underground forums .
+hackers may use such infiltrations to gain further access to the victim organisation 's systems .
+compromised servers can also be used to set up command-and-control centers for cyber-crime operations known as botnets , run spam campaigns or launch denial of service attacks to knock websites off line .
+justin clarke , a principal consultant for the cybersecurity firm cylance inc , told reuters while ` hash '

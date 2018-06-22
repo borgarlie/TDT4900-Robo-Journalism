@@ -1,0 +1,3 @@
+researchers at palo alto networks who detailed their findings in a research paper .
+wirelurker monitors ios devices , including ipods , iphones and ipads , connected to a mac via usb .
+the virus begins by infecting the mac os software , through malicious files or links .

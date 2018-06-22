@@ -1,0 +1,3 @@
+the ultrabike unit has sensors to give the rider constant directional feedback of obstacles ahead and at each side , via vibrating buttons beneath each thumb .
+the device , which is detachable and can be fitted onto the handlebars of any bike , was designed by electronics engineer and entrepreneur paul clark .
+it uses the same obstacle detection capability in the award winning ultracane , an electronic mobility aid that is used by people with sight loss all over the world .

@@ -1,0 +1,5 @@
+flow is a small programmable wireless controller created by engineers and computer scientists in berlin , germany .
+it is designed to be more sensitive and flexible than a computer mouse .
+gadget can be programmed with shortcuts for more than 30 applications .
+users could control apps with the flick of a wrist , or by tapping the device .
+gadget is available to pre-order via indiegogo from $ 99 -lrb- # 63 -rrb- .

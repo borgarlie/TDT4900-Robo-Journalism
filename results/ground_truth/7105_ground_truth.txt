@@ -1,0 +1,5 @@
+the chin strap is made from a smart piezoelectric material known as pfc .
+pfc is made up of integrated electrodes and adhesive polymer .
+it produces electric charge when it stretches and is subjected to stress .
+the maximum amount of power harvested was 18 microwatts .
+but canadian researchers are working on increasing this output significantly .

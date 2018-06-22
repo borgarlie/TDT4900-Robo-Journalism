@@ -1,0 +1,6 @@
+massachusetts institute of technology researchers have developed a method to detect hazardous gases and pollutants .
+they modified nfc chips to make them detect things in their environment .
+when a phone came near it could then be given the information .
+the technology could be improved to send alerts over distances .
+for example , when vegetables in your fridge go off , the sensor could trigger a device that sends a reminder to your phone to get more food .
+it could also be used to detect explosives in packages .

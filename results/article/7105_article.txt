@@ -1,0 +1,15 @@
+chatting on your phone drains its battery , but in the future , all this talk time could actually be used to boost its power .
+researchers from canada have created a chin strap that harvests energy from jaw movements , including chewing and talking .
+it is hoped the device could soon be used to power electronic devices , such as hearing aids , cochlear implants , and even phones .
+the chin strap , -lrb- setup pictured -rrb- is made from a smart piezoelectric material known as pfc , which consists of integrated electrodes and adhesive polymer .
+it produces an electric charge when it stretches , and is subjected to mechanical stress .
+the strap is made from a smart material known as pfc. pfc is a type of piezoelectric material made up of integrated electrodes , and an adhesive polymer matrix .
+the material is able to produce an electric charge when it stretches , and is subjected to mechanical stress .
+the strap is made from a smart material known as pfc. pfc is a type of piezoelectric material made up of integrated electrodes , and an adhesive polymer matrix .
+the material is able to produce an electric charge when it stretches and is subjected to mechanical stress .
+to ensure maximum performance , the chin strap was fitted snugly to the user , so when the user 's jaw moved it caused the strap to stretch .
+to test the performance of the device , the subject was asked to chew gum for 60 seconds while wearing the head-mounted device .
+the maximum amount of power that could be harvested from the jaw movements was around 18 microwatts , but researchers claim that a realistic output is closer to 10 microwatts .
+this is still just a fraction of the energy used in a typical phone charger , which uses between 10 and 16 watts per day - but the strap is still in an experimental phase .
+in their study , researchers from sonomax-éts industrial research chair in in-ear technologies -lrb- critias -rrb- in montreal , canada , created an energy harvesting strap made from a single layer of pfc and attached it to a pair of ear muffs using a pair of elastic side straps .
+to ensure maximum performance , the chin strap was fitted snugly to the user ,

@@ -1,0 +1,17 @@
+sommeliers are able to identify hundreds of flavours in wine , from woody notes to citrus bursts and chocolate undertones .
+but now a nanosensor could be threatening their livelihood .
+dubbed ` mini-mouth ' , the sensor mimics the reaction that wine creates on a person 's tongue to determine how the alcohol tastes and , in particular , how astringent it is .
+the nanosensor , dubbed ` mini-mouth ' -lrb- pictured -rrb- uses salivary proteins to mimic the reaction wine creates on a human tongue .
+it does this by measuring the molecules and chemical compounds .
+from this , it determines the astringency - and overall flavour - of wine .
+the technology was created by phd student joana guerreiro from aarhus university in denmark .
+vineyard owners turn grapes into wine using a series of highly-controlled processes , designed to bring out the desired flavour in the product that ends up on the shelves .
+an important part of the taste is known in wine terminology as astringency , and it is characterised by the dry sensation drinkers get in their mouth when they drink red wine , in particular .
+the tannins in the wine bring out this sensation , which is often likened to biting into an unripe banana .
+the sensor is a small plate coated with nanoscale gold particles .
+on this plate , the researchers simulate what happens in a person 's mouth by first adding some of the proteins contained in saliva .
+after this they add the wine .
+the gold particles on the plate act as nano-optics and make it possible to focus a beam of light below the diffraction limit , making it possible to precisely measure something that is very small - down to 20 nanometres .
+this makes it possible to study and follow the proteins , and to see what effect the wine has , and ultimately see the extent to which the small molecules have to bind together for the clumping effect on the protein to be set off .
+these are mixed with lots of tastes in the wine and feel both soft and dry .
+ms guerreiro and her fellow researchers at the interdisciplinary nanoscience centre -lrb- inano -rrb- , aarhus university , have now developed a nanosensor capable of measuring the effect of astringency in a mouth when people

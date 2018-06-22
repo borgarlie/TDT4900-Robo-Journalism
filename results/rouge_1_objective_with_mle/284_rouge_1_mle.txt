@@ -1,0 +1,5 @@
+stephen hawking and elon musk are among the eminent scientists who fear that intelligent robots could be mankind 's downfall .
+the # 1.4 million project will run until 2018 .
+the nuclear , aerospace , manufacturing and agricultural industries are starting to develop autonomous systems that can carry out tasks that are either too difficult or too dangerous for humans .
+researchers at the universities of sheffield , liverpool and the west of england , bristol have set up a new project to address concerns around these new technologies .
+the project will ` develop formal verification techniques for tackling questions of safety , ethics , legality and reliability across a range of autonomous systems '

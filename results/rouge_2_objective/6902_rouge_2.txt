@@ -1,0 +1,4 @@
+officials at the software giant and the us national security agency collaborated to get around the company 's own encryption programmes , according to documents seen by the guardian newspaper .
+the paperwork , provided by whistleblower edward snowden , apparently demonstrates the level of co-operation between silicon valley and the intelligence services over the past three years .
+microsoft helped the nsa intercept web chats and e-mail addresses including hotmail and outlook accounts .
+the company worked with the fbi to allow the nsa easier access via the prism program to the cloud storage system skydrive , which has more than 250million users .

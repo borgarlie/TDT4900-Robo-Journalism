@@ -1,0 +1,5 @@
+facebook paper is a news curation app that will launch on 3 february .
+it pulls in news stories , photos and videos from a facebook news feed .
+all stories are displayed on a customisable picture-led grid .
+users can also read stories by browsing content from partner publications .
+it additionally includes many features found on the facebook app - making the original somewhat redundant .

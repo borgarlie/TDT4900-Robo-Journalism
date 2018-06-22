@@ -1,0 +1,23 @@
+by .
+kerry mcdermott .
+published : .
+03:08 est , 22 june 2013 .
+| .
+updated : .
+03:21 est , 22 june 2013 .
+british eavesdropping agency gchq has secretly accessed fibre-optic cables carrying huge amounts of internet and communications data , according to documents disclosed by whistleblower edward snowden .
+the agency is able to tap into and store data - including phone calls and e-mails between innocent people - from the cables for up to 30 days so it can be analysed under an operation codenamed tempora , the guardian reported .
+the cheltenham-based agency would not comment on intelligence matters but insisted it was ` scrupulous ' in complying with the law .
+whistleblower : gchq has secretly been tapping into and storing internet and communications data via fibre optic cables , according to edward snowden .
+the information is the latest leak from mr snowden , the nsa whistleblower responsible for a string of disclosures about u.s. intelligence operations .
+the newspaper claimed operation tempora had been running for 18 months and gchq and the nsa are consequently able to access vast quantities of communications between entirely innocent people as well as targeted suspects .
+it means the agency has the ability to sift through everything from an individual 's phone calls to their internet search history and even the content of their e-mails and facebook entries .
+the newspaper said there were two .
+principal components to the agency 's surveillance programme , called .
+mastering the internet and global telecoms exploitation .
+it claimed the data was shared with the organisation 's u.s. counterpart the national security agency -lrb- nsa -rrb- .
+mr snowden , who fled the us for hong kong after deciding to reveal the nsa 's secrets , told the guardian he wanted to expose ` the largest programme of suspicionless surveillance in human history ' .
+` it 's not just a u.s. problem .
+the uk has a huge dog in this fight , ' he said .
+` they -lrb- gchq -rrb- are worse than the u.s. ' the guardian reported that gchq lawyers told u.s. counterparts there was a ` light oversight regime ' in britain compared with america .
+yet the leaked documents reveal britain has developed the technical capacity to access the cables that carry the world 's communications and process the

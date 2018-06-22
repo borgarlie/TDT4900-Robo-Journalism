@@ -1,0 +1,18 @@
+scan : an improved version of mri can spot the earliest stages of life-threatening diseases , researchers have said .
+pictured is a doctor helping a patient with an mri scan .
+a new scanner can spot the earliest stages of life-threatening diseases including cancers in seconds , researchers say .
+the early detection could see the disease picked up when they are at their most treatable .
+the device is an improved version of mri -lrb- magnetic resonance imaging -rrb- which is currently used by doctors to pick up tumours , multiple sclerosis , heart disease and other illnesses .
+at present the amount of detail that can be probed is limited but mrf -lrb- magnetic resonance fingerprinting -rrb- can collect a vast amount of information in one measurement .
+it uses mathematical formulas called pattern-recognition algorithms to figure out in a few seconds if a patient has anything to worry about .
+each body tissue and disease has a unique fingerprint that can be used to quickly diagnose problems , say the scientists .
+by using their technology to look for different physical properties simultaneously they differentiated white and grey matter from cerebrospinal fluid in the brain in about 12 seconds .
+they promise to do this much quicker in the near future and believe an mri scan will be standard procedure in annual check-ups .
+a full-body scan lasting only minutes would provide far more information , making diagnostics cheap .
+dr mark griswold , professor of radiology at case western reserve school of medicine , in ohio , said : ` the overall goal is to specifically identify individual tissues and diseases , to hopefully see things and quantify things before they become a problem .
+` but to try to get there we 've had to give up everything we knew about the mri and start over .
+' mri is a radiology technique which uses magnets , radio waves and a computer to produce a range of images of the body 's tissues and structures .
+treatable : the early detection could see diseases picked up when they are at their most treatable .
+pictured is a human cancer cell .
+mrf can obtain much more information with each measurement than a traditional mri .
+prof griswold , who spent three years developing it , likens the difference to a pair of choirs .

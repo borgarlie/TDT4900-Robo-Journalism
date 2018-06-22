@@ -1,0 +1,4 @@
+the software will be widely available in the autumn , at the same time the iphone 6 is expected to launch , meaning the much-rumoured handset could finally end apple 's battery woes .
+a presentation slide shown at apple 's developer conference by senior vice president of software engineering , craig federighi revealed ios 8 will monitor battery usage by app .
+android has had a similar feature for years .
+by monitoring which apps use the most power , apple users will be able to keep a closer eye on their battery life and know which services to close .

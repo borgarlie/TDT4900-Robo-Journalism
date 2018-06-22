@@ -1,0 +1,2 @@
+emu app uses artificial intelligence to learn behaviours and fine tune suggestions in real time .
+emu is similar to google now because it predicts what users want to do next , and offers relevant help , but it goes one step further .

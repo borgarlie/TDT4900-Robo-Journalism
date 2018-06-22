@@ -1,0 +1,18 @@
+finland 's largest airport will be the first in the world to track passengers ' movements in real-time - from the car park to the departure gate .
+dozens of sensors throughout helsinki airport will automatically pinpoint the location of mobile phones with wifi setting turned on - as part of a plan that is drawing criticism from privacy advocates .
+the system , which aims to monitor crowds and eliminate bottlenecks at security checkpoints or shopping areas , will send alerts to passengers if their departure times or gates change .
+passengers at helsinki airport will soon be monitored by mobile phone if they leave their wifi turned on .
+the international airport , which is operated by state-owned finavia and accommodates 15 million fliers a year , estimates 60 to 70 per cent of all visitors will leave their wifi turned on once the system is up and running by the end of the year .
+finavia and walkbase , a finnish company that developed the technology , insist the system is secure and does n't store or reveal any personal data belonging to the user or owner of the mobile device .
+tuomas wuoti , ceo and co-founder of walkbase , told bloomberg passengers ' details will not be put at risk .
+however , privacy watchdogs are not entirely convinced .
+antti tikkanen , director of security response at software maker f-secure , told bloomberg : ` the fact that my movements are tracked is a scarier thought than someone knowing which websites i visit .
+' airport officials insist the system does not store or reveal the personal information of mobile phone users .
+he added : ' i have a hard time believing location tracking is only left at statistics when the same technology makes so many other things possible .
+' finavia says its system has clear benefits for travellers and will transform helsinki airport into a technologically-advanced ` smart airport ' thanks to the ability to manage crowds .
+the system .
+uses nearly 300 small devices , including ibeacons and wifi routers , .
+which will discreetly monitor smartphone signals either passively or .
+with an app-based opt-in .
+about 150 white boxes will collect the unique identifier number , or mac address , from devices searching for wifi networks .
+retailers inside the airport can use the technology to notify

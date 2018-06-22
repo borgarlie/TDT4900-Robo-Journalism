@@ -1,0 +1,17 @@
+it seems phone batteries always die at the same moment you need to make an important call .
+but while shouting at your mobile in frustration might seem pointless , a new gadget could soon mean your screams wo n't be in vain .
+researchers in london have created a new technology that uses sound , such as chants at a football ground or chatter in a coffee shop , to charge up mobile phones .
+scroll down for video .
+while shouting at your mobile in frustration might seem pointless , a new gadget could soon mean your screams wo n't be in vain .
+researchers in london have created a new technology that uses sound , such as chants at a football ground or chatter in a coffee shop , to charge up mobile phones .
+their prototype device , which is about the size of a mobile phone , uses zinc oxide to convert vibrations caused by sound into electricity .
+the invention was inspired by previous research at queen mary university of london -lrb- qmul -rrb- , which found playing pop and rock music improved the performance of solar cells .
+this was because the sound vibrations triggered the movement of material in the solar cell that caused it to improve efficiency by up to 40 per cent .
+developing this research further , nokia worked with the qmul team to create an energy-harvesting prototype that could be used to charge a mobile phone using everyday background noise .
+nokia worked with the qmul team to create an energy-harvesting prototype that could be used to charge a mobile phone using everyday background noise .
+pictured here is the zinc oxide used in the device .
+the team used the key properties of zinc oxide , a material that when squashed or stretched creates a voltage by converting energy from motion into electrical energy , in the form of nanorods .
+the nanorods can be coated onto various surfaces in different locations making the energy harvesting versatile .
+when this surface is squashed or stretched , the nanorods then generate a high voltage .
+the latest research was inspired by a study last year that found playing pop and rock music improves the performance of solar cells .
+scientists at qmul and imperial college london found sound vibrations triggered the movement of material in the solar cell

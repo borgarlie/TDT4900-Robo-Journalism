@@ -1,0 +1,3 @@
+tokyo-based software engineer cameron beccario has created a weather map -lrb- shown -rrb- that looks like the infamous star wars character jabba the hutt .
+the face of the criminal overlord can be made out , with vortices representing his eyes and wind creating scaly , green skin .
+he said the wind map was a personal project used to learn how to develop web visualisations .

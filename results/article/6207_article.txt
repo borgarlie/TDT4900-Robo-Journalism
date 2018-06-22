@@ -1,0 +1,22 @@
+by .
+daily mail reporter .
+published : .
+19:13 est , 11 january 2013 .
+| .
+updated : .
+12:10 est , 12 january 2013 .
+athletes of all levels have always needed to monitor the possible danger of concussion on the sports field .
+now , a new gadget aims to simplify the assessment of a blow to the head , before producing an immediate signal about the severity of the incident .
+checklight , a skull cap produced by reebok and electronics company mc10 , fits underneath a helmet and uses sensor technology to monitor impact .
+safety first : the new skull cap will instantly analyze and indicate impact on the head during contact sports .
+the control module at the back of the cap will flash yellow for moderate impact and red for severe blows to the head .
+as reported by engadget , the device then flashes a color-coded led on the strength of the blow for all to see .
+mc10 claim on their website that this ` smart , sensing skullcap serves as an extra set of eyes on the playing field , giving players , parents , coaches and trainers a visual measurement of force of impact to put athletes on a pathway to assessment .
+' a strip of flexible plastic inside the cap is packed full of sensors , measuring multi-directional and rotational acceleration , as well as the location and duration of impact .
+according to engadget , all this technology is connected to a microcontroller module at the back of the cap with three indicator leds .
+the sophisticated sensors inside the cap measure multi-directional and rotational acceleration , as well as the location and duration of head impact .
+the technological cap fits round the head , so measures impact extremely accurately and it can also be used with multiple helmets .
+one light shows the status of the rechargeable battery on board , then a yellow led flashes after moderate blows to the head and the third light flashes red after severe impact .
+this ensures that immediately after a potentially dangerous collision , everyone on the field is immediately notified .
+mc10 hope that this will remove one of the biggest problems with concussion injuries - the fact that sports players often do n't even report such incidents .
+as the new product

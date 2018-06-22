@@ -1,0 +1,2 @@
+feature was announced by company spokesperson guido schenken in seoul for the launch of the car .
+it uses gps to locate speed cameras and then , after alerting the driver to the speed , slows the car down if it detects it is going too fast .

@@ -1,0 +1,3 @@
+the ` malware ' was spread by windows users opening links sent out via phishing emails and social networks , inadvertently downloading a virus onto their computers .
+seven servers located across europe which used by the criminals to control infected computers were shut down overnight , including one situated in gosport , hampshire .
+a total of 3.2 million computers have fallen prey to the ` ramnit ' virus over the past three years , 33,000 of which were in the uk .

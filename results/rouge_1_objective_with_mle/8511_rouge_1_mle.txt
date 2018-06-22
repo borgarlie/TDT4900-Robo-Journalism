@@ -1,0 +1,2 @@
+telesar v mimics the movements of its pilot - and is so realistic it can even pick up objects .
+the controller dons a 3d head display that covers his whole vision and can ` see ' through a robot 's eyes .

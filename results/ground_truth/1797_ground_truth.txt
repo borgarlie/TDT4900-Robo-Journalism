@@ -1,0 +1,4 @@
+customers in the borough of richmond buy a product by using an app .
+they place an order by clicking on their chosen shop on a virtual map .
+retailers then charge them by tapping on an image of the customer 's face .
+customers come to pick up their purchase and the retailer recognises them by their profile picture .

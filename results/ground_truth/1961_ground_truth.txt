@@ -1,0 +1,3 @@
+the dynamic closet rotates clothes , brings chosen outfit to the door .
+users can search by picture , colour , type or date to select item .
+idea first suggested in 1995 film clueless by alicia silverstone 's character .

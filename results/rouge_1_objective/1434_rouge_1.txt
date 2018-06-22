@@ -1,0 +1,4 @@
+the dickson county sheriff 's office in middle tennessee ended up paying a ransom after a malicious computer program blocked access to their files .
+he was forced to pay $ 500 in bitcoins in order to retrieve case files locked by a computer virus called cryptoware .
+he says the malware , called ` cryptowall , ' does n't tamper with files on a computer , but keeps them locked until a ransom is paid .
+the agency 's web use is hosted by third party company , securenet systems .

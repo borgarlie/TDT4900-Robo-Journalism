@@ -1,0 +1,20 @@
+a world where there are no more language barriers might not be too far away - online , at least .
+skype has now released the beta version of its live translation tool , allowing people to speak to others in another language - even if they do n't know what they 're saying .
+the tool translates speech instantly , providing both text and spoken translations .
+scroll down for videos .
+washington-based microsoft has released a preview of skype translator -lrb- shown -rrb- .
+it lets people of different languages talk to each other on video calls .
+the software translates one language into text and speech of another .
+for now only spanish and english are available - and you need to have a windows 8.1 device .
+you can sign up for the beta version of skype translator now on their website .
+for now the public version is only able to translate between english and spanish - and you need a windows 8.1 device to use it .
+but it will eventually have more than 40 languages available letting people of many countries speak to one another with ease .
+there 's no news yet , though , on when the full version will be available .
+` skype is now removing another barrier to make it possible for people to communicate irrespective of what language they speak , ' microsoft 's gurdeep pall wrote in a blog post .
+to start using it , you simply need to choose a contact , turn on the ` translation ' switch for that person , and start typing or speaking if you 've made a call .
+the programme analyses speech against audio snippets from millions of previously recorded samples , and transforms the audio into a set of text candidates .
+speech disfluencies - like ` ums ' and ` ahs ' - are removed , and the top choice among the sound-alike words is made , getting the text ready for translation .
+the technology apparently knows how dozens of languages align with one another , by reviewing millions of pieces of previously translated content .
+the translator applies this knowledge to quickly translate text into another language .
+increased usage and user feedback , plus constant refinement by human transcribers , will also help it get better and better .
+skype translator will

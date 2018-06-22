@@ -1,0 +1,3 @@
+the earliest wake-up time worldwide is on a monday in south africa .
+it uses the phone 's accelerometer to identify phases by tracking movements in bed and wakes users up during their lightest sleep phase .
+the sleep cycle app tracks a user 's sleep as they go through a cycle of sleep phases .

@@ -1,0 +1,2 @@
+researchers at massachusetts institute of technology have developed the 3d motion tracker which uses radio waves to mark a person 's location .
+the device can plot moves and even follow gestures , meaning that a person can switch a light off in a separate room just by raising their arm .

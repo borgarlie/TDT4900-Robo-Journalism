@@ -1,0 +1,2 @@
+grand theft auto engine is capable of running on a scaled-down version of fox .
+the game will run at 60 frames-per-second on next-gen hardware , and 30 fps on current gen. assassin 's creed .

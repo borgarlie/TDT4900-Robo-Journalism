@@ -1,0 +1,22 @@
+by .
+francesca infante .
+published : .
+20:01 est , 11 july 2013 .
+| .
+updated : .
+03:50 est , 12 july 2013 .
+microsoft liaised with the us intelligence services so they could access emails , including hotmail , and listen in on skype video calls .
+officials at the software giant and the us national security agency collaborated to get around the company 's own encryption programmes , according to documents seen by the guardian newspaper .
+the paperwork , provided by whistleblower edward snowden , apparently demonstrates the level of co-operation between silicon valley and the intelligence services over the past three years .
+co-operation : microsoft liased with us intelligence agencies so that they could spy on unsuspected people 's emails , according to documents seen by the guardian .
+they show that microsoft helped the nsa intercept web chats and e-mail addresses including hotmail and outlook accounts .
+they also reveal the company worked with the fbi to allow the nsa easier access via the prism program to the cloud storage system skydrive , which has more than 250million users .
+and in july last year , nine months after microsoft bought skype , the nsa boasted that ` a new capability ' had allowed it to triple the amount of skype video calls collected through prism .
+material collected through prism is routinely shared both with the fbi and cia and one nsa document even described the program as a ` team sport ' .
+listening in : as well as emails , the documents suggest that microsoft liased with intelligence services so that they could monitor skype conversations .
+the revelations expose the extent of tensions between major tech firms in silicon valley and the obama administration .
+the firms want to be allowed to speak openly about how much they co-operate with the nsa in order to placate their customers ' concerns over privacy .
+in private , they insist the access given to the us intelligence agencies is not one of collaboration but is driven by legal compulsion .
+leak : the documents were provided to the guardian by nsa whistleblower edward snowden .
+microsoft said : ` when we upgrade or update products we are n't absolved from the need to comply with existing or future lawful demands .
+' but the company maintains it provides customer

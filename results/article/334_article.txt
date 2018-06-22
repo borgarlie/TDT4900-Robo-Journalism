@@ -1,0 +1,34 @@
+by .
+damien gayle .
+published : .
+09:02 est , 24 december 2012 .
+| .
+updated : .
+09:02 est , 24 december 2012 .
+world 's top civilian cyber defender : chris doman , 26 , from essex finished second overall in the 2012 digital forensics challenge .
+a british software developer has been named the world 's top civilian computer security expert in a competition run by the u.s military .
+chris doman , 26 , from essex finished as the highest-ranked civilian and second overall in the 2012 digital forensics challenge , held by the u.s. department of defense cyber crime centre .
+he beat competition from almost 2,000 cyber defenders from 53 countries , losing out only to a professional team from multibillion pound u.s. aerospace and defence firm northrop grumman .
+the final standings provided further .
+good news for the health of the country 's home-grown cyber talent pool .
+as the uk contributed more participants than almost any other country .
+two more british amateurs , matt bartlet and chris moore , finished in the top 12 .
+the dc3 digital forensics challenge is .
+a global competition designed and hosted by the us department of .
+defense cyber crime center .
+considered one of the toughest .
+forensic competitions in the world , it takes the form of scenario-based .
+exercises replicating the complexity digital forensics examiners face .
+extracting and scrutinising data to solve cybercrime .
+areas covered include file signatures , hashing metadata , data hiding , communication recovery , and information concealment .
+chris doman is a computer science .
+graduate , a former web developer , and the co-founder of ignite research , .
+a start-up he set up in 2009 with a school friend to tackle various .
+projects using their software expertise .
+ignite 's latest project , hotelsweep , represents the world 's largest collection of hotel data collected into a single system .
+despite .
+his obvious talents with information technology , success in the dc3 .
+competition came as a surprise and has prompted him to start applying .
+for his first job in cyber security .
+mr doman 's success has made him eligible to take part in the cyber security challenge uk : here a team tackle the challenge in an event this year .
+the man who hacked

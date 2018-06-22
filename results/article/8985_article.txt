@@ -1,0 +1,18 @@
+as our cities get busier parking spaces become harder to come by and it can be difficult to squeeze into a tight spot in rush hour .
+but german engineers have come up with an innovative solution - a small electric car that can turn on the spot , shrink in size and even move sideways , like a crab , so it can park itself .
+the eossc2 is described as an ` ultra flexible micro-car for mega cities ' and is designed to connect to others to form a train .
+scroll down for videos .
+engineers at the dfki robotics centre describe the eossc2 -lrb- animated -rrb- as an ` ultra flexible micro-car for mega cities ' and plan on enabling it to drive itself .
+the concept car can turn on the spot , shrink in size and even move sideways , like a crab , so it can park itself .
+crabs have a wide flat body to make it easier squeeze into narrow spaces and the eossc2 works in a similar way .
+the arthropods flex the second joint of each leg to move sideways , although some crabs can walk forwards as well .
+in the case of the eossc2 , the car turns its wheels to manoeuvre and mimic this movement .
+its unusual design also features a forward tilt and doors that open like the delorean in back to the future .
+its unusual design also features a forward tilt and doors that open like the delorean in back to the future -lrb- pictured -rrb- .
+currently , the two-seater vehicle can be driven in the traditional way , diagonally and sideways .
+it pivots using wheels powered by separate motors and shrinks from 8ft -lrb- 2.5 metres -rrb- to 5ft ft -lrb- 1.5 metres -rrb- .
+crabs -lrb- stock image -rrb- have a wide flat body to make it easier squeeze into narrow spaces and the eossc2 works in a similar way .
+the arthropods flex the second joint of each leg to move sideways , although some crabs can walk forwards as well .
+in the case of the car , the wheels pivot sideways .
+created at the dfki robotics centre in bremen , germany , the concept vehicle is intended to be semi-autonomous .
+the car 's computer and its auto-navigation system enables it to park itself

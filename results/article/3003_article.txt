@@ -1,0 +1,15 @@
+the idea of a device that constantly keeps an eye on your home and can tell you which electrical devices are running at any one time , may sound appealing when it comes to saving energy and money .
+now there 's a device called neurio that claims to make any ` ordinary home smart ' and even tells you when you 've accidently left lights on .
+the $ 250 -lrb- # 168 -rrb- device recognises the electronic signature of different devices - such as kettles and washing machines - allowing users to keep an eye on their energy consumption and even control appliances through their phone .
+scroll down for video .
+one device to rule them all : a $ 250 -lrb- # 168 -rrb- device called neurio -lrb- pictured -rrb- claims to make ` an ordinary home smart ' .
+it recognises the electronic signature of different devices , such as kettles and washing machines , allowing users to keep an eye on their energy consumption and even control appliances through their phone .
+` we are trying to create one sensor that can make every home smart , ' ali kashani , co-founder of neurio told fast company .
+` it creates that intelligence for all of the dumb products that are already in your home and that you do n't want to replace .
+' its website says : ` using a wi-fi power sensor and a cloud service with some smart pattern detection algorithms , neurio monitors your home 's electricity to figure out what your appliances are up to - without the need to install sensors on every device .
+' neurio feeds information about energy consumption of the devices it 's recognised back to an app , where users can make decisions about how to save power and money by turning gadgets off , for instance .
+these screenshots show the home screen -lrb- left -rrb- , appliances recognised -lrb- centre -rrb- and usage for one day -lrb- right -rrb- .
+the neurio sensor is plugged into the house 's breaker panel , or circuit box .
+it measures both differential voltage and current signals every split second and these signals are used to calculate power and energy consumption .
+the measurements are sent to the neurio cloud where algorithms identify appliances and behaviours based on unique electronic signals .
+when

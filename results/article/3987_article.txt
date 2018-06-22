@@ -1,0 +1,22 @@
+by .
+victoria woollaston .
+having increased security on phones is a comfort if it 's lost or stolen - but having to add fingerprints , passwords and pins does make accessing these devices a drawn-out process .
+thankfully , apple appears to be working on a way to make this process a lot easier , without compromising on high security levels .
+the firm 's latest patent reveals plans to add customisable security options , based on the user 's location , meaning the phone would automatically unlock when in a ` safe ' location .
+the california firm 's latest patent reveals plans to add customisable security options that could , based on a user 's location , automatically unlock a phone when the user is in a ` safe ' zone .
+for example , if the device is connected to the user 's home wi-fi network -lrb- pictured -rrb- .
+apple is planning to put some muscle behind its future iphones - literally .
+the .
+cupertino-based company published a patent last month to use .
+an ` artificial muscle system ' for focusing cameras in devices such as .
+its iphone and ipad .
+the patent claims the system would contract in a similar way to how muscles move , to focus the lens and take images .
+the system could allow for much slimmer .
+mobile systems that use less power while carrying larger camera .
+components , the company said .
+for example , if the device is connected to the user 's home wi-fi network , or the network inside their office , the phone will not ask for the security code or fingerprint scan , and will keep the screen unlocked .
+additionally , the patent describes how the ` location ' does n't need to refer to a fixed location , and could also include a user 's car .
+to verify the location , the phone could connect to the car 's bluetooth , navigation systems or audio displays .
+alternatively , if the phone is on a mobile or public network , in a pub or café , security levels could be increased .
+this could add extra security levels , in addition to the pin , passcode or fingerprint scan .
+the patent , titled ` location-sensitive security levels and setting profiles based on detected location '

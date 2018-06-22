@@ -1,0 +1,5 @@
+london design studio has created a wall calendar made entirely of lego .
+each row represents a month and the staff are assigned mini figures .
+colours of the lego bricks fixed to the calendar represent different tasks .
+each brick represents a set amount of time and bricks can be doubled up .
+software scans a photo of the calendar and syncs it with an online version .

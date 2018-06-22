@@ -1,0 +1,18 @@
+intelligence agency gchq is able to spy on facebook and youtube users and can manipulate online polls , according to the latest documents allegedly leaked by fugitive cia worker edward snowden .
+documents thought to have been provided by the whistleblower allegedly show that the cheltenham-based agency has developed a set of software programmes designed to breach users ' computers and manipulate the internet .
+among the listed tools are ones capable of searching for private facebook photographs , sending fake text messages , changing the outcome of online polls , censoring ` extremist ' material , and collating comments on youtube and twitter .
+spying tools : intelligence agency gchq is able to spy on facebook and youtube users and can manipulate online polls , according to the latest documents allegedly leaked by fugitive cia worker edward snowden -lrb- pictured -rrb- .
+some of the software enables the psychological manipulation of internet users , not unlike the controversial secret study recently undertaken with the approval of facebook , in which the social network altered people 's newsfeeds to see if it had an effect on their emotions .
+the list of programmes was revealed in a wikipedia-style document allegedly compiled by gchq 's joint threat research intelligence group .
+-lrb- jtrig -rrb- , which was first published by the intercept .
+the tools , which have each been given codenames such as birdsong , angry pirate , and scrapheap challenge are described as being part of the agency 's ` weaponised capability ' .
+the list , apparently compiled in 2012 , .
+also notes whether a tool is operational , or in the design , pilot or .
+implementation stages , although the document states that most of them are ` fully .
+operational , tested and reliable ' .
+it states : ` do n't treat this like a .
+catalogue .
+if you do n't see it here , it does n't mean we ca n't build it .
+headquarters : according to leaked documents , cheltenham-based agency gchq -lrb- pictured -rrb- has developed a set of software programmes designed to breach users ' computers and manipulate the internet .
+` if you involve the jtrig operational teams at the start of your operation , you have more of a chance that we will build something for you .
+` for each of our tools we

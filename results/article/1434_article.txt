@@ -1,0 +1,19 @@
+the dickson county sheriff 's office in middle tennessee ended up paying a ransom after a malicious computer program blocked access to their files .
+detective jeff mccliss told wtvf-tv that malware on a computer locked the agency 's case files , which included autopsy reports , witness statements and crime scene photos .
+he says the malware , called ` cryptowall , ' does n't tamper with files on a computer , but keeps them locked until a ransom is paid .
+no choice : jeff mccliss grimaced when he was forced to pay $ 500 worth in bitcoins in order to retrieve case files locked by a computer virus called cryptoware .
+` every sort of document that you could develop in an investigation was in that folder .
+there was a total of 72,000 files , ' mccliss said tuesday .
+after consulting with the tennessee bureau of investigation and the fbi , mccliss said the agency determined the only way to get their files back was to pay the asking price : $ 500 in bitcoins .
+officials think the malware came from an ad someone in the department clicked on .
+` is it better to take a stand and lose all that information ?
+or make the payment grit your teeth and just do it ?
+' he said .
+` it made me sick to have to do that , ' he said .
+mccliss says it does n't appear that the office was targeted and that it could happen to any computer .
+wdkn general manager kenneth forte said the police station 's web use is hosted by third party company , securenet systems .
+they believe the problem has been fixed .
+` it 's a bad feeling .
+it 's a very bad feeling to be the victim instead of the investigator , ' he said .
+cyber crimes like these are hard to investigate because oftentimes criminals are anonymous online users and commit their crimes overseas .
+locked up : cryptowall does n't tamper with files on a computer , but keeps them locked until a ransom is paid .

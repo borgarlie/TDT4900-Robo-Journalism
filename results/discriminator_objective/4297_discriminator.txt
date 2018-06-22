@@ -1,0 +1,3 @@
+livr is a social network that is only available through an app .
+it works with a breathalyser that plugs into the charging port of an ios or android device .
+users can only access that app when they 're drunk .

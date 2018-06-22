@@ -1,0 +1,14 @@
+facebook has come under fire for its election plans to try to encourage voting - and mine its users data for political preferences .
+the firm announced plans to mine data of millions of american voters , just as an experiment which tried to encourage people to vote was disclosed .
+the data mining is likely to prove controversial as it adds to the amount facebook knows about its users - although the company itself says that the data is anonymized before being processed .
+the move was announced as a controversial 2010 study has been revealed called ' a 61-million-person experiment in social influence and political mobilization , ' .
+it found that around 20 percent of the users who saw that their friends had voted also clicked on an ' i voted ' button facebook is set to make available .
+user data : facebook says it 's mining its users ' posts to analyze sentiment regarding candidates and issues for the 2014 and 2016 elections .
+earlier this year facebook issued tough new guidelines on research using its system following outrage from users over experiments on the social network .
+the firm tightened its research guidelines following uproar over its disclosure this summer that it allowed researchers to manipulate users ' feeds to see if their moods could be changed .
+at issue was study in which facebook allowed researchers to manipulate the content that appeared in the main section , or ` news feed , ' of small fraction of the social network 's users .
+as part of the study , facebook put different forms of an ` i 'm voting ' button on the pages of about 60 million of its american users .
+company researchers were testing them to understand the effect of each and to determine how to optimize the tool 's impact , according to mother jones .
+two groups of 600,000 users were left out to serve as a control group -- one which saw the ` i 'm voting ' button but did n't get any information about their friends ' behavior , and one which saw nothing related to voting at all .
+however , experts have warned the feature could be misused .
+jonathan zittrain , a professor of law and computer science at harvard university , believes the search giant could even influence the outcome of

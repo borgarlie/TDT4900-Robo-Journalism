@@ -1,0 +1,22 @@
+by .
+damien gayle .
+published : .
+13:10 est , 23 january 2013 .
+| .
+updated : .
+15:28 est , 23 january 2013 .
+researchers have downloaded shakespeare 's sonnets on to synthetic dna in a breakthrough that could lead to major advances in computer storage .
+a genetic storage device has been used to ` download ' all 154 of shakespeare 's sonnets on to strands of synthetic dna .
+scientists were then able to decode the information and reproduce the words of the bard with complete accuracy .
+the same technique made it possible to store a 26 second excerpt from martin luther king 's ' i have a dream ' speech and a photo of the cambridgeshire laboratory where the work took place .
+researchers were also able to turn a copy of watson and crick 's paper describing the nature of dna into genetic code .
+the landmark study paves the way to storing huge amounts of data using the same method evolved by nature to write the ` book of life ' .
+theoretically , 100million hours of high definition video could be stored in a cupful of dna - equivalent to every film and tv programme ever created .
+unlike magnetic tape , which degrades within a decade , dna is a hardy material that can last for tens of thousands of years .
+a dna archive also requires no constant supply of electric power , as do hard disks .
+for their experiment , the british scientists employed a california-based company to create strands of artificial dna that corresponded to their coding instructions .
+the end result was a small test-tube the size of a little finger containing a tiny amount of dry dusty material .
+this was the dna , which was then ` read ' and decoded to reproduce the original files .
+details of the technique are described today in the journal nature .
+five genetic ` letters ' from the genetic code - a , c , g and t - were used to represent the noughts and ones that make up ` bytes ' of digital information .
+for instance , the upper case t in the word ` thou ' from the second line of shakespeare 's sonnet xviii - ` thou art more lovely and more temperate ' - was encoded by the

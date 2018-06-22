@@ -1,0 +1,4 @@
+a swedish company has implanted microchips in the hands of staff which allows them to use the photocopier , open security doors and even pay for their lunch .
+the chips use radio-frequency identification -lrb- rfid -rrb- and are about the same size as a grain of rice .
+they store personal security information which can be transmitted over short distances to special receivers .
+rfid chips can already be found in contactless cards - including the oyster system which is used by more than 10 million people in london .

@@ -1,0 +1,4 @@
+diy phone runs on an arduino circuit board connected to a mobile network .
+it features a small led display , buttons , speaker and microphone .
+casing is made of wood and the board is protected inside a rubber sleeve .
+the basic model can make and receive calls , send texts and store numbers .

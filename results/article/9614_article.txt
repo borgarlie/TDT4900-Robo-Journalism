@@ -1,0 +1,18 @@
+sci-fi films such as minority report show people controlling computer programmes with expansive hand gestures .
+and now there 's a gadget called flow that will allow users to do just that , which could one day replace the computer mouse .
+flow is designed to be more sensitive than a mouse and will allow people to edit documents , draw and control apps by touching it or swiping in mid air above the gadget .
+flow , a gadget that responds to gestures and touch could be used to edit documents , draw and control apps , replacing the computer mouse .
+it can be programmed with shortcuts for more than 30 applications , enabling users to control spotify with the flick of their wrist or use it to manipulate images in photoshop .
+the gadget , designed by engineers in berlin , germany , works alongside a desktop or laptop via a bluetooth connection , with apps such as final cut pro x , soundcloud , spotify and youtube .
+the engineers and computer scientists are raising money on crowd funding site indiegogo to put flow into production .
+flow -lrb- pictured -rrb- works alongside a desktop or laptop via a bluetooth connection , with apps such as final cut pro x , soundcloud , spotify and youtube .
+for example , a user could programme the device to skip tracks in a spotify playlist by swiping in mid-air over the device .
+flow will allow users to manipulate images and documents using hand gestures , such as in sci-fi films like minority report -lrb- a screenshot is pictured -rrb- - without the light-up gloves .
+to begin with , the device will support macs , with ios devices , android , windows and linux support in the pipeline .
+it could be used alongside work equipment or in the home -lrb- pictured -rrb- which may mean that smart appliances could one day be controlled using the simple device .
+description : a programmable wireless controller that is small enough to fit in a pocket and could one day replace the computer mouse .
+materials : a metal ring and polycarbonate touch surface .
+connectivity : bluetooth le/4 .1 .
+compatibility : macs , with more operating systems in the pipeline - starting with 30 popular apps .
+battery : four months .
+size : almost three inches

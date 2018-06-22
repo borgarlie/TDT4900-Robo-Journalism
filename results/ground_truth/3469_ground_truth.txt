@@ -1,0 +1,6 @@
+georgia tech scientist created the gloves fitted with motors in the knuckles .
+the gloves buzz to tell wearers to press a corresponding key , and the system tells them which letter they are typing .
+process is based on a technique known as passive haptic learning -lrb- phl -rrb- .
+this means wearers learn braille even if they 're not paying full attention .
+in tests , wearers could read 70 per cent of a braille phrase after 30 minutes .
+while others were typing perfectly after just four hours of lessons .

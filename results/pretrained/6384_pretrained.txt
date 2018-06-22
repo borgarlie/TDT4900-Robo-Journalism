@@ -1,0 +1,2 @@
+the usb type-c connector has been designed for use with thinner , sleeker devices , such as tablets and ultrabooks , and solves the annoying problem of inserting drives the wrong way up .
+the type-c connector is built on existing usb 3.1 and usb 2.0 technologies .

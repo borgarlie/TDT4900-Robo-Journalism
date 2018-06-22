@@ -1,0 +1,2 @@
+nats has produced the third in its series of air traffic visualisations , taking a tour of the uk 's airspace , called uk 24 .
+flights peak at more than 8,000 a day and the visualisation plots 7,000 of these movements .

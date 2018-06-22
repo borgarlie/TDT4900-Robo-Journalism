@@ -1,0 +1,3 @@
+car completed a lap on the grand prix track in hockenheim at full speed .
+audi working with stanford on self driving cars .
+car uses gps and dual cameras to read the road ahead and choose best racing line .

@@ -1,0 +1,6 @@
+the pplkpr app syncs with a bluetooth heart rate monitor to track emotions .
+when the monitor spots a change in heart rate the app alerts the user .
+it asks the user to explain how they 're feeling , such as happy or scared .
+over time , an algorithm learns the difference between different heart rates .
+it then identifies people who cause stress , or who are a calming influence .
+the app can even delete contacts it considers to be bad for the wearer .

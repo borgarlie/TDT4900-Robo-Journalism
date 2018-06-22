@@ -1,0 +1,2 @@
+the pplkpr app syncs with a bluetooth heart rate monitor to track and log subtle changes in emotional state when you 're around these people .
+it can even tell you which friends could be damaging your health .

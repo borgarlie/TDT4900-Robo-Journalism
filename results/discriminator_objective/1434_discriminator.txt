@@ -1,0 +1,2 @@
+detective jeff mccliss told wtvf-tv that malware on a computer locked the agency 's case files , which included autopsy reports , witness statements and crime scene photos .
+he says the malware , called ` cryptowall , ' does n't tamper with files on computer , but keeps them locked until a ransom is paid .

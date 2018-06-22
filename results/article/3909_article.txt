@@ -1,0 +1,15 @@
+the obama administration quietly announced on tuesday that it intends to change the way americans learn about natural disasters and other major emergencies during radio and tv broadcasts , giving the president the ability to flip a switch and address the entire nation at once .
+the emergency alert system , the latest version of a program first established in 1951 , blasts out emergency messages in the event of local weather emergencies , but can also be used to warn americans about terror attacks and major natural disasters .
+every broadcaster in the country is required to participate in the eas .
+messages travel along a closed , private network , piggybacking from station to station .
+it can take up to 10 minutes for every radio , tv , cable and satellite provider to blare its alert .
+television screens display text messages during emergency alert system events , and could be used by future white houses for a variety of purposes .
+most messages in the system are restricted to specific states , counties or other geographic areas .
+but now the federal communications commission has filed public notice of a rule change that would bypass the daisy-chain entirely and give the federal government instant access to all the nation 's airwaves at once , in the event of a national emergency .
+some republicans fear a system that would give the white house a way to address the entire country at will could be abused .
+` oh , great , ' a republican capitol hill staffer told mailonline on tuesday .
+` big brother is talking to you .
+' ` call me crazy , but i have a feeling we 're going to see the definition of an `` emergency '' get looser and looser -- especially as we get closer to an election .
+' the fcc 's plan could also make the national eas vulnerable to the sort of hacking that embarrassed broadcasters in montana a year ago .
+in july 2013 hackers there gained access to an eas signal and broadcast a phony alert about a zombie apocalypse on a string of cbs television affiliates owned by the montana television network .
+` civil authorities in your area have reported that the bodies of the dead are rising from their graves and attacking the living , ' the fictitious message said

@@ -1,0 +1,2 @@
+massachusetts institute of technology -lrb- mit -rrb- researchers have developed a method to detect hazardous gases and pollutants .
+the sensors are made using modified near-field communication -lrb- nfc -rrb- to make them detect things in their environment , and the information could then be sent to your phone .

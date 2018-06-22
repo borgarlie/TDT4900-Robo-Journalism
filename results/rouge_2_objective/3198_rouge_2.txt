@@ -1,0 +1,3 @@
+engineers have been forced to suspend the rover 's work while they attempt to restore a corrupted computer .
+the team is shifting the rover from safe mode to operational status over the next few days .
+the condition is related to a glitch in flash memory linked to the other , now-inactive , computer .

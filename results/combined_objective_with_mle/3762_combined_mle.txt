@@ -1,0 +1,2 @@
+the nearby friends feature must be turned on by the user , so people should n't expect to broadcast their location unknowingly .
+it will use your smartphone 's gps system to tell your facebook friends you are nearby .

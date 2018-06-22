@@ -1,0 +1,19 @@
+smart internet connected sex toys are at risk from hackers , a security firm has warned .
+experts say the toys can be easily hacked , allowing people to intercept communications and take control of them .
+however , the firm behind one of the gadgets said its ` teledildonics ' are secure .
+scroll down for video .
+security experts examined a series of adult toys that link to an app , and are available in male -lrb- pictured -rrb- and female versions .
+several manufacturers now made internet connected adult toys .
+most working by interfacing with a smartphone app .
+the allows them to be controlled remotely , or to download new software from the internet .
+some even come with special videoconferencing software so couple can see each other .
+they also warned that one of the toys even captured video , which could easily be accessed .
+joe bursell of pen test partners said the firm decided to investigate the market , which has dozens of products already available and in development .
+` apparently ` cyberdildonics ' are set to be the next big thing in sex toys , allowing you to share ` sensations ' across the internet , and there is no shortage of products from various manufacturers , and even a social media site where you can get some random who you 'll probably never meet to ` drive ' your sex toy for you , ' he explained .
+` if an attacker could intercept the devices communications they could portray their victim as a monumentally inept in the stimulation department , which would be hilarious and tragic in equal measure .
+' the firm looked at toys from lovense , which can even use a videconferencing service .
+` there was no apparent encryption during the registration process , meaning anyone snooping on the line could get hold of login information , ' the firm told forbes .
+` it will clearly be trivial to compromise a user 's account and access some quite juicy content , particularly so if the victim is a ` friend ' in a shared household using the same wireless access point .
+' lovense first launched on indiegogo , and hit back at the claims .
+` there are three layers of security .
+` the server side , the way we transfer

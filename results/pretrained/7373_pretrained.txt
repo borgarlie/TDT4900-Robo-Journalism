@@ -1,0 +1,2 @@
+secret app allows people to post anonymous messages .
+app lets users post anonymously to friends and friends of friends .

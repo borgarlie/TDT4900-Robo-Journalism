@@ -1,0 +1,2 @@
+the dickson county sheriff 's office in middle tennessee ended up paying a ransom after a malicious computer program blocked access to their files .
+detective jeff mccliss said the malware , called ` cryptowall , ' does n't tamper with files on a computer , but keeps them locked until a ransom is paid .

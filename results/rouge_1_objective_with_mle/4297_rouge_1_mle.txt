@@ -1,0 +1,3 @@
+it works with a breathalyser that plugs into the charging port of an ios or android device .
+livr is a social network that is only available through an app , and users can only access that app when they 're drunk .
+the app and users blow on the breathalyzer to get a blood alcohol content .

@@ -1,0 +1,5 @@
+scanadu scout uses the operating system nasa uses in its mars rover .
+to take a reading , the gadget is held on a person 's temple for 10 seconds .
+sensors and a built-in microphone read a variety of vital health signs .
+this includes temperature , heart rate , blood oxygen levels and more .
+full technical specifications have not been released , but a prototype is on display at the consumer electronics show in vegas .

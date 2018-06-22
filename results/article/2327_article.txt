@@ -1,0 +1,24 @@
+by .
+victoria woollaston in barcelona .
+published : .
+07:34 est , 25 february 2014 .
+| .
+updated : .
+12:19 est , 25 february 2014 .
+among the high-profile launches at this week 's mobile world congress , a security firm disrupted the event with a smartphone built entirely around encryption .
+the blackphone is an android-based handset built by spanish manufacturer geeksphone alongside security experts silent circle and pretty good privacy -lrb- pgp -rrb- .
+everything , from the custom-built privatos to web browsing and apps , are encrypted , or have been fitted with an extra layer of security .
+scroll down for video .
+almost follow-proof : the blackphone is an android-based handset built by spanish manufacturer geeksphone alongside security experts silent circle and pretty good privacy .
+internet access on the phone is carried out through a virtual private network -lrb- vpn -rrb- that sends and receives data in a way that 's designed to keep it hidden .
+when the phone boots up it asks for a password and pin before a wizard guides users through the security options .
+for example , it shows users which apps want access to which data .
+the blackphone owner can then decide to restrict access to that information and handpick the apps and the data they share .
+mike kershaw , chief architect from blackphone told mailonline the smartphone was designed to have ` the benefit of security without having to have an in-depth knowledge of how to make a phone secure .
+' the company says that it is ` anti-personal data from the ground up ' .
+they say the phone will appeal will appeal to those who do n't want any data collection , those who agree with principle of collecting data and businessmen .
+kershaw continued that there are existing products , such as red phone , that lets customers communicate securely to each other , but ` blackphone extends this concept to everyone .
+' ` we 're anti-personal data from the ground up .
+` there are a number of people this handset will appeal to ; there 's the people who do n't want any data collection .
+` there are people concerned about data collection for data collection sake .
+` then there are people concerned about secondary data collection , such as business men who

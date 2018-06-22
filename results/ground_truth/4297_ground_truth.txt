@@ -1,0 +1,6 @@
+livr is a social network accessed via a breathalyser plugged into a phone .
+it only allows access when a user 's blood alcohol level is high enough .
+the app features a truth or dare game as well as a drunk dial option .
+hot spots helps users find nearby bars based on how busy they are .
+photos are uploaded to the app and can only be seen by other drunk users .
+a blackout button is then used to wipe all evidence from the app .

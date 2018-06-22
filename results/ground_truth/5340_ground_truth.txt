@@ -1,0 +1,4 @@
+bounty , available for six months , is part of asteroid data .
+hunter contest .
+the contest hopes to reduce false positives when searching for asteroids .
+nasa would like members of the public to develop computer code that can better spot near-earth asteroids in images from ground-based telescopes .

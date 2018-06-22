@@ -1,0 +1,17 @@
+scientists believe we are one step closer to creating an artificial mind .
+ibm has announced a new programming architecture for chips inspired by the human brain .
+the company claims the chips could pave the way for smart sensor networks that mimic the brain 's capacity for perception , action , and thought .
+san diego-based qualcomm is planning to launch the first ever commercial chip inspired by the human brain .
+the chip 's memory functions as synapses would in the brain , the processors as neurons and communication as nerve fibres .
+one day , it could allow computer scientists to develop a machine with a brain that is even more intelligent than that of humans .
+ibm 's said its new programming architecture will allow developers to design applications for these brain-like chips once they released .
+` architectures and programs are closely intertwined and a new architecture necessitates a new programming paradigm , ' said dr dharmendra modha , the principal investigator for the project at ibm research .
+` while complementing today 's computers , this will bring forth a fundamentally new technological capability in terms of programming and applying emerging learning systems .
+' the computers we use today were designed decades ago for sequential processing according to a pre-defined program .
+the brain consumes the same amount of power as a 20 watt light and occupies the volume of a two-litre bottle .
+although they are fast and precise ` number crunchers , ' our computers struggle to deal with real-time processing of the noisy , voluminous , big data produced by the world around us .
+in contrast , the brain - which operates comparatively slowly and at low precision - excels at tasks such as recognising , interpreting , and acting upon patterns .
+overall the brain , consumes the same amount of power as a 20 watt light bulb and occupying the volume of a two-litre bottle .
+a computer uses 99 per cent of its volume for cooling and powering , and only one per cent to process information .
+in august 2011 , ibm demonstrated a building block of a novel brain-inspired chip architecture based on a scalable , interconnected , configurable network of ` neurosynaptic cores .
+' the chip 's memory functions as synapses would in the brain , the processors as neurons and communication

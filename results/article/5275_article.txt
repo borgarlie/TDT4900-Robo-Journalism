@@ -1,0 +1,24 @@
+by .
+victoria woollaston .
+published : .
+07:12 est , 5 december 2013 .
+| .
+updated : .
+07:31 est , 5 december 2013 .
+it may not have all the bells and whistles as a brand new iphone , or even look particularly pretty , but if all you want a phone for is to make calls and send texts , why not build your own ?
+created by the co-founder of the arduino platform , the wooden handset features a circuit board , a small led display , buttons , a speaker and microphone .
+it can store numbers , make and receive calls , send texts and be used as an alarm clock .
+the basic phone , pictured , has been created by engineer and co-founder of the arduino circuit board david mellis .
+it features a display , buttons , speaker and microphone and can connect to mobile networks .
+this means the phone can store numbers , make and receive calls , send texts and be used as an alarm clock .
+phonebloks is a customisable smartphone made up of what 's called ` modular elements ' , or blocks , that can be instantly swapped and replaced .
+if a battery dies , for example , a new one can be clipped into place .
+storage can be upgraded or cameras with different lenses an be swapped in and out depending on the occasion .
+the designs , by dutch inventor dave hakkens , were recently bought by google-owned motorola as part of project ara .
+arduino is a small open-source platform which comes with a circuit board , and software that tells people how program it .
+it is used to power a variety of electronic devices .
+engineer david mellis from mit 's media labs helped set up the arduino project and has now used it to make a diy feature phone .
+mellis has put the blueprints for the phone , as well as instructions on how to program the board on github .
+programmers can either buy a starter pack of basic components , or use the instructions to design and buy their own .
+mellis ' version has a wooden casing that is laser-cut using plywood .
+it has a total of 60 components including the board , the speaker and microphone to make calls ,

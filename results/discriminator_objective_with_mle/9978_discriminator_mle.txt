@@ -1,0 +1,2 @@
+birmingham university project has created a robot that can grab plates and cups .
+it can work out how to pick up different objects placed in front of it .

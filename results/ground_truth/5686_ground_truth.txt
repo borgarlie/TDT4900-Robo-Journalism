@@ -1,0 +1,3 @@
+muse is designed to track people 's brain waves and monitor stress levels .
+users wear a plastic headband whose sensors follow brain movements .
+bluetooth signals then tell lights in the room to adjust to user 's mood .

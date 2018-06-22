@@ -1,0 +1,2 @@
+the pplkpr app syncs with a bluetooth heart rate monitor to track and log subtle changes in emotional state .
+the free ios app ranks friendships based on a metric called ` heart rate variability '

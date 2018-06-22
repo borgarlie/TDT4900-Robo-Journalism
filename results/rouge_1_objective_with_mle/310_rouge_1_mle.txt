@@ -1,0 +1,3 @@
+the u.s. justice department is claiming that microsoft must hand over emails that the company stores in databases in dublin , ireland , in a case that is being watched closely by tech companies legal scholars .
+the u.s. federal government is claiming it can force any company that conducts business operations within its borders to comply with warrants for data stored on its databases , even if those databases are n't physically located within the united states .
+ireland has become a popular location for many of the u.s. tech companies .

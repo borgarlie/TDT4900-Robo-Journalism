@@ -1,0 +1,4 @@
+owners of the cyborg unplug , can also disconnect all target devices from any network they are associated with , including paired connections with phones .
+cyborg unplug ` sniffs ' out surveillance and undercover devices including google glass , hidden microphones and security cameras .
+the alarm is then signalled and the detected device is disconnected .
+the signatures are broadcast by wireless devices as they probe for , connect to and use wireless networks .

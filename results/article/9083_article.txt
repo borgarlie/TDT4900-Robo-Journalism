@@ -1,0 +1,18 @@
+you 're listening to a playlist on ` shuffle ' when you notice three katy perry songs have played back to back - what are the chances ?
+while some dismiss this as a coincidence , others claim that so-called ` random ' playlists are n't random at all .
+instead , they say , music services are conspiring against listeners to promote tracks .
+it 's a criticism that spotify has faced , and as a result the music service has had to change its algorithms to fit the human brain 's warped idea of ` random ' .
+new york-based spotify admits it had to change its playlist algorithm to be less random in order to trick its users into hearing what the believed to be random songs .
+the graphic shows different genre songs -lrb- labelled in various colours -rrb- spread out evenly to fit the human expectation for ` random ' in spotify 's new algorithm .
+` on my 442 song playlist , the same 30 or 35 tracks play over and over again and the other 400 songs i have barely heard once , ' one user wrote on a spotify forum .
+` it 's almost unbelievable to me that such a simple process is broken , ' another user wrote .
+` the only remaining explanation i can give is that spotify deliberately chooses the songs that are cheaper for spotify to pay royalties .
+' but spotify has denied these allegations .
+instead , it says , it 's all in our heads .
+` our brain is an excellent pattern-matching device , ' said babar zafar , a lead developer at spotify , in an interview for tech tent on the bbc world service .
+` it will find patterns where there are n't any .
+' spotify realised that our brains actually want to see what we consider ` random ' -- or different genres of music spread evenly over a playlist .
+spotify 's algorithm -- which is anything but random -- uses the length of a playlist and records how many of each type of song it contains .
+the human brain is designed to notice coincidences .
+it is also programmed to expect something to happen if it has n't occurred in a while .
+for instance , people often think that if they have n't

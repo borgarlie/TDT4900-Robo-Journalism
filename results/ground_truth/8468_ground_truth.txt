@@ -1,0 +1,5 @@
+wirelurker malware targets os x as well as the mobile ios software .
+when a mobile is connected to an infected mac , the virus spreads .
+it installs malicious apps on the device , and uses these to steal information .
+malware was discovered by experts at palo alto networks in california .
+it is currently only affecting apple product owners in china - but has the potential to spread elsewhere .

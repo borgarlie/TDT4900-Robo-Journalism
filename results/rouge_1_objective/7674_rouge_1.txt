@@ -1,0 +1,4 @@
+new data is giving fascinating insights into how the world sleeps .
+the earliest wake-up time worldwide is on a monday in south africa .
+the sleep cycle app tracks a user 's sleep as they go through a cycle of sleep phases .
+it uses the phone 's accelerometer to identify phases by tracking movements in bed and wakes users up during their lightest sleep phase .

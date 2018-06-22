@@ -1,0 +1,23 @@
+published : .
+12:22 est , 1 march 2013 .
+| .
+updated : .
+12:23 est , 1 march 2013 .
+nasa 's curiosity rover has developed a major computer problem on mars .
+engineers have been forced to suspend the rover 's work while they attempt to restore a corrupted computer .
+the team said the rover had been placed in a ` safe mode ' to protect it .
+help !
+the last self portrait the rover sent back before it developed a major computer fault .
+the intentional swap put the rover , as anticipated , into what what engineers said was a minimal-activity precautionary status called ` safe mode .
+' the team is shifting the rover from safe mode to operational status over the next few days and is troubleshooting the condition that affected operations yesterday , nasa said .
+the condition is related to a glitch in flash memory linked to the other , now-inactive , computer .
+` we switched computers to get to a standard state from which to begin restoring routine operations , ' said richard cook of nasa 's jet propulsion laboratory , project manager for the mars science laboratory project , which built and operates curiosity .
+a picasso-like self portrait of nasa 's curiosity rover was taken by its navigation cameras , located on the now-upright mast .
+curiosity carries a pair of redundant main computers in order to have a backup available if one fails .
+each of the computers , a-side and b-side , also has other redundant subsystems linked to just that computer .
+curiosity is now operating on its b-side , as it did during part of the flight from earth to mars .
+it operated on its a-side from before the august 2012 landing through wednesday .
+` while we are resuming operations on the b-side , we are also working to determine the best way to restore the a-side as a viable backup , ' said jpl engineer magdy bareh , leader of the mission 's anomaly resolution team .
+the spacecraft remained in communications at all scheduled communication windows on wednesday , but it did not send recorded data , only current status information .
+the status information revealed that the computer had not switched to the usual daily ` sleep ' mode when planned .
+diagnostic work in a

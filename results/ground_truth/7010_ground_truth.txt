@@ -1,0 +1,4 @@
+system uses combination of powerful software and ` mems ' technology .
+this allows the camera to pick up the hyperspectral image of an object .
+hyperspectral imaging reveals chemical composition from a distance .
+data will be analysed elsewhere and the results sent to a smartphone .

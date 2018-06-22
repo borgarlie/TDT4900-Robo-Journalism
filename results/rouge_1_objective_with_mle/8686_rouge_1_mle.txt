@@ -1,0 +1,2 @@
+the device 's built-in camera registers the movement of the eye to take the shot and to make sure it 's not mistaken for a blink , the wink will need to be exaggerated to register .
+google announced the feature could one day be used to pay for goods or to wink at pages in a recipe book .

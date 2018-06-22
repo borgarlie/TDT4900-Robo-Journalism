@@ -1,0 +1,18 @@
+it was a job advert designed to find the best mathematical minds in the country by hiding a phone number inside a complicated numerical puzzle .
+but the royal australian air force , which posted the ad , has been left red-faced after failing to spot a mistake in the numbers , therefore making the puzzle insolvable .
+the typos were eventually spotted by users of the website reddit and the formula has now been corrected .
+a job advert for an engineer at the royal australian air force was meant to hide its recruitment phone number inside a maths puzzle .
+the first four terms shown in the formula added together give this number but the final terms should have then equaled zero .
+the two typos , highlighted , made the task impossible .
+according to business insider australia -lrb- bia -rrb- , the defence force recruiters got the formula from a university of melbourne professor .
+the force told the website that the formula was designed as a ` means of driving engagement , and not a formal test .
+' the site said : ` that 's good , because the formula -- which involves infinite sums , integrals , complicated trigonometry and imaginary numbers -- does n't produce the intended phone number .
+' reddit users solved the first four terms shown in the formula and added them together to get the defence jobs phone number of 131901 .
+defence force recruiting has since corrected the formula on its website , pictured , by replacing sin 2 x with sin -lrb- 2x -rrb- in the third to last line , and -lrb- 2k-1 -rrb- !
+with -lrb- 2k +1 -rrb- !
+in the penultimate line .
+the force thanked the reddit members who spotted the mistake , adding : ` you are exactly the kind of people we 'd be looking for ' however , they discovered that the remaining terms were meant to equate to zero but two typos in the formula made this impossible .
+the incorrect formula showed ` sin to the power of two x ' when it should have read sin -lrb- 2x -rrb- .
+to get zero in the penultimate line the formula should have said -lrb- 2k +1 -rrb- !
+instead of -lrb- 2k-1 -rrb- !
+defence force recruiting has since corrected the formula and told bia :

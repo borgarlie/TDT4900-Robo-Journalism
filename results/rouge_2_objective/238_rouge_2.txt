@@ -1,0 +1,5 @@
+washington-based microsoft has released the beta version of its live translation tool , allowing people to speak to others in another language - even if they do n't know what they 're saying .
+the tool translates speech instantly , providing both text and spoken translations .
+it lets people of different languages talk to each other on video calls .
+the software translates one language into text and speech of another .
+for now only spanish and english are available - and the top choice among the sound-alike words is made , getting the text ready for translation .

@@ -1,0 +1,3 @@
+google maps now includes 3d ` panoramas ' of 15,000 landmarks .
+built from photos from google 's picasa photo-sharing website .
+` tours ' allow users to fly round popular tourist landmarks .

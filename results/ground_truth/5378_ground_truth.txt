@@ -1,0 +1,4 @@
+beam runs on android and can run any app from the google play store .
+also connects to iphones and ipads with specially designed app .
+turns any surface into a smart screen connected to the internet .
+can function as an alarm to wake you up with video and sound .

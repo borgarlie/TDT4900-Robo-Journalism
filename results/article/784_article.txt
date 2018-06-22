@@ -1,0 +1,40 @@
+by .
+lizzie smith .
+published : .
+12:21 est , 26 july 2013 .
+| .
+updated : .
+17:01 est , 26 july 2013 .
+var twittervia = ` dailymailus ' ; .
+dm.has -lrb- ` sharelinktop ' , ` sharelinks ' , -lcb- .
+` id ' : ' 2379180 ' , .
+` title ' : ` amanda bynes \ ' father can \ ' t hide his concern as it emerges she has blown $ 1.4 m in just a few months ... and even took a cab from new york to la ' , .
+` url ' : ` http://www.dailymail.co.uk/tvshowbiz/article-2379180/amanda-bynes-father-hide-concern-emerges-blown-1-4m--taking-cab-new-york-la.html' , .
+` etwitterstatus ' : ` amanda%20bynes\'%20father%20can\'t%20hide%20concern%20as%20it%20emerges%20she%20has%20blown%20$1.4m...%20even%20taking%20a%20cab...%20http:\/\/dailym.ai\/15l8aw1%20via%20@' + twittervia , .
+` articlechannelfollowbutton ' : ` dailymailceleb ' , .
+` ischannel ' : false .
+-rcb- -rrb- ; .
+60 .
+shares .
+7 .
+view comments .
+he 's seen his daughter transformed from an outgoing movie star into a troubled young woman feared to be suffering from a severe mental illness .
+and the concern was etched on the face of amanda bynes ' father rick as he stood outside a los angeles court house on friday .
+his anxious appearance came as papers filed at the court revealed shocking new details of the extent of his daughter 's apparent mental illness .
+amongst .
+the examples given of amanda 's disturbed state include the fact that she .
+hailed a taxi cab in new york in order to visit la - a .
+journey of some 2,778 miles .
+anxious : concern shows on the face of rick bynes ahead of his court appearance to talk about the future of his daughter amanda in la on thursday morning .
+the .
+details come from papers filed in support of amanda 's mother lynn 's .
+application for conservatorship of her daughter 's affairs - both .
+personal and financial .
+the .
+cab journey is just one case of financial extravagance from the starlet - .
+who is said to have burned through $ 1.4 m of her $ 4m fortune in just a .
+few months .
+the papers state that amanda withdrew $ 100,000 on june 4 , then the same .
+amount on july 2 .
+she has also written checks for a total of $ 63,000 during the same period .
+her parents state

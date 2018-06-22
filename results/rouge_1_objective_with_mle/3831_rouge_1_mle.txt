@@ -1,0 +1,3 @@
+users will be able to choose an emoji 's skin colour that best reflects their own at the touch of a smartphone button .
+the unicode consortium , which sets the standards for emojis , is considering adding five new skin colours to its library of icons .
+the proposal is still under review but could lead to changes for millions of users as many operating systems are based on unicode standards .

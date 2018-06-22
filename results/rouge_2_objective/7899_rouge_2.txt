@@ -1,0 +1,3 @@
+the tianhe-2 , which means milky way 2 , was developed by the national university of defense technology in china 's changsha city and is capable of operating at the equivalent of 33,860 trillion calculations per second .
+china 's supercomputer tianhe-2 has been declared the top500 fastest supercomputer title .
+the chinese government sponsored the project and did n't expect the computer to be fully functional until 2015 .

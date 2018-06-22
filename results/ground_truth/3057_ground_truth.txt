@@ -1,0 +1,3 @@
+sensors allow the system to track hand movements , and work out what letters are being written .
+system could be used for computers and mobile phones to allow easy text entry .
+could be combined with systems such as google glass - and the project has recently won funding from the search giant .

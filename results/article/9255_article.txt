@@ -1,0 +1,30 @@
+by .
+mark prigg .
+published : .
+09:27 est , 20 august 2012 .
+| .
+updated : .
+09:27 est , 20 august 2012 .
+a sheep in a knitted jumper may not , at first glance , seem the biggest advance in animation ever seen .
+however , experts say the image could usher in a new era of characters wearing ultra-realistic clothes .
+the images are the first time researchers have managed the incredibly complex feat of recreated knitting inside a computer .
+the images of a sheep in a knitted jumper is the first time researchers have been able to ` virtually knit ' an outfit , and could lead to far more realistic animated characters .
+to put clothes on their characters , .
+computer graphic artists usually simulate cloth by creating a thin .
+sheet , then adding some sort of texture .
+however , this does n't work for knitted garments , as they are simply too complex .
+to make the image realistic , the computer has to simulate the surface right down to the intricate intertwining of yarn .
+so computer scientists are in effect teaching the computer to knit .
+the research , from cornell university , was unveiled at a computer graphics conference .
+` we are actually changing the shape of the yarn loops that make up the stitches , ' professor steve marschner from cornell , who led the research , explained , ` simulating how they wrap around other loops .
+' the result is a simulation with detail down to the yarn level .
+the trickiest part , marschner said , is to make sure the images of yarn loops do n't slide through each other like ghosts .
+that would cause the simulation to `` unravel '' like a dropped stitch in real knitting .
+the team has also revealed far more natural looking knitted outfits for human .
+funded by pixar , the research could be seen on a cinema screen soon .
+the .
+cornell innovation is to create a 3-d model of a single stitch and then .
+combine multiple copies into a mesh , like tiles in a mosaic .
+the .
+computer projects the mesh onto a model of the desired shape of the .
+garment , treating each stitch as a tiny flat polygon that stretches and

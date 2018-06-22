@@ -1,0 +1,2 @@
+dr ed manley , a research associate at university college london 's centre for advanced spatial analysis -lrb- casa -rrb- created the map based on data collected at the busiest times on weekday mornings -- between 7am and 10am .
+a link has been drawn between the two places and the link and points coloured according to the destination .

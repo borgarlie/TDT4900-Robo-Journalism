@@ -1,0 +1,3 @@
+the pavlov poke gadget sits under the wrist of a computer user and monitors which sites are used .
+pavlov poke is made of an arduino board - a board that can be used to develop applications and service .
+it was created by ph.d from the massachusetts institute of technology who wanted to reduce the amount of time they spent on sites such as facebook and twitter .

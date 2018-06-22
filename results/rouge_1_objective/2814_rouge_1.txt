@@ -1,0 +1,3 @@
+the ` malware ' was spread by windows users opening links sent out via phishing emails and social networks , inadvertently downloading a virus onto their computers .
+a total of 3.2 million computers have fallen prey to the ` ramnit ' virus over the past three years , 33,000 of which were in the uk .
+the ramnit malware , spread on microsoft windows computers , has been brought down by authorities in italy , germany and the netherlands .

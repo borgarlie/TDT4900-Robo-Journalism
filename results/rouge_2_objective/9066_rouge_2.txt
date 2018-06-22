@@ -1,0 +1,3 @@
+american researchers studied social networking interactions over three years and found that positive messages spread through contacts .
+they analysed more than a billion facebook status updates , among more than 100 million users .
+the researchers , from the university of california , analysed status updates on facebook in the top 100 most populous cities in the us between january 2009 and march 2012 , using automated text analysis .

@@ -1,0 +1,2 @@
+ultrabike unit has sensors to give the rider constant directional feedback of obstacles ahead and will be fitted onto the handlebars of any bike .
+it uses the same obstacle detection capability in the award winning ultracane , an electronic mobility aid that is used by people with sight loss all over the world .

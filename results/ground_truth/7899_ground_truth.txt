@@ -1,0 +1,3 @@
+china 's tianhe-2 supercomputer is double the speed of the previous american world record holder , titan .
+it can perform 33,860 trillion calculations per second was built by china 's national university of defense technology .
+the average computer performs around 100 million calculations per second .

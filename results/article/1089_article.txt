@@ -1,0 +1,25 @@
+by .
+rob waugh .
+last updated at 3:58 pm on 6th january 2012 .
+security researchers say that the hi-tech ` worm ' has stolen 45,000 facebook log-ins and passwords - and that the cyber-criminals behind it may be using these to infect others , or even penetrate email accounts .
+a hi-tech cyber attack has stolen 45,000 user names and passwords from facebook - mostly from customers in the uk .
+researchers fear that the criminals - using the ramnit worm , an attack often used to steal banking details and attack corporate networks - may be using these ` infected ' accounts to send links to people 's facebook friends , spreading the computer ` worm ' further .
+clicking on links can direct facebook users to infected websites , which download the worm into their pcs , turning them into another victim .
+they also say that the passwords for the 45,000 accounts could be used by the cybercriminals to break into email services .
+anyone who uses the same password across several web services is at risk .
+seculert estimates that 69 per cent of infected computers are in the uk .
+` worm ' is a technical term for malicious software made by hackers which can spread itself without human help - making worms potentially more dangerous than viruses , which only spread through innocent-looking but infected files .
+security company seculert , which tracked the attack , says , ` seculert has discovered .
+that ramnit recently started targeting facebook accounts with .
+considerable success , stealing over 45,000 facebook login credentials .
+worldwide , mostly from people in the uk and france .
+' ` we suspect that the attackers behind .
+ramnit are using the stolen credentials to log in to victims ' facebook .
+accounts and to transmit malicious links to their friends , thereby .
+helping it spread even further .
+i .
+` cybercriminals are taking advantage of the fact that users tend to use .
+the same password in various web-based services - facebook , gmail , microsoft outlook - to gain remote access to .
+corporate networks .
+' ramnit is a hi-tech cyber attack which infects a computer in several different ways , designed to steal passwords and sensitive information .
+ramnit is estimated to account for 17.3 per cent of new computer infections worldwide

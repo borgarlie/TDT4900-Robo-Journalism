@@ -1,0 +1,25 @@
+by .
+victoria woollaston .
+when it comes to personal assistant apps , google and apple lead the way with their now and siri services .
+but google may be trying to establish itself even further in the market , and steal an edge on its rival , following the purchase of emu .
+emu is similar to google now because it predicts what users want to do next , and offers relevant help - but it goes one step further .
+the firm claims the emu app uses artificial intelligence to learn behaviours and fine tune suggestions in real time .
+scroll down for video .
+emu -lrb- pictured -rrb- is similar to google now because it predicts what users want to do next , and offers relevant help , but it goes one step further .
+the firm claims the emu app uses artificial intelligence to learn behaviours and fine tune suggestions in real time , using contextual information .
+for example , google now alerts people to an upcoming flight , and informs them of traffic or public transport conditions before they leave .
+it can also remind people to take an umbrella , if it looks like it 's going to rain .
+the software in prediction apps is based on an algorithm that combines various snippets of information to form a prediction .
+in the case of personal-assistant apps , the software scans calendar entries to work out .
+where a user is , or should be .
+it combines this with location data , .
+taken from the device 's gps unit , as well as posts on social .
+networks , email information and more .
+it will then present the user with the help it thinks they need .
+for example , if a calendar on an android phone contains a diary invite , google now will create a reminder .
+it will then check to see whether the .
+user is en route to the meeting and add directions to this reminder , or .
+work out how long it will take them to get there based on current .
+traffic .
+emu is slightly more advanced because it additionally scans and monitors conversations , in real time , to offer these suggestions automatically , and with context .
+if a friend asks a user where they are , emu can

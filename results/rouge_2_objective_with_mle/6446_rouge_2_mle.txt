@@ -1,0 +1,1 @@
+the liquid is called shear-thickening fluid -lrb- stf -rrb- , and does not conform to the model of newtonian liquids , such as water , in which the force required to move the fluid faster must increase exponentially , and its resistance to flow changes according to temperature .

@@ -1,0 +1,3 @@
+the pplkpr app -lrb- right -rrb- syncs with a bluetooth heart rate monitor -lrb- left -rrb- to track and log subtle changes in emotional state .
+it asks the wearer to explain how they 're feeling and who they 're with , and over time , an algorithm learns the difference between the varying heart rates .
+the free ios app was created by brooklyn-based artists kyle mcdonald and lauren mccarthy , and was recently tested on a group of students at carnegie mellon university .

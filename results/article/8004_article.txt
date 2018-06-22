@@ -1,0 +1,14 @@
+scientists are currently competing to create the best invisibility cloak , as imagined in films such as harry potter and star trek .
+as yet , no-one has managed to replicate a flexible cloak as worn by the boy wizard , or the cloaking device used by the kingons to make their ships invisible to another starship 's sensors , but two canadian scientists have created an invisibility cloak that they say is thin and adaptive to different types and sizes of objects .
+unlike other recent cloaks that rely on planes of glass simply bending light in a way that renders small objects temporarily invisible , the researchers have taken an electrical engineering approach , which makes objects undetectable to radar .
+this is the set up of the lab where professor george eleftheriades and michael selvanayagam have designed and tested a new approach to cloaking - by surrounding an object with small antennas that collectively radiate an electromagnetic field .
+the radiated field cancels out any waves scattering off the cloaked object .
+they said as the technology advances , it could also be adapted to make things invisible to the human eye too .
+professor george eleftheriades and phd student michael selvanayagam have designed and tested a new approach to cloaking , by surrounding an object with small antennas that collectively radiate an electromagnetic field .
+the radiated field cancels out any waves scattering off the cloaked object , rendering the object invisible to radar , explained the two researchers at the university of toronto .
+` we 've taken an electrical engineering approach , but that 's what we are excited about , '' said professor eleftheriades .
+` it 's very practical .
+' when light hits an object , such as a postbox and bounces back into a person 's eyes , they can see it and similarly , when radio waves hit the object , they bounce back to a radar detector and reveal it is a postbox , in a certain location .
+the scientists ' system wraps the mailbox in a layer of tiny antennas that radiate a field away from the box , cancelling out any waves that would bounce back .
+in this way , the mailbox becomes undetectable to radar .
+usually , when radio waves hit an object , they bounce back to a radar detector -lrb-

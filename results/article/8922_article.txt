@@ -1,0 +1,22 @@
+by .
+daily mail reporter .
+last updated at 8:46 pm on 30th september 2011 .
+a document obtained by the aclu shows for the first time how the four largest cellphone companies in the u.s. treat data about their subscribers ' calls , text messages , web surfing and approximate locations .
+the one-page document from the justice department 's cybercrime division shows , for instance , that verizon wireless keeps for one year information about which cell towers subscriber phones connect to .
+that data that can be used to figure out where the phone has been , down to the level of a neighborhood .
+at&t has kept the same data since july 2008 .
+a new document obtained by aclu revealed the varying degrees to which cell phone companies keep users information .
+t-mobile usa does n't keep any information on web browsing activity .
+the sheet is a guide for law enforcement , which can request the information from the carriers through legal channels .
+where 's kim ?
+data stored by the phone companies can track movement down to a specific neighborhood .
+the north carolina section of the american civil liberties union obtained it through a freedom of information act request , the aclu said .
+wired.com reported earlier about the document , which is dated aug. 2010 .
+the document was released by the aclu wednesday , but has been hiding in plain sight on the website of the vermont public defender 's office .
+it can be found there through a google search , but only if the searcher knows the exact title of the document .
+a few data points from the sheet were known outside law enforcement circles , but wireless carriers have not been open about their policies .
+they are n't required to keep the data , and they keep the same information for varying lengths of time .
+some do n't keep data at all that other companies store .
+for instance , it says t-mobile usa does n't keep any information on web browsing activity .
+verizon , on the other hand , keeps some information for up to a year that can be used to ascertain if a particular phone visited a particular web site .
+according to the sheet , sprint nextel corp. 's virgin mobile brand keeps the text content of text

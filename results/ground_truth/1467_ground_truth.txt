@@ -1,0 +1,6 @@
+apple 's online tool lets buyers check the status of a second-hand iphone .
+it determines whether the activation lock on the handset is switched on .
+if activation lock is enabled , it means the device is locked using a password .
+this suggests the owner of the phone has not removed the security steps needed to access it .
+it is , therefore , unusual for a person selling the handset to leave it locked .
+this means there is a chance it is stolen , or does n't belong to the seller .

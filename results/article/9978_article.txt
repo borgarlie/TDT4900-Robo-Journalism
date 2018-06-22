@@ -1,0 +1,22 @@
+if stacking the dishwasher is a chore you dread , help may soon be at hand .
+british scientists have developed a robot which they are training to complete that very task .
+the robot - which they have named boris - is the first to have enough intelligence to work out how to grip any single item put in front of it .
+scroll down for video .
+a birmingham university project has created a robot that can grab plates and cups .
+it can work out how to pick up different objects placed in front of it .
+called ` boris ' -lrb- shown -rrb- it is controlled by three separate computers .
+while that is sufficient for most factory production , creating a robot which can pick up and manipulate any single item hugely increases its potential use for industry , surgery , or in the home .
+the development marks a huge step forward in robotics .
+until now robots could only pick up items of a fixed size , placed in a fixed location .
+boris - who was publicly unveiled at the british science festival in birmingham today - is controlled by three different computers and has cost # 350,000 -lrb- $ 570,000 -rrb- to build .
+professor jeremy wyatt , the birmingham university computing expert who led the project , said loading a dishwasher was his main goal .
+` the scenario that we 've got is to get the robot to load a dishwasher , ' he said .
+` that 's not because i think that dishwasher-loading robots are an economic , social necessity right now .
+it 's because it encapsulates an incredibly hard range of general manipulation tasks .
+` once you can crack that , once you can manipulate an object that you 've never seen before , you can do a whole bunch of different things .
+` loading a dishwasher is a really hard task .
+' the boris robot has been created by british scientists .
+boris has thick multi-jointed arms that enable it to pick up objects .
+the robot can learn various grips and costs # 350,000 -lrb- $ 570,000 -rrb- to build .
+boris the robot 's hands can learn the dexterity needed to pick up objects of different shapes and sizes .
+boris performed in public for the first time in

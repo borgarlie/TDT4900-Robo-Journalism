@@ -1,0 +1,3 @@
+microsoft 's chairman , co-founder and former ceo admitted the tricky combination of keys used to reboot machines was not well thought out .
+the hand-stretching command that is sometimes referred to by computer geeks as the ` three finger salute , ' is used by many as a last-resort when trying to stop programs from running .
+the command was originally designed to reboot a pc and on older versions of windows was used to log-in , but since windows 8 launched , it has been used to access the task manager bar .

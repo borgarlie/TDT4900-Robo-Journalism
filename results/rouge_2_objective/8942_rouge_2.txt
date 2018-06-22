@@ -1,0 +1,3 @@
+silk road 2.0 is the reincarnation of silk road , the online black market that was dramatically shut down last year following a high-profile fbi sting .
+the site 's administrator , defcon , revealed it had been infiltrated by hackers who exploited the same ` transaction malleability ' that caused temporary transfer shutdowns at bitcoin exchanges bitstamp and mt gox this week .
+defcon is now calling on the hackers to return the bitcoin .

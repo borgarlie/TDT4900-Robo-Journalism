@@ -1,0 +1,6 @@
+payment function was developed by french bank groupe bpce .
+from today , french residents can transfer money by sending a tweet .
+users of the service need a twitter handle and bank account .
+details on how it works are scarce , but no bank details need to be entered .
+move coincides with twitter 's attempts to generate revenue by another means other than advertising , with its ` twitter buy ' button .
+facebook is rumoured to be working on a service that lets friends transfer money to each other without the hassle of remembering bank details

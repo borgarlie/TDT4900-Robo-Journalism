@@ -1,0 +1,17 @@
+it appears like any other racing car - taking the perfect lines , making spilt second decisions and navigating a track at 150mph .
+however , audi 's new rs7 has one big difference - it does n't have a driver .
+the german car giant let the car show off its at skills at top speed for the first time .
+scroll down for video .
+the audi rs 7 piloted driving concept completed a lap on the grand prix track in hockenheim -- at racing speed , without a driver .
+the car has no driver - and is driven entirely by software .
+for orientation on the track , the car uses specially corrected gps signals .
+this gps data is transmitted to the vehicle via wifi according to the automotive standard and redundantly via high-frequency radio .
+in parallel to this , 3d cameras in the car film the track , and a computer program compares the cameras ' image information against a data set stored on board .
+this is what makes it possible for the technology pioneer to orient itself on the track within centimeters - and decide on the perfect race line .
+the audi rs 7 piloted driving concept completed a lap on the grand prix track in hockenheim -- at racing speed , without a driver .
+audi scored yet another major success in the development of piloted driving : before the season finale of the deutsche tourenwagen masters -lrb- dtm -rrb- , the latest technology pioneer was running up to its physical limit , with no driver .
+it took the audi rs 7 piloted driving concept just slightly over two minutes to complete a lap on the grand prix track in hockenheim -- piloted with high precision and accuracy to within centimeters .
+` the top performance by the audi rs 7 today substantiates the skills of our development team with regard to piloted driving at audi , ' said prof. dr. ulrich hackenberg , board member for technical development at audi ag .
+` the derivations from series production , particularly in terms of precision and performance , are of great value for our further development steps .
+' for orientation on the track , the technology pioneer uses specially corrected gps signals .
+this gps data is transmitted to the vehicle via wifi according to the automotive

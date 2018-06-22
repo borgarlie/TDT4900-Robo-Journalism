@@ -1,0 +1,29 @@
+by .
+mark prigg .
+published : .
+10:47 est , 22 february 2013 .
+| .
+updated : .
+12:54 est , 22 february 2013 .
+it could be the end of the keyboard - but also the pen .
+german researchers have revealed a hi-tech glove that lets people simply write in mid air .
+dubbed the ` airwriter ' , the system is able to work out what is being written simply by monitoring the position of the user 's hand .
+the airwriting glove can recognise letters drawn in mid air using sensors .
+its inventor claims it could one day even be woven into clothing so people can type anywhere .
+the system could be combined with google glass to let owners of the wearable computer type in mid air - and the project recently won funding from the search giant .
+acceleration sensors and gyroscopes are attached to the thin glove , and track the movement of the user 's hand .
+during writing , the airwriting system .
+decodes the letters by a pattern recognition method .
+for every letter of .
+the alphabet , a statistical model of the characteristic signal pattern .
+is stored - this allows the system to spot letters and build up words easily , and learn a user 's writing style over time .
+its inventors say it could be used to enter text messages and write emails .
+` the airwriting glove is used to write letters into air , as if using an invisible board or pad , ' said doctoral student christoph amma , who developed the system at the karlsruhe institute of technology in germany .
+she believes the technology could eventually be woven into clothing so it can be used anywhere .
+` the interaction is embedded seamlessly in everyday life , ' she said .
+sensors attached to a glove record hand .
+movements , then a computer system captures relevant signals and .
+translates them into text .
+the sensors are also able to tell when a user is actually writing , rather than simply moving around normally .
+` all movements that are not similar to writing , such as cooking , doing laundry , waving to someone , are ignored .
+` the system runs in the background without interpreting every movement as computer input , ' says

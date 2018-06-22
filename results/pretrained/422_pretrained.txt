@@ -1,0 +1,2 @@
+the pavlov poke gadget sits under the wrist of a computer user and monitors which sites are used .
+if the users spend too long on a site , a warning message will appear on the screen .

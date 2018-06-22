@@ -1,0 +1,3 @@
+improved version of mri could detect life-threatening diseases when they are at their most treatable .
+uses mathematical formulas to figure out in a matter of seconds if a patient has anything to worry about .
+uses unique fingerprints of each individual body tissue and disease to quickly diagnose problems .

@@ -1,0 +1,4 @@
+map , by stefano maggiolo , highlights the difference between solar time and clock-time in large parts of the planet .
+places where the sun rises later according to solar time are shown in red and areas earlier are shown in green .
+this is due to latitude of country and earth 's tilt as it moves around sun causing solar days to vary during the year .
+for example , all clocks in china are set to beijing time which means in western part of the country solar noon takes place at three in the afternoon .

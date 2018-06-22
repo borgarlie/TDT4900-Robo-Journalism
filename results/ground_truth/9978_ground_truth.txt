@@ -1,0 +1,5 @@
+birmingham university project creates robot that can grab plates and cups .
+it can work out how to pick up different objects placed in front of it .
+called ` boris ' it is controlled by three separate computers .
+it has thick multi-jointed arms that enable it to pick up objects .
+the robot can learn various grips and costs # 350,000 -lrb- $ 570,000 -rrb- to build .

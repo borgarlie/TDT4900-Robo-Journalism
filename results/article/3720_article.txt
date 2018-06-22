@@ -1,0 +1,17 @@
+we all know that panic-stricken moment .
+you drop your mobile and watch , aghast , as it plunges towards the floor , fearing it will land screen-side down -- with shattering consequences .
+but now apple plans to spare you that agony , with an invention that will stop your iphone hitting the ground face-first .
+the technology giant was granted a patent last week on an invention that can detect when a handset is falling -- and flips it to ensure the screen does n't hit the ground .
+the idea could also work with ipads and other devices .
+apple was granted a patent last week for the invention that shifts an internal weight in the device in mid-air so it does n't hit the ground face first on impact .
+industry experts point out that a prototype has yet to be tested .
+apple 's design features on-board sensors that measure the speed that the phone is falling and predict when it will land and which side of the device will hit the floor .
+if sensors calculate a delicate component , such as the screen or camera , will hit the ground , a motor is instantly activated within the phone .
+this moves an internal weight fast enough to affect the ` rotational velocity ' of the device and spin it around as it falls , so that it lands on a reinforced area .
+the effect is similar to how a falling cat always manages to land on its feet .
+and that 's not all .
+the patent even includes a system that would eject the headphone cord to avoid damage to the connector .
+victor seidel , a lecturer in science entrepreneurship at oxford university , said : ` this does what a lot of successful innovations do : combines ideas in a way others had not considered , such as adding gyroscopic action within a smartphone .
+` but integrating this idea into current slimline designs may be a challenge .
+of course , no one will really know the possible benefits and limitations until apple gets prototypes into the hands of users -- hands that are indeed sometimes clumsy .
+' industry insiders say an iphone featuring the new technology may appear within three years .

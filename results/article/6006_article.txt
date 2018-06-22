@@ -1,0 +1,25 @@
+by .
+sarah griffiths .
+published : .
+13:20 est , 26 september 2013 .
+| .
+updated : .
+13:33 est , 26 september 2013 .
+confirming what many computer users might have guessed at for a while , bill gates has admitted that the ` ctrl , alt , delete ' command was a mistake .
+microsoft 's chairman , co-founder and former ceo admitted the tricky combination of keys used to reboot machines was not well thought out .
+the hand-stretching command that is sometimes referred to by computer geeks as the ` three finger salute , ' is used by many as a last-resort when trying to stop programs from running .
+scroll down for video .
+confirming what many computer users might have guessed at for a while , bill gates has admitted that the ` control , alt , delete ' command was a mistake .
+the command was originally designed to reboot a pc and on older versions of windows was used to log-in , but since windows 8 launched , it has been used to access the task manager bar .
+in the early 1990s it became a popular way of banishing the infamous ` blue screen of death ' .
+speaking at a harvard fundraising campaign , mr gates said : we could have had a single button , but the guy who did the ibm keyboard design did n't want to give us our single button .
+it was a mistake .
+' he explained the .
+original idea was to use a taxing key combination to ensure it was .
+difficult for other software to fake a log-in screen and steal .
+passwords .
+a worker at .
+ibm called david bradley , who was partially responsible for the design .
+of the first ibm pc created the command , the huffington post reported , which was originally intended to reset the computer .
+while he has claimed he did invent the command mr bradley said it is mr gates who made it famous .
+but the nostalgic computer command may never have come to be , as mr bradley prefered ctrl , alt , esc , before he realised the combination of keys made it possible for a user to accidentally reboot their machine -lrb- which was not the command 's original function -rrb- , the bbc reported

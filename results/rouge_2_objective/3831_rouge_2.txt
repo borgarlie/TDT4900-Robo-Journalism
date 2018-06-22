@@ -1,0 +1,4 @@
+users will be able to choose an emoji 's skin colour at the touch of a smartphone button , if the plans go ahead .
+the unicode consortium , which sets the standards for emojis , is considering adding five new skin colours to its library of icons .
+the default emoji face was designed to be generic , but is caucasian , rather than an unrealistic shade such as bright yellow , leading people , including miley cyrus , to call for changes to better reflect global diversity .
+the proposal is still under review but could lead to changes for millions of users as many operating systems are based on unicode standards .

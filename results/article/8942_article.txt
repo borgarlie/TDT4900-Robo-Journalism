@@ -1,0 +1,18 @@
+by .
+daily mail reporter .
+silk road 2.0 has been reportedly hacked by attackers who made off with nearly $ 2.7 million in bitcoin - the online marketplace 's entire holdings .
+the trading site is a reincarnation of silk road , the online black market that was dramatically shut down last year following a high-profile fbi sting .
+but today the site 's administrator , defcon , revealed it had been infiltrated by hackers who exploited the same ` transaction malleability ' that caused temporary transfer shutdowns at bitcoin exchanges bitstamp and mt gox this week .
+reincarnated : silk road 2.0 is the reincarnation of silk road , the online black market that was dramatically shut down last year following a high-profile fbi sting .
+defcon is now calling on the hackers to return the bitcoin .
+` given the right flavor of influence from our community , we can only hope that he will decide to return the coins with integrity as opposed to hiding like a coward , ' he wrote .
+the site 's users are currently attempting to track down the thief .
+writes defcon : ' # attacker 1 : -lrb- responsible for 95 % of theft -rrb- , ' wrote one administrator .
+` suspected french , responsible for vast majority of the thefts .
+used the following six vendor accounts to order from each other , to find and exploit the vulnerability aggressively .
+' arrested : silk road was shut down following the arrest the so-called ` digital don ' behind it ross william ulbricht , 29 , who is accused of running the website behind a military-style encryption code that enabled it to become the ` ebay ' of the internet 's black market .
+black ebay : the fbi shut down the site on october 2nd after infiltrating it .
+the so-called deep web or dark web hidden website allegedly worked as an ebay for the black market - selling cocaine and marijuana , drugs , credit card numbers , instructions on how to hack an atm and other illegal goods .
+news of the theft has driven the price of btc down by about 50 points , where it is hovering at 600 .
+the hackers stole over 4474 bitcoins , worth $ 2,747,000 .
+according to the verge , defcon said that a claims a

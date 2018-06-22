@@ -1,0 +1,26 @@
+by .
+daniel bates .
+google is trialling software that could allow it to trace what you buy in bricks and mortar stores back to your computer .
+the internet giant is working on a program to prove to companies who advertise on its web pages that their money is persuading customers to make physical purchases .
+the software could allow google to charge more for advertisements and make even more money .
+watch what you shop !
+the internet giant is working on software so it can to prove to companies who advertise on its web pages that their money is persuading customers to make physical purchases .
+but it will likely raise fresh concerns over privacy with google , which has a chequered history of handling its users data .
+the program works with adwords , google 's biggest advertising software , which lets companies put links next to search results .
+google is paid every time somebody clicks through and goes to the company 's website .
+the software works by sending an anonymous ` click id ' to the advertiser when somebody clicks on an advert .
+the person is identified by the advertiser because they will have cookies installed on the user 's computer .
+when .
+that person buys something in a bricks and mortar store , the retailer is .
+able to link them back to their computer using data gleaned from the .
+cookie .
+the cookie is then matched up with the ` click id ' , thus telling them how effective their advertising with google was .
+companies .
+who advertise with google will be able to see the results in a new .
+column on their version of the programme which shows in-store sales .
+fuelled by internet advertising , the wall st journal reported .
+it remains unclear exactly how this will be implemented .
+the program , which was first reported by the wall st journal , works with adwords , google 's biggest advertising software , which lets companies put links next to search results .
+google is paid each time a surfer clicks on an advert and goes to the retailer 's website .
+the software works by sending an anonymous ` click id ' to the advertiser when somebody clicks on an advert .
+the person is identified by the advertiser because they will

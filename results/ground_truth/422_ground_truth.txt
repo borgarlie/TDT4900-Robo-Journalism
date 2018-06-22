@@ -1,0 +1,3 @@
+pavlov poke is a keyboard accessory that gives people electric shocks .
+it monitors sites and sends shocks to people who are procrastinating .
+device was developed by students to help tackle their addiction .

@@ -1,0 +1,2 @@
+security researchers say the hi-tech ` worm ' has stolen 45,000 facebook log-ins and passwords from facebook - mostly from customers in the uk and france .
+researchers fear the criminals - using the ramnit worm , an attack often used to steal banking details and attack corporate networks .

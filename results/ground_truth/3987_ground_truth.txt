@@ -1,0 +1,5 @@
+the firm 's latest patent reveals plans to add customisable security options .
+based on a user 's location , the phone could unlock when in a ` safe ' zone .
+for example , if the device is connected to the user 's home wi-fi network .
+alternatively , if the phone is on a mobile or public network , security levels could be increased .
+this could add extra security steps , in addition to the pin or passcode .

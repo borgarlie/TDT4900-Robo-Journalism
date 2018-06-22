@@ -1,0 +1,5 @@
+emu was founded by ex-google and apple employee gummi hafsteinsson .
+it works in a similar way to personal assistant apps google now and siri .
+but , emu claims it is different because the app relies on ` machine learning ' this means it can learn behaviours and fine tune suggestions for users .
+it works by monitoring conversations for contextual data , in real time .
+if someone asks to meet up , it automatically checks a calendar , for example .

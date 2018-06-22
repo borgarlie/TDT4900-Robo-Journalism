@@ -1,0 +1,2 @@
+microsoft 's chairman , co-founder and former ceo admitted the tricky combination of keys used to reboot machines was not well thought out .
+the hand-stretching command was originally designed to reboot a pc and on older versions of windows was used to log-in , but since windows 8 launched .

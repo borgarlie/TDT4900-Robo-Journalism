@@ -1,0 +1,15 @@
+over the course of a year , 2.2 million flights blanket the skies above the uk - peaking at 8,000 in a single day .
+these flights are managed by nats -lrb- formerly known as national air traffic services -rrb- , which is responsible for monitoring airspace above more than 180 public and private airports , military training flights centres and helipads .
+to put this ` spider 's web ' of traffic into perspective , nats has produced the third in its series of air traffic visualisations , taking a tour of the uk 's airspace , called uk 24 .
+scroll down for video .
+more than 2.2 million flights are managed by the swanwick and prestwick-based nats , formerly known as national air traffic services in airspace over the uk -lrb- pictured -rrb- .
+flights peak at more than 8,000 a day and the visualisation plots 7,000 of these movements .
+` following the success of our two data visualisations - europe 24 and north atlantic skies - we 've taken a lot of time to think about where to go next , ' said head of operational policy , brendan kelly .
+` both europe 24 and north atlantic skies were designed to give an overview of the daily complexity and volumes of air traffic across the uk and europe and to do so in a way that was cinematic and exciting to watch .
+` i think we were able to do that to great effect , but we now want to take you a little deeper .
+` we are therefore very excited to publish uk 24 - your guided tour to some of what makes uk aviation work .
+' during the visualisation , around 7,000 flights are shown entering and leaving uk airspace .
+the day starts with the bow wave of transatlantic traffic heading towards the uk on organised and separated tracks .
+this is joined by traffic from europe and the first waves of departures from uk airports .
+traffic levels are then seen growing to reveal the main ` trunk roads ' , or routes , of airspace as well as the hubs around london , manchester and central scotland .
+the visualisation then shows holding stacks over london , also known as a holding manoeuvre that is used to delay a flight from landing , but keep it

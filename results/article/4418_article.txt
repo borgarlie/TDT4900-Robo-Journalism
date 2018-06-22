@@ -1,0 +1,26 @@
+by .
+daily mail reporter .
+the national science foundation has suspended a researcher after the organization discovered that the unnamed employee was using powerful , government-funded supercomputers to mine bitcoins , the popular virtual payment system , according to a government report published earlier this year .
+the researcher 's scheme was revealed in the agency 's semi-annual report to congress compiled by the nsf 's office of the inspector general .
+` we received reports describing a researcher 's abuse of nsf-funded .
+supercomputing resources at two universities to conduct bitcoin mining .
+activities , ' the report said .
+miner : the nsf suspended a researcher who used government-funded computers to mine bitcoins .
+the benefits of mining bitcoins is described by fox news as an ` alternative to buying bitcoins on an exchange .
+' ` the so-called `` miners '' are rewarded with the virtual currency for using their processing power .
+to verify transactions , a task which requires significant compute .
+resources .
+because the cryptocurrency has no central authority or banks , .
+transactions are managed and bitcoins are issued collectively across a .
+peer-to-peer network .
+' according to the report , the researcher misused more than $ 150,000 in supercomputing equipment .
+the bitcoins generated were valued between $ 8,000 and $ 10,000 .
+scam : according to the nsf , the researcher misused more than $ 150,000 in government-owned supercomputers .
+` both universities determined that this was an unauthorized use of their it systems , ' the report states .
+` the researcher asserted that he was conducting tests on the computers , but neither university had authorized him to conduct such tests .
+' according to the report , the unnamed universities found that the researcher had accessed the supercomputers remotely in an attempt to conceal what he was doing .
+in one example , he accessed the computer through a ` mirror site ' located in europe .
+in addition to the government-wide suspension , the nsf terminated the researcher 's access to all nsf-funded supercomputers .
+bitcoin : each unit of the popular digital currency is worth about $ 652 in u.s. currency .
+according to the harvard crimson , a similar mining of virtual currency was discovered at harvard university earlier this year .
+in the harvard case , a researcher was using the

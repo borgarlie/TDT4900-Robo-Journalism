@@ -1,0 +1,3 @@
+dubbed wirelurker , the malware targets both mac computers and laptops -lrb- pictured -rrb- as well as phones and tablets running ios .
+it was discovered by experts at palo alto networks who detailed their findings in a research paper .
+the experts suggest ios and mac owners only download apps from the official apple app store , and that they make sure to keep their software up to date .

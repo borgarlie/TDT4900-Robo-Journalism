@@ -1,0 +1,3 @@
+facebook paper is a news curation and reader app that pulls in stories , photos , videos and links from the user 's facebook feed - alongside facebook 's own notification bar and action buttons .
+all stories are displayed on a customisable picture-led grid , and the app has been designed to make it easier to share content with other people .
+the app is the first product to launch from the california firm 's creative labs project .

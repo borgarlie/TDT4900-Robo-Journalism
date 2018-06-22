@@ -1,0 +1,6 @@
+healbe gobe wristband was designed by a team of russian developers .
+wristband uses an algorithm that analyses data collected by three sensors .
+the theory is that when we eat , carbohydrates are turned into glucose .
+cells absorb glucose and use it for energy , displacing liquid in the process .
+gobe 's sensors track these changes through the skin , and translate it into calorie intake and output .
+but doctors have disputed the claims , saying the technology is n't reliable .

@@ -1,0 +1,14 @@
+they are two of the most destructive computer viruses ever created , tailor-made for cyber-espionage and capable of wreaking havoc on government systems .
+both flame and stuxnet are believed to have been used by the u.s. government to wage online warfare against hostile regimes .
+now the washington post has claimed , citing anonymous western officials , that the united states and israel jointly developed the flame computer virus that collected intelligence to help slow iran 's nuclear program .
+the so-called flame malware aimed to map iran 's computer networks and monitor computers of iranian officials , the newspaper said .
+collaboration : sources say the two nations worked together to develop flame , with the purpose of damaging iran 's nuclear program .
+it was designed to provide intelligence to help in a cyber campaign against iran 's nuclear program , involving the national security agency , the cia and israel 's military , the post said .
+the cyber campaign against iran 's nuclear program has included the use of another computer virus called stuxnet that caused malfunctions in iran 's nuclear enrichment equipment , the newspaper said .
+current and former u.s. and western national security officials confirmed to reuters that the united states played a role in creating the flame virus .
+since flame was an intelligence ` collection ' virus rather than a cyberwarfare program to sabotage computer systems , it required less-stringent u.s. legal and policy review than any u.s. involvement in offensive cyberwarfare efforts , experts told reuters .
+the cia , nsa , pentagon , and office of the director of national intelligence declined to comment .
+flame is the most complex computer spying program ever discovered .
+two leading computer security firms - kaspersky lab and symantec corp - have linked some of the software code in the flame virus to the stuxnet computer virus , which was widely believed to have been used by the united states and israel to attack iran 's nuclear program .
+the destructive computer worm stuxnet is believed to have damaged .
+iran 's nuclear programme in 2010 .

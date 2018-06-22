@@ -1,0 +1,17 @@
+imagine the scenario : you 're at work , when your smartphone tells you some of the vegetables in your fridge at home have gone off , letting you know to pick more up on the way home .
+that 's one of the potential uses of a new technology developed by researchers at the massachusetts institute of technology -lrb- mit -rrb- .
+using a simple sensor that can be read by a smartphone , they have devised a way to wirelessly detect hazardous gases and pollutants .
+massachusetts institute of technology -lrb- mit -rrb- researchers have developed a method to detect hazardous gases and pollutants .
+they modified nfc chips -lrb- shown -rrb- to make them detect things in their environment , and the information could then be sent to your phone .
+the sensors are made using modified near-field communication -lrb- nfc -rrb- tags .
+these tags , which receive the little power they need from the device reading them , function as wirelessly addressable barcodes .
+among their many uses they can be used to make wireless payments with an nfc-enabled smartphone .
+nfc tags can be read by any smartphone that has near-field communication capability .
+these phones can send out short pulses of magnetic fields at radio frequency -lrb- 13.56 megahertz -rrb- , inducing an electric current in the circuit on the tag , which relays information to the phone .
+to adapt these tags for their own purposes , the mit team first disrupted the electronic circuit by punching a hole in it .
+then , they reconnected the circuit with a linker made of carbon nanotubes that are specialised to detect a particular gas .
+the team refers to the modified tags as cards -lrb- chemically actuated resonant devices -rrb- .
+when carbon nanotubes bind to the target gas , their ability to conduct electricity changes , which shifts the radio frequencies at which power can be transferred to the device .
+when a smartphone pings the card , it responds only if it can receive sufficient power at the smartphone-transmitted radio frequencies , allowing the phone to determine whether the circuit has been altered and the gas is present .
+but now the researchers have found that with a small modification , the chips can be used to detect the presence of gases .
+to adapt them for their own purposes ,

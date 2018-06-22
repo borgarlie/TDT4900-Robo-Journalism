@@ -1,0 +1,3 @@
+each morning residents of the east india state of assam watch the sun rise more than 90 minutes earlier than the west of the country .
+this is because time on the clocks across india are set to be exactly the same in each of its states and provinces , regardless of location .
+the map , created by google engineer stefano maggiolo , highlights the huge differences between solar time and clock-time in large parts of our planet .

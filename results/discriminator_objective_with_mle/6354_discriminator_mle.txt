@@ -1,0 +1,2 @@
+cyborg unplug can also disconnect all target devices from any network they are associated with , including paired connections with phones .
+if this makes you feel paranoid , a firm has created a router that detects such surveillance devices and blocks them from accessing your wi-fi network .

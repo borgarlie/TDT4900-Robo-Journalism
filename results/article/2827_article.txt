@@ -1,0 +1,24 @@
+it was the maths problem designed for 14-year-olds that baffled people around the world .
+for those who did not manage to work out the cryptic clues that were designed to lead them towards the fictional cheryl 's birthday , then the answer was july 16 .
+those who were able to reason their way to this answer followed a series of logical steps that allowed them to rule out the other dates given as part of the question .
+the question , ` so when is cheryl 's birthday ?
+' was one of 25 questions set in the singapore and asian schools math olympiad .
+at first , it appears impossible to answer without more information but pictured is the method used to work it out .
+the question , ` so when is cheryl 's birthday ?
+' was one of 25 questions set in the singapore and asian schools math olympiad .
+it asked : albert and bernard just became friends with cheryl , and they want to know when her birthday is .
+cheryl gives them a list of 10 possible dates : may 15 , may 16 , may 19 , june 17 , june 18 , july 14 , july 16 , august 14 , august 15 and august 17 .
+cheryl then tells albert and bernard separately the month and the day of her birthday respectively .
+the puzzle asked : albert and bernard just became friends with cheryl , and they want to know when her birthday is .
+cheryl gives them a list of 10 possible dates .
+may 15 , may 16 , may 19 .
+june 17 , june 18 .
+july 14 , july 16 .
+august 14 , august 15 , august 17 .
+cheryl then tells albert and bernard separately the month and the day of her birthday respectively .
+albert : i do n't know when cheryl 's birthday is , but i know that bernard does not know too .
+bernard : at first i do n't know when cheryl 's birthday is , but i know now .
+albert : then i also know when cheryl 's birthday is .
+so when is cheryl 's birthday ?
+albert said : ' i do n't know when cheryl 's birthday is , but i know that bernard does not know too .
+bernard

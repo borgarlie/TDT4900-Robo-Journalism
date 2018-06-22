@@ -1,0 +1,25 @@
+by .
+victoria woollaston .
+and fiona macrae .
+if you 're terrible with numbers but never forget a face , your life could be about to get quite a bit easier .
+because scientists are planning to replace fiddly passwords and pins with an access code based on pictures .
+the facelock system capitalises on the human brain 's excellent ability to recognise faces , which its creators say makes it almost impossible to forget .
+the facelock system asks users to identify familiar faces , including friends and celebrities , across a range of photos , known as a challenge grid -lrb- pictured -rrb- .
+by showing faces only the user recognises , the research team claim it 's harder for hackers to gain access to web accounts .
+facelock asks people to identify familiar faces across a range of different photos .
+previous research has found people recognise a face even if images are poor .
+the system uses a set of faces known to a user , to create a personalised ` lock ' .
+users .
+can pick portraits of people familiar to them , which can include idols .
+such as sports personalities , musicians or even poker players .
+researchers then create a set of faces known to that user only , to make it difficult for hackers to break into accounts .
+if we know someone well we will quickly recognise them in a photo even if it is blurred or hazy .
+but when we are shown two pictures of a stranger , we often assume the images show two different people .
+scientists from glasgow and york universities asked volunteers to name z-list celebrities who they knew well , but most people would not .
+the team then made up panels of nine pictures , each showing one celebrity face and eight strangers .
+volunteers were shown four of the panels and asked to spot the faces they knew .
+they got all four right almost 100 per cent of the time .
+even a year later , they still did extremely well , journal peerj reports .
+the researchers said this is because , unlike with passwords , they did not have to memorise anything .
+do you remember : faces may soon replace passwords but will you remember who 's who ?
+this scatterplot shows the relationship between

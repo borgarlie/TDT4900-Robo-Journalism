@@ -1,0 +1,14 @@
+flying a military drone in a warzone or other dangerous locations currently requires a team of human operators .
+but this could be about to change , as the us military looks to enable drones to hunt in ` coordinated packs ' with minimal human supervision .
+the defence advanced research projects agency -lrb- darpa -rrb- will host a number of meetings in march to discuss how aircraft could work together to find , identify and engage targets with fewer humans controlling them .
+darpa is hosting meetings to discuss how aircraft could work together to find , identify and engage targets with fewer humans controlling them -lrb- illustrated -rrb- .
+its ` code ' programme is also designed to cut the number of operators needed to control a single unmanned vehicle , allowing one person to operate six simultaneously .
+the meeting is being called under the programme name ` collaborative operations in denied environment ' -lrb- code -rrb- .
+darpa has invited ` participants with capabilities , methodologies , and approaches that are related to code research and focused on revolutionary approaches to unmanned aircraft systems , autonomy and collaborative operations , ' to attend the discussion in arlington , virginia .
+it said that the programme offers experts the opportunity to ` help develop groundbreaking software enabling unmanned aircraft to work together with minimal supervision ' .
+darpa said that the programme offers experts the opportunity to ` help develop groundbreaking software enabling unmanned aircraft to work together with minimal supervision ' .
+a current mq-9 reaper drone used in afghanistan is pictured .
+last january , the us department of defence -lrb- dod -rrb- revealed in its unmanned systems integrated roadmap for the next 25 years .
+it said that drones may be able to deviate from set missions , carry stronger chemical weapons and hunt in swarms in the years to come .
+at the moment , drones follow precise commands to complete a predetermined step-by-step mission , but the unmanned aircraft of the future could deviate from tasks , informed by ` laws ' that govern their behaviour , laid out in algorithms and machine learning , as well as advanced sensors .
+they currently use gps to navigate war zones and remote areas , but the satellite signals used by the systems can be jammed easily , so darpa is working on jam-proof

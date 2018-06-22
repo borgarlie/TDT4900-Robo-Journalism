@@ -1,0 +1,3 @@
+muting a user on means their tweets and retweets will no longer be visible .
+users also no longer receive push or sms notifications from that user .
+muted user will not know that you 've muted them .

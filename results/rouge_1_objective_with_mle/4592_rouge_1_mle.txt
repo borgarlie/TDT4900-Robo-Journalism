@@ -1,0 +1,3 @@
+the images are taken on a network of around 8,000 automatic numberplate recognition -lrb- anpr -rrb- cameras across the uk .
+the system is invaluable in preventing and solving serious crime and terror attacks .
+the records are stored on a national database of 17 billion images , used by police and intelligence services to track criminals .

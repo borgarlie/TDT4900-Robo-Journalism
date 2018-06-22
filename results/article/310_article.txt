@@ -1,0 +1,24 @@
+by .
+daily mail reporter .
+the u.s. justice department is claiming that microsoft must hand over emails that the company stores in databases in dublin , ireland , in a case that is being watched closely by tech companies legal scholars .
+the u.s. federal government is claiming that it can force any company that conducts business operations within its borders to comply with warrants for data stored on its databases , even if those databases are n't physically located within the united states .
+several companies that operate within the u.s. keep databases in other countries .
+ireland has become a popular location for many of the u.s. tech companies .
+global : microsoft has offices all over the world , including one just outside of paris -lrb- pictured -rrb- .
+the justice department , in a brief filed last week , claims that data stored online does n't fall under the same umbrella of protection provided by the fourth amendment as data stored in ` the physical world , ' the website arstechnica.com reports .
+in its brief , the justice department cites the stored communications act , which states , which states that a federal warrant requesting records stored overseas must be complied with .
+` overseas records must be disclosed domestically when a valid .
+subpoena , order , or warrant compels their production , ' the justice department wrote in its brief .
+` the disclosure of .
+records under such circumstances has never been considered tantamount to .
+a physical search under fourth amendment principles , and microsoft is .
+mistaken to argue that the sca provides for an overseas search here .
+as .
+there is no overseas search or seizure , microsoft 's reliance on .
+principles of extra-territoriality and comity falls wide of the mark .
+' reach : president obama 's justice department says it has the right to subpoena data stored on servers in other countries .
+the federal government already has received a favorable ruling in the case - in april , a magistrate judge ruled in its favor , concluding that ` the basic principle that an entity lawfully obligated to produce .
+information must do so regardless of the location of that information .
+' microsoft appealed the ruling .
+it will be heard on july 31 .
+in its own filings , microsoft wrote

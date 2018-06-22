@@ -1,0 +1,5 @@
+nearby friends will use your smartphone 's gps system to tell your facebook friends you are nearby .
+rather than share your exact location , it will show only that you are nearby , say , within half a mile .
+feature must be turned on by the user , so people should n't expect to broadcast their location unknowingly .
+launches amid the growing popularity of location-based mobile dating apps such as tinder and hinge .
+most users wo n't have the feature available right away , but rather in the coming weeks and months and it wo n't
