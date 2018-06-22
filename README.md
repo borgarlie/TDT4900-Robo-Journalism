@@ -1,9 +1,5 @@
-# TDT4900-Robo-Journalism
+# TDT4900 - Computer Science, Master's Thesis
 Improving Abstractive Text Summarization Models by using Reinforcement Learning and Generative Adversarial Networks
- - Master Thesis
-
-Deep Learning for NLP and Robo-Journalism
-
 
 This repository contains the code used to produce the results seen in [tdt4900_final_delivery.pdf](tdt4900_final_delivery.pdf)
 
@@ -176,7 +172,7 @@ Explaination of some of the fields:
 Other fields in the config are default values, and not all are relevant. Those that are most relevant to play around with are the model parameters, e.g. `hidden_size`, `embedding_size` and `dropout_p`.
 
 
-When training with RL and GAN there are a few details not included in the config file. E.g. what strategy to use and what objective function to use. For instance, to use the naive roll-out strategy, comment out the other strategies and only include `generator = GeneratorRlStrat(...)`. To use the ROUGE objective function, comment out the other `discriminator` alternatives and only include `discriminator = RougeDiscriminator(...)`.
+When training with RL and GAN there are a few details not included in the config file. E.g. which roll-out strategy to use and which objective function to use. For instance, to use the naive roll-out strategy, comment out the other strategies and only include `generator = GeneratorRlStrat(...)`. To use the ROUGE objective function, comment out the other `discriminator` alternatives and only include `discriminator = RougeDiscriminator(...)`.
 
 
 ## Results
@@ -189,7 +185,7 @@ bayern munich star david alaba suffered a knee ligament injury in their 2-0 vict
 
 david alaba had to be taken off in the second half of bayern ’s 2-0 win over roma in the champions league on wednesday night . the austrian international had set up the opening goal for franck ribery . the club later said on twitter the player sustained ’ a medial collateral ligament injury ’
 
-Results from all the best models as shown in the thesis is found [here](results).
+Results from all the best models (as shown in the thesis) is found [here](results).
 
 ## Notes
 
