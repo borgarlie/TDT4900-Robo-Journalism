@@ -1,7 +1,7 @@
 # TDT4900 - Computer Science, Master's Thesis
 Improving Abstractive Text Summarization Models by using Reinforcement Learning and Generative Adversarial Networks
 
-This repository contains the code used to produce the results seen in [tdt4900_final_delivery.pdf](tdt4900_final_delivery.pdf)
+This repository contains the code used to produce the results seen in the thesis. The thesis link will be added as soon as grading is completed.
 
 ## Installing and running the project
 
